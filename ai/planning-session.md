@@ -1,59 +1,83 @@
-You are an experienced product manager tasked with helping to create a comprehensive project requirements document (PRD) based on the information provided. Your goal is to generate a list of questions and recommendations that will be used in the next prompt to create a complete PRD.
+<conversation_summary>
 
-Please read the following information carefully:
+<decisions>
+1. Input will be plain text (up to 10k characters); flashcards limited to 200 chars (front) and 500 chars (back).  
+2. AI flashcard generation will mix summarization and extraction.  
+3. Regenerated flashcards overwrite existing ones (no version history).  
+4. Users can fully edit, regenerate, and save AI-generated flashcards.  
+5. Interface will prioritize simplicity over flexibility.  
+6. Success criterion: 75% AI flashcard acceptance per session.  
+7. Linear user process: input text → specify number of cards → AI generates cards → user edits/regenerates → save all.  
+8. Flashcards can be categorized by projects (folders) with title, short description, date, and tag metadata.  
+9. Users can rename and delete projects.  
+10. Thumbs up/down used to track AI flashcard acceptance (analytics only, no feedback loop).  
+11. AI proposes all flashcard types (open-ended, fill-in-the-blank, multiple choice without distractors).  
+12. Review table (done/new/upcoming/to learn) updates after session completion only.  
+13. Tech stack: Astro 5, TypeScript 5, React 19, Tailwind 4, Supabase for auth + database.  
+14. Flashcards stored as individual records linked to project IDs.  
+15. AI-generated flashcards saved as drafts until user confirmation.  
+16. Error handling includes retry message (“Generation failed, please try again”).  
+17. MVP development plan:  
+    - Week 1: UI + Database  
+    - Week 2: AI Integration  
+    - Week 3: Testing  
+    - Week 4: Go Live  
+18. Testing will include unit and Playwright E2E tests.  
+19. Internal analytics page (not user-facing) will track 75% acceptance KPI.  
+20. Go-live deployment platform not specified.  
+</decisions>
 
-<project_description>
-### Main problem
-Manually creating high-quality flashcards is time-consuming, which discourages the use of spaced repetition, an effective learning method.
+<matched_recommendations>
+1. Define clear generation logic combining extraction and summarization to ensure high-quality flashcards within text limits.  
+2. Implement a linear, step-by-step flow for flashcard creation to ensure a simple and predictable UX.  
+3. Display project metadata (title, date, tag) in dashboard view for easier organization and navigation.  
+4. Use Supabase for authentication and data storage to streamline development.  
+5. Introduce clear error handling for AI generation failures to improve user trust.  
+6. Store flashcards as individual records linked to project IDs to support scalability.  
+7. Include a lightweight analytics dashboard to monitor success metrics and measure AI flashcard acceptance.  
+8. Use a weekly milestone-based roadmap to ensure 4-week MVP delivery.  
+9. Prioritize CRUD and AI generation test coverage in unit and E2E tests for stable MVP validation.  
+10. Keep interface simple, focusing on core linear functionality before adding advanced options.  
+</matched_recommendations>
 
-### Minimum set of features
-- AI-generated flashcards based on entered text (copy-paste)
-- Manual flashcard creation
-- Viewing, editing, and deleting flashcards
-- Simple user account system for storing flashcards
-- Integration of flashcards with a ready-made repetition algorithm
+<prd_planning_summary>
+**Main Functional Requirements:**  
+- **AI Generation:** Mix of summarization and extraction for flashcard creation from user-provided text (up to 10k characters).  
+- **Manual Editing:** Users can fully edit and regenerate flashcards; regenerated versions overwrite previous ones.  
+- **Organization:** Flashcards grouped by projects (folders) with metadata: title, short description, date, and tag.  
+- **Storage:** Flashcards saved as individual records in Supabase, linked to project IDs. Drafts persist until user saves.  
+- **Interface:** Simple and linear UX (input → generate → edit → save).  
+- **Review & Tracking:** Overview table showing progress (done/new/upcoming/to learn), updated after each session.  
+- **Feedback:** Users can rate flashcards with thumbs up/down (for analytics only).  
+- **Error Handling:** Retry message for failed AI generation attempts.  
+- **Testing:** Unit and Playwright E2E tests for CRUD and AI flows.  
+- **Analytics:** Internal dashboard to track AI acceptance rates (75% KPI).  
+- **Timeline:** 4-week MVP roadmap with weekly milestones for UI, AI integration, testing, and go-live.  
 
-### What is NOT included in the MVP
-- Own advanced repetition algorithm (like SuperMemo, Anki)
-- Import of multiple formats (PDF, DOCX, etc.)
-- Sharing of flashcard sets between users
-- Integrations with other educational platforms
-- Mobile applications (web only for now)
+**Key User Stories & Usage Paths:**  
+1. As a user, I can paste text and specify the number of flashcards I want generated.  
+2. As a user, I can review AI-generated flashcards, edit them, regenerate, and save.  
+3. As a user, I can create, rename, or delete projects to organize flashcards.  
+4. As a user, I can view my flashcard progress in a simple post-session overview.  
+5. As an admin, I can monitor AI flashcard acceptance metrics to evaluate product success.  
 
-### Success criteria
-- 75% of flashcards generated by AI are accepted by the user
-- Users create 75% of flashcards using AI
-</project_description>
+**Success Criteria & Measurement:**  
+- 75% of AI-generated flashcards accepted by users per session (measured via thumbs up/down feedback).  
+- 75% of total flashcards created through AI generation (tracked in internal analytics).  
+- MVP delivery within 4 weeks following milestone roadmap.  
 
-Analyze the information provided, focusing on aspects relevant to the creation of the PRD. Consider the following issues:
-<prd_analysis>
-1. Identify the main problem that the product is intended to solve.
-2. Define the key MVP functionalities.
-3. Consider potential user stories and product usage paths.
-4. Think about success criteria and how to measure them.
-5. Assess design constraints and their impact on product development.
-</prd_analysis>
+**Design Constraints:**  
+- Web-only MVP (no mobile apps).  
+- Simple interface with limited customization.  
+- Supabase-based backend for both auth and data management.  
+- No version history or advanced repetition algorithm.  
 
-Based on your analysis, generate a list of 10 questions and recommendations in a combined form (question + recommendation). These should address any ambiguities, potential issues, or areas where more information is needed to create an effective PRD. Consider questions about:
+</prd_planning_summary>
 
-1. Details of the user's problem
-2. Prioritization of functionality
-3. Expected user experience
-4. Measurable success indicators
-5. Potential risks and challenges
-6. Schedule and resources
+<unresolved_issues>
+1. Decision pending on scope and priority of automated tests (unit vs. E2E balance).  
+2. Final hosting/deployment environment not confirmed (e.g., Vercel, Netlify).  
+3. No explicit plan for user testing or feedback collection beyond internal QA.  
+</unresolved_issues>
 
-<questions>
-List your questions and recommendations here, numbered for clarity:
-
-For example:
-1. Are you planning to introduce paid subscriptions from the start of the project?
-
-Recommendation: The first stage of the project can focus on free features to attract users, and paid features can be introduced at a later stage.
-</questions>
-
-Continue this process, generating new questions and recommendations based on the user's responses, until the user explicitly asks for a summary.
-
-Remember to focus on clarity, relevance, and accuracy of results. Do not include any additional comments or explanations beyond the specified output format.
-
-Analytical work should be done in the thinking block. The final output should consist solely of questions and recommendations and should not duplicate or repeat any work done in the prd_analysis section.
+</conversation_summary>
