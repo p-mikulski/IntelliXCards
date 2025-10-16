@@ -2,13 +2,22 @@
 
 ## 1. List of Tables
 
+### users
+This table is managed by Supabase Auth.
+
+- `id` UUID PRIMARY KEY
+- `email` VARCHAR(255) NOT NULL UNIQUE
+- `encrypted_password` VARCHAR NOT NULL
+- `created_at` TIMESTAMPTZ NOT NULL DEFAULT now()
+- `confirmed_at` TIMESTAMPTZ
+
 ### projects
 - `id` UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - `user_id` UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 - `title` VARCHAR(255) NOT NULL
 - `description` TEXT
 - `tag` VARCHAR(100)
-- `creation_date` TIMESTAMP DEFAULT NOW()
+- `created_at` TIMESTAMP DEFAULT NOW()
 - `last_modified` TIMESTAMP DEFAULT NOW()
 
 ### flashcards
@@ -49,7 +58,7 @@
 
 ## 4. PostgreSQL Policies
 
-No Row-Level Security (RLS) policies are implemented for the MVP, as per planning decisions. Data access control will be managed at the application layer.
+Enable RLS on projects and flashcards tables with policies like "user_id = auth.uid()" for Supabase integration, ensuring multi-tenant security and preventing data leakage between users.
 
 ## 5. Additional Notes
 
@@ -58,5 +67,4 @@ No Row-Level Security (RLS) policies are implemented for the MVP, as per plannin
 - Character limits on `front` and `back` are enforced via CHECK constraints.
 - Default values for `next_review_date` and `ease_factor` are set as specified.
 - Foreign keys use ON DELETE CASCADE to maintain data integrity.
-- The schema is normalized to 3NF and optimized for the small initial scale.</content>
-<parameter name="filePath">c:\Users\piotr\Documents\00_PERSONAL\06_LEARNING\10xDEVS\10x-project-anki\10xdevs-project\.ai\db-plan.md
+- The schema is normalized to 3NF and optimized for the small initial scale.

@@ -12,7 +12,7 @@ Many learners, including students and professionals, understand the value of spa
 
 ## 3. Functional Requirements
 ### 3.1. User Account Management
--   Users must be able to create an account, log in, and log out.
+-   Users must be able to create an account, log in, and log out, delete and account with associated project / flashcards.
 -   Authentication and user data will be managed via Supabase.
 -   User sessions should be persistent.
 

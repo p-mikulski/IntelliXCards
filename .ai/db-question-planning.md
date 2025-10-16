@@ -85,7 +85,7 @@ Recommendation: Add an index on scheduling fields (e.g., next_review_date) and c
 5. Add a feedback column (e.g., ENUM: 'accepted', 'rejected', NULL) to flashcards, with an optional feedback_timestamp; for analytics, use this for aggregation without versioning, as the PRD specifies no version history.
 6. Again keep it simple - Create indexes on foreign key columns (user_id, project_id) and potentially on timestamps (creation_date) for efficient queries on dashboards and lists, using B-tree indexes as the default for PostgreSQL.
 7. Partitioning is not needed for the MVP
-8. not needed for the MVP
+8. Enable RLS on projects and flashcards tables with policies like "user_id = auth.uid()" for Supabase integration, ensuring multi-tenant security and preventing data leakage between users.
 9. Use foreign key constraints with ON DELETE CASCADE from flashcards to projects, and consider triggers or application-level checks for study sessions to prevent orphaned references, ensuring consistency.
 10. Add an index on scheduling fields (e.g., next_review_date) and consider partial indexes for active flashcards; for study mode, use efficient queries with LIMIT/OFFSET or cursors to avoid loading all flashcards at once, optimizing for real-time user experience
 
