@@ -206,13 +206,6 @@
   - **Success Codes:** 204 No Content
   - **Error Codes:** 401 Unauthorized, 404 Not Found
 
-- **Regenerate Flashcard (AI Based)**
-  - **Method:** POST
-  - **URL Path:** `/flashcards/{flashcardId}/regenerate`
-  - **Description:** Regenerates an AI-generated flashcard, overwriting the previous version.
-  - **Success Codes:** 200 OK (with revised flashcard payload)
-  - **Error Codes:** 400 Bad Request, 401 Unauthorized, 404 Not Found
-
 - **Initiate AI Flashcard Generation**
   - **Method:** POST
   - **URL Path:** `/projects/{projectId}/flashcards/ai-generate`
@@ -237,6 +230,13 @@
     ```
   - **Success Codes:** 200 OK
   - **Error Codes:** 400 Bad Request, 500 Internal Server Error
+
+- **Regenerate Flashcard (AI Based)**
+  - **Method:** POST
+  - **URL Path:** `/flashcards/{flashcardId}/regenerate`
+  - **Description:** Regenerates an AI-generated flashcard, overwriting the previous version.
+  - **Success Codes:** 200 OK (with revised flashcard payload)
+  - **Error Codes:** 400 Bad Request, 401 Unauthorized, 404 Not Found
 
 ### Study Sessions
 - **Start Study Session**
