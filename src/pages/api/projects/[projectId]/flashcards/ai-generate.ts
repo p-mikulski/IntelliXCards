@@ -2,8 +2,8 @@ import type { APIRoute } from "astro";
 import {
   FlashcardGenerationService,
   generateFlashcardsSchema,
-} from "../../../../lib/services/flashcard-generation.service";
-import type { ErrorResponseDto, GenerateFlashcardsCommand, ValidationErrorResponseDto } from "../../../../types";
+} from "../../../../../lib/services/flashcard-generation.service";
+import type { ErrorResponseDto, GenerateFlashcardsCommand, ValidationErrorResponseDto } from "../../../../../types";
 import { ZodError } from "zod";
 
 // Disable prerendering as this is a dynamic API endpoint
