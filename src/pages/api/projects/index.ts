@@ -3,11 +3,7 @@ import { ProjectService } from "../../../lib/services/project.service";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../types";
 import { createProjectSchema } from "../../../lib/validation/project.schema";
 import { ZodError } from "zod";
-
-interface AstroLocals {
-  user: { id: string } | null;
-  supabase: import("@supabase/supabase-js").SupabaseClient;
-}
+import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -17,29 +13,13 @@ export const prerender = false;
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    // Get user from session
-    const user = (locals as AstroLocals).user;
-    if (!user) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "Authentication required",
-          statusCode: 401,
-        } satisfies ErrorResponseDto),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     // Parse and validate request body
     const requestData = await request.json();
     const validatedData = createProjectSchema.parse(requestData);
 
     // Create project
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.createProject(validatedData, user.id);
+    const project = await projectService.createProject(validatedData, DEFAULT_USER_ID);
 
     return new Response(JSON.stringify(project), {
       status: 201,
@@ -90,25 +70,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
  */
 export const GET: APIRoute = async ({ locals }) => {
   try {
-    // Get user from session
-    const user = (locals as AstroLocals).user;
-    if (!user) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "Authentication required",
-          statusCode: 401,
-        } satisfies ErrorResponseDto),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    // Get projects
+    // Get all projects for the user
     const projectService = new ProjectService(locals.supabase);
-    const projects = await projectService.listProjects(user.id);
+    const projects = await projectService.listProjects(DEFAULT_USER_ID);
 
     return new Response(JSON.stringify(projects), {
       status: 200,
