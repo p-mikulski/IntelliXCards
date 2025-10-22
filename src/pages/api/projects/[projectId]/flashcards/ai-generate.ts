@@ -5,6 +5,7 @@ import {
 } from "../../../../../lib/services/flashcard-generation.service";
 import type { ErrorResponseDto, GenerateFlashcardsCommand, ValidationErrorResponseDto } from "../../../../../types";
 import { ZodError } from "zod";
+import { supabaseClient, DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 // Disable prerendering as this is a dynamic API endpoint
 export const prerender = false;
@@ -31,6 +32,25 @@ export const POST: APIRoute = async ({ params, request }) => {
           statusCode: 400,
         } as ErrorResponseDto),
         { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Verify project exists and user has access
+    const { data: project, error: projectError } = await supabaseClient
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("user_id", DEFAULT_USER_ID)
+      .single();
+
+    if (projectError || !project) {
+      return new Response(
+        JSON.stringify({
+          error: "NotFound",
+          message: "Project not found or access denied",
+          statusCode: 404,
+        } as ErrorResponseDto),
+        { status: 404, headers: { "Content-Type": "application/json" } }
       );
     }
 

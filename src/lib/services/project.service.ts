@@ -1,9 +1,9 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { supabaseClient } from "../../db/supabase.client";
 import type { CreateProjectCommand, ProjectDto, UpdateProjectCommand } from "../../types";
 import { createProjectSchema, updateProjectSchema } from "../validation/project.schema";
 
 export class ProjectService {
-  constructor(private readonly supabase: SupabaseClient) {}
+  constructor(private readonly supabase: typeof supabaseClient) {}
 
   /**
    * Creates a new project for the current user
@@ -98,11 +98,7 @@ export class ProjectService {
    * @throws {Error} If database error occurs
    */
   async deleteProject(projectId: string, userId: string): Promise<void> {
-    const { error } = await this.supabase
-      .from("projects")
-      .delete()
-      .eq("id", projectId)
-      .eq("user_id", userId);
+    const { error } = await this.supabase.from("projects").delete().eq("id", projectId).eq("user_id", userId);
 
     if (error) {
       throw new Error(`Failed to delete project: ${error.message}`);

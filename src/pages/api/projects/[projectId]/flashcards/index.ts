@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { FlashcardService } from "../../../../../lib/services/flashcard.service";
 import { createFlashcardSchema } from "../../../../../lib/validation/flashcard.schema";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../../../types";
+import { DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -40,7 +41,7 @@ export const POST: APIRoute = async ({ request, locals, params }) => {
 
     // 3. Create flashcard using service
     const flashcardService = new FlashcardService(locals.supabase);
-    const flashcard = await flashcardService.createFlashcard(projectId, validationResult.data);
+    const flashcard = await flashcardService.createFlashcard(projectId, validationResult.data, DEFAULT_USER_ID);
 
     // 4. Return success response
     return new Response(JSON.stringify(flashcard), {
