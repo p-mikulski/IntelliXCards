@@ -3,11 +3,7 @@ import { ProjectService } from "../../../lib/services/project.service";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../types";
 import { updateProjectSchema } from "../../../lib/validation/project.schema";
 import { ZodError } from "zod";
-
-interface AstroLocals {
-  user: { id: string } | null;
-  supabase: import("@supabase/supabase-js").SupabaseClient;
-}
+import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -30,23 +26,8 @@ export const GET: APIRoute = async ({ locals, params }) => {
     );
   }
   try {
-    const user = (locals as AstroLocals).user;
-    if (!user) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "Authentication required",
-          statusCode: 401,
-        } satisfies ErrorResponseDto),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.getProjectById(params.projectId, user.id);
+    const project = await projectService.getProjectById(params.projectId, DEFAULT_USER_ID);
 
     return new Response(JSON.stringify(project), {
       status: 200,
@@ -101,26 +82,11 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
     );
   }
   try {
-    const user = (locals as AstroLocals).user;
-    if (!user) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "Authentication required",
-          statusCode: 401,
-        } satisfies ErrorResponseDto),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     const requestData = await request.json();
     const validatedData = updateProjectSchema.parse(requestData);
 
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.updateProject(params.projectId, user.id, validatedData);
+    const project = await projectService.updateProject(params.projectId, DEFAULT_USER_ID, validatedData);
 
     return new Response(JSON.stringify(project), {
       status: 200,
@@ -196,23 +162,8 @@ export const DELETE: APIRoute = async ({ locals, params }) => {
     );
   }
   try {
-    const user = (locals as AstroLocals).user;
-    if (!user) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "Authentication required",
-          statusCode: 401,
-        } satisfies ErrorResponseDto),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     const projectService = new ProjectService(locals.supabase);
-    await projectService.deleteProject(params.projectId, user.id);
+    await projectService.deleteProject(params.projectId, DEFAULT_USER_ID);
 
     return new Response(null, { status: 204 });
   } catch (error) {
