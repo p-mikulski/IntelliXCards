@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import StudySessionView from "@/components/study/StudySessionView";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Study Session">
+  <StudySessionView client:load projectId={projectId} />
+</Layout>

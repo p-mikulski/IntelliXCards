@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { FlashcardService } from "../../../../../lib/services/flashcard.service";
-import { createFlashcardSchema } from "../../../../../lib/validation/flashcard.schema";
+import { updateFlashcardSchema } from "../../../../../lib/validation/flashcard.schema";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../../../types";
 import { DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
@@ -26,8 +26,8 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
 
     const body = await request.json();
 
-    // Validate using the same schema but make fields optional
-    const validationResult = createFlashcardSchema.partial().safeParse(body);
+    // Validate using the update schema
+    const validationResult = updateFlashcardSchema.safeParse(body);
 
     if (!validationResult.success) {
       return new Response(

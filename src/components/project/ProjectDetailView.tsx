@@ -75,9 +75,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
       <ProjectHeader
         project={viewModel.project}
         onStudyClick={() => {
-          toast.info("Study session feature coming soon!", {
-            description: "This feature will allow you to practice your flashcards.",
-          });
+          window.location.href = `/projects/${projectId}/study`;
         }}
         onGenerateAIClick={() => {
           toast.info("AI generation feature coming soon!", {

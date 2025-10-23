@@ -76,14 +76,18 @@ export class FlashcardService {
     // First verify the flashcard exists and user has access
     await this.getFlashcardById(flashcardId, userId);
 
+    // Build update object with only provided fields
+    const updateData: Record<string, unknown> = {};
+    if (command.front !== undefined) updateData.front = command.front;
+    if (command.back !== undefined) updateData.back = command.back;
+    if (command.feedback !== undefined) updateData.feedback = command.feedback;
+    if (command.next_review_date !== undefined) updateData.next_review_date = command.next_review_date;
+    if (command.ease_factor !== undefined) updateData.ease_factor = command.ease_factor;
+
     // Update the flashcard
     const { data: flashcard, error: updateError } = await this.supabase
       .from("flashcards")
-      .update({
-        front: command.front,
-        back: command.back,
-        feedback: command.feedback,
-      })
+      .update(updateData)
       .eq("id", flashcardId)
       .select()
       .single();

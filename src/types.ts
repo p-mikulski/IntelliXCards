@@ -76,9 +76,12 @@ export type FlashcardDto = Flashcard;
 
 /**
  * Command model for updating an existing flashcard
- * Allows updating content and feedback
+ * Allows updating content, feedback, and spaced repetition fields
  */
-export type UpdateFlashcardCommand = Pick<TablesUpdate<"flashcards">, "front" | "back" | "feedback">;
+export type UpdateFlashcardCommand = Pick<
+  TablesUpdate<"flashcards">,
+  "front" | "back" | "feedback" | "next_review_date" | "ease_factor"
+>;
 
 /**
  * Simplified flashcard DTO for list views
