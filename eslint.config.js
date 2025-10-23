@@ -9,6 +9,7 @@ import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tseslint from "typescript-eslint";
+import astroParser from "astro-eslint-parser";
 
 // File path setup
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +17,7 @@ const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, ".gitignore");
 
 const baseConfig = tseslint.config({
+  files: ["**/*.{js,jsx,ts,tsx}"],
   extends: [eslint.configs.recommended, tseslint.configs.strict, tseslint.configs.stylistic],
   rules: {
     "no-console": "warn",
@@ -56,11 +58,29 @@ const reactConfig = tseslint.config({
   },
 });
 
+const prettierConfig = tseslint.config({
+  files: ["**/*.{js,jsx,ts,tsx}"],
+  extends: [eslintPluginPrettier],
+});
+
+const astroConfig = tseslint.config({
+  files: ["**/*.astro"],
+  extends: [eslintPluginAstro.configs["flat/recommended"]],
+  languageOptions: {
+    parser: astroParser,
+  },
+  rules: {
+    "prettier/prettier": "off", // Disable Prettier for Astro files
+  },
+});
+
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
   jsxA11yConfig,
   reactConfig,
-  eslintPluginAstro.configs["flat/recommended"],
-  eslintPluginPrettier
+  //eslintPluginAstro.configs["flat/recommended"],
+  //eslintPluginPrettier
+  astroConfig,
+  prettierConfig
 );
