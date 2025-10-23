@@ -3,6 +3,7 @@
 ## 1. List of Tables
 
 ### users
+
 This table is managed by Supabase Auth.
 
 - `id` UUID PRIMARY KEY
@@ -12,6 +13,7 @@ This table is managed by Supabase Auth.
 - `confirmed_at` TIMESTAMPTZ
 
 ### projects
+
 - `id` UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - `user_id` UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 - `title` VARCHAR(255) NOT NULL
@@ -21,6 +23,7 @@ This table is managed by Supabase Auth.
 - `last_modified` TIMESTAMP DEFAULT NOW()
 
 ### flashcards
+
 - `id` UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - `project_id` UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE
 - `front` VARCHAR(200) NOT NULL CHECK (length(front) <= 200)
@@ -32,6 +35,7 @@ This table is managed by Supabase Auth.
 - `created_at` TIMESTAMP DEFAULT NOW()
 
 ### study_sessions
+
 - `id` UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - `user_id` UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 - `project_id` UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE

@@ -28,56 +28,62 @@
 </decisions>
 
 <matched_recommendations>
-1. Define clear generation logic combining extraction and summarization to ensure high-quality flashcards within text limits.  
-2. Implement a linear, step-by-step flow for flashcard creation to ensure a simple and predictable UX.  
-3. Display project metadata (title, date, tag) in dashboard view for easier organization and navigation.  
-4. Use Supabase for authentication and data storage to streamline development.  
-5. Introduce clear error handling for AI generation failures to improve user trust.  
-6. Store flashcards as individual records linked to project IDs to support scalability.  
-7. Include a lightweight analytics dashboard to monitor success metrics and measure AI flashcard acceptance.  
-8. Use a weekly milestone-based roadmap to ensure 4-week MVP delivery.  
-9. Prioritize CRUD and AI generation test coverage in unit and E2E tests for stable MVP validation.  
+
+1. Define clear generation logic combining extraction and summarization to ensure high-quality flashcards within text limits.
+2. Implement a linear, step-by-step flow for flashcard creation to ensure a simple and predictable UX.
+3. Display project metadata (title, date, tag) in dashboard view for easier organization and navigation.
+4. Use Supabase for authentication and data storage to streamline development.
+5. Introduce clear error handling for AI generation failures to improve user trust.
+6. Store flashcards as individual records linked to project IDs to support scalability.
+7. Include a lightweight analytics dashboard to monitor success metrics and measure AI flashcard acceptance.
+8. Use a weekly milestone-based roadmap to ensure 4-week MVP delivery.
+9. Prioritize CRUD and AI generation test coverage in unit and E2E tests for stable MVP validation.
 10. Keep interface simple, focusing on core linear functionality before adding advanced options.  
-</matched_recommendations>
+    </matched_recommendations>
 
 <prd_planning_summary>
-**Main Functional Requirements:**  
-- **AI Generation:** Mix of summarization and extraction for flashcard creation from user-provided text (up to 10k characters).  
-- **Manual Editing:** Users can fully edit and regenerate flashcards; regenerated versions overwrite previous ones.  
-- **Organization:** Flashcards grouped by projects (folders) with metadata: title, short description, date, and tag.  
-- **Storage:** Flashcards saved as individual records in Supabase, linked to project IDs. Drafts persist until user saves.  
-- **Interface:** Simple and linear UX (input → generate → edit → save).  
-- **Review & Tracking:** Overview table showing progress (done/new/upcoming/to learn), updated after each session.  
-- **Feedback:** Users can rate flashcards with thumbs up/down (for analytics only).  
-- **Error Handling:** Retry message for failed AI generation attempts.  
-- **Testing:** Unit and Playwright E2E tests for CRUD and AI flows.  
-- **Analytics:** Internal dashboard to track AI acceptance rates (75% KPI).  
-- **Timeline:** 4-week MVP roadmap with weekly milestones for UI, AI integration, testing, and go-live.  
+**Main Functional Requirements:**
 
-**Key User Stories & Usage Paths:**  
-1. As a user, I can paste text and specify the number of flashcards I want generated.  
-2. As a user, I can review AI-generated flashcards, edit them, regenerate, and save.  
-3. As a user, I can create, rename, or delete projects to organize flashcards.  
-4. As a user, I can view my flashcard progress in a simple post-session overview.  
-5. As an admin, I can monitor AI flashcard acceptance metrics to evaluate product success.  
+- **AI Generation:** Mix of summarization and extraction for flashcard creation from user-provided text (up to 10k characters).
+- **Manual Editing:** Users can fully edit and regenerate flashcards; regenerated versions overwrite previous ones.
+- **Organization:** Flashcards grouped by projects (folders) with metadata: title, short description, date, and tag.
+- **Storage:** Flashcards saved as individual records in Supabase, linked to project IDs. Drafts persist until user saves.
+- **Interface:** Simple and linear UX (input → generate → edit → save).
+- **Review & Tracking:** Overview table showing progress (done/new/upcoming/to learn), updated after each session.
+- **Feedback:** Users can rate flashcards with thumbs up/down (for analytics only).
+- **Error Handling:** Retry message for failed AI generation attempts.
+- **Testing:** Unit and Playwright E2E tests for CRUD and AI flows.
+- **Analytics:** Internal dashboard to track AI acceptance rates (75% KPI).
+- **Timeline:** 4-week MVP roadmap with weekly milestones for UI, AI integration, testing, and go-live.
 
-**Success Criteria & Measurement:**  
-- 75% of AI-generated flashcards accepted by users per session (measured via thumbs up/down feedback).  
-- 75% of total flashcards created through AI generation (tracked in internal analytics).  
-- MVP delivery within 4 weeks following milestone roadmap.  
+**Key User Stories & Usage Paths:**
 
-**Design Constraints:**  
-- Web-only MVP (no mobile apps).  
-- Simple interface with limited customization.  
-- Supabase-based backend for both auth and data management.  
-- No version history or advanced repetition algorithm.  
+1. As a user, I can paste text and specify the number of flashcards I want generated.
+2. As a user, I can review AI-generated flashcards, edit them, regenerate, and save.
+3. As a user, I can create, rename, or delete projects to organize flashcards.
+4. As a user, I can view my flashcard progress in a simple post-session overview.
+5. As an admin, I can monitor AI flashcard acceptance metrics to evaluate product success.
+
+**Success Criteria & Measurement:**
+
+- 75% of AI-generated flashcards accepted by users per session (measured via thumbs up/down feedback).
+- 75% of total flashcards created through AI generation (tracked in internal analytics).
+- MVP delivery within 4 weeks following milestone roadmap.
+
+**Design Constraints:**
+
+- Web-only MVP (no mobile apps).
+- Simple interface with limited customization.
+- Supabase-based backend for both auth and data management.
+- No version history or advanced repetition algorithm.
 
 </prd_planning_summary>
 
 <unresolved_issues>
-1. Decision pending on scope and priority of automated tests (unit vs. E2E balance).  
-2. Final hosting/deployment environment not confirmed (e.g., Vercel, Netlify).  
+
+1. Decision pending on scope and priority of automated tests (unit vs. E2E balance).
+2. Final hosting/deployment environment not confirmed (e.g., Vercel, Netlify).
 3. No explicit plan for user testing or feedback collection beyond internal QA.  
-</unresolved_issues>
+   </unresolved_issues>
 
 </conversation_summary>

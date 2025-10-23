@@ -1,9 +1,11 @@
 # API Endpoint Implementation Plan: Create Flashcard (Manual Entry)
 
 ## 1. Endpoint Overview
+
 This endpoint allows users to manually create a new flashcard under a specified project using a POST request. It validates user input (ensuring that 'front' and 'back' fields meet character limits), associates the flashcard with the given project, and persists the record in the database. Upon success, it returns the created flashcard data with a 201 Created status.
 
 ## 2. Request Details
+
 - **HTTP Method:** POST
 - **URL Structure:** /projects/{projectId}/flashcards
 - **Parameters:**
@@ -21,11 +23,13 @@ This endpoint allows users to manually create a new flashcard under a specified 
   ```
 
 ## 3. Used Types
+
 - **DTO Types & Command Models:**
   - `CreateFlashcardCommand` (from types.ts): Contains the fields `front` and `back` drawn from the request payload.
   - `FlashcardDto` for response payload.
 
 ## 4. Response Details
+
 - **Success Response:**
   - **Status Code:** 201 Created
   - **Payload:**
@@ -47,6 +51,7 @@ This endpoint allows users to manually create a new flashcard under a specified 
   - **500 Internal Server Error:** For unexpected server errors.
 
 ## 5. Data Flow
+
 1. **Request Reception:** The API gateway or server receives the POST request with a project ID and request body.
 2. **Authentication & Authorization:** Verify that the user is authenticated and authorized to add flashcards to the specified project.
 3. **Input Validation:** Validate payload ensuring 'front' is present and not exceeding 200 characters and 'back' is present and not exceeding 500 characters.
@@ -57,23 +62,27 @@ This endpoint allows users to manually create a new flashcard under a specified 
 6. **Response Generation:** Construct the response payload based on the created flashcard and return a 201 status.
 
 ## 6. Security Considerations
+
 - **Authentication:** Ensure endpoint is protected using authentication middleware (e.g., JWT, session-based auth).
 - **Authorization:** Confirm that the authenticated user has access rights to the specified project.
 - **Input Sanitization:** Validate and sanitize inputs to prevent injection attacks.
 - **Rate Limiting:** Consider rate limiting to prevent abuse of the endpoint.
 
 ## 7. Error Handling
+
 - **Validation Errors (400):** Return detailed error messages when 'front' or 'back' fields are missing or exceed character limits.
 - **Unauthorized Access (401):** Return error when authentication fails.
 - **Resource Not Found (404):** Return error if the project with the given ID does not exist.
 - **Server Errors (500):** Log unexpected errors and return a generic error message to prevent sensitive information leakage.
 
 ## 8. Performance Considerations
+
 - **Efficient Database Queries:** Ensure that the insertion operation is efficient by leveraging proper indexing (using `projects_user_id_idx` and `flashcards_project_id_idx`).
 - **Validation Efficiency:** Implement early validation to avoid unnecessary processing.
 - **Scalability:** Ensure the service layer can handle concurrent requests gracefully.
 
 ## 9. Implementation Steps
+
 1. **Define the Route Handler:** Create or update the API route file at `src/pages/api/projects/[projectId]/flashcards/index.ts` to handle POST requests.
 2. **Extract Request Data:** Parse the `projectId` from URL parameters and the request body.
 3. **Authentication Middleware:** Integrate authentication/authorization checks to confirm user access to the project.

@@ -3,11 +3,11 @@ You are an AI assistant whose task is to help plan a PostgreSQL database schema 
 Please carefully review the following information:
 
 <product_requirements>
-#file:prd.md 
+#file:prd.md
 </product_requirements>
 
 <tech_stack>
-#file:tech-stack.md 
+#file:tech-stack.md
 </tech_stack>
 
 Analyze the provided information, focusing on aspects relevant to database design. Consider the following issues:
@@ -36,6 +36,7 @@ The output should have the following structure:
 List your questions and recommendations here, numbered for clarity:
 
 For example:
+
 1. Should the `users` entity have a relationship with `posts`?
 
 Recommendation: Yes, the `users` entity should have a relationship with `posts` because users can create posts.
@@ -46,7 +47,6 @@ Remember that your goal is to provide a comprehensive list of questions and reco
 Continue this process, generating new questions and recommendations based on the provided context and user responses, until the user explicitly requests a summary.
 
 Remember to focus on clarity, relevance, and accuracy of outputs. Do not include any additional comments or explanations beyond the specified output format.
-
 
 Recommendation: Based on the PRD, it appears to be one-to-many (users own projects), but confirm if multi-user access is needed for future scalability; if not, enforce this with foreign keys and RLS to prevent unauthorized access.
 
@@ -79,16 +79,15 @@ Recommendation: Add an index on scheduling fields (e.g., next_review_date) and c
 </questions>
 
 1.  multi-user access
-2. Flashcards should belong to projects (one-to-many relationship), with a foreign key from flashcards to projects, ensuring data integrity and allowing cascading deletes when projects are removed
-3. 200 for front, 1000 for back? 
-4. Store scheduling fields (e.g., next_review_date TIMESTAMP, ease_factor DECIMAL) directly on the flashcards table for simplicity in the MVP, as it reduces joins and aligns with the simple algorithm requirement - keep it simple
-5. Add a feedback column (e.g., ENUM: 'accepted', 'rejected', NULL) to flashcards, with an optional feedback_timestamp; for analytics, use this for aggregation without versioning, as the PRD specifies no version history.
-6. Again keep it simple - Create indexes on foreign key columns (user_id, project_id) and potentially on timestamps (creation_date) for efficient queries on dashboards and lists, using B-tree indexes as the default for PostgreSQL.
-7. Partitioning is not needed for the MVP
-8. Enable RLS on projects and flashcards tables with policies like "user_id = auth.uid()" for Supabase integration, ensuring multi-tenant security and preventing data leakage between users.
-9. Use foreign key constraints with ON DELETE CASCADE from flashcards to projects, and consider triggers or application-level checks for study sessions to prevent orphaned references, ensuring consistency.
+2.  Flashcards should belong to projects (one-to-many relationship), with a foreign key from flashcards to projects, ensuring data integrity and allowing cascading deletes when projects are removed
+3.  200 for front, 1000 for back?
+4.  Store scheduling fields (e.g., next_review_date TIMESTAMP, ease_factor DECIMAL) directly on the flashcards table for simplicity in the MVP, as it reduces joins and aligns with the simple algorithm requirement - keep it simple
+5.  Add a feedback column (e.g., ENUM: 'accepted', 'rejected', NULL) to flashcards, with an optional feedback_timestamp; for analytics, use this for aggregation without versioning, as the PRD specifies no version history.
+6.  Again keep it simple - Create indexes on foreign key columns (user_id, project_id) and potentially on timestamps (creation_date) for efficient queries on dashboards and lists, using B-tree indexes as the default for PostgreSQL.
+7.  Partitioning is not needed for the MVP
+8.  Enable RLS on projects and flashcards tables with policies like "user_id = auth.uid()" for Supabase integration, ensuring multi-tenant security and preventing data leakage between users.
+9.  Use foreign key constraints with ON DELETE CASCADE from flashcards to projects, and consider triggers or application-level checks for study sessions to prevent orphaned references, ensuring consistency.
 10. Add an index on scheduling fields (e.g., next_review_date) and consider partial indexes for active flashcards; for study mode, use efficient queries with LIMIT/OFFSET or cursors to avoid loading all flashcards at once, optimizing for real-time user experience
-
 
 Recommendation: Standardize on 200 for front and 500 for back as per PRD to avoid confusion, implementing CHECK constraints in PostgreSQL to enforce these limits and prevent invalid data entry.
 
@@ -128,5 +127,5 @@ Recommendation: Implement a trigger on flashcards for updating project last_modi
 6. Yes, add composite indexes like (user_id, creation_date DESC) on projects and (project_id, next_review_date) on flashcards to optimize dashboard views and study session queries, ensuring efficient sorting and filtering.
 7. Allow duplicates for flexibility in manual creation, but consider a unique constraint on (project_id, front) if uniqueness is desired; for MVP, rely on application logic to handle duplicates rather than database constraints.
 8. Keep analytics normalized in flashcards, using COUNT queries with WHERE clauses on feedback; avoid denormalization for MVP to maintain simplicity, and consider materialized views if query performance becomes an issue later.
-9. Assume small  growth (users: 20, projects/user: 10, flashcards/project: 200) and design with this in mind, using EXPLAIN ANALYZE in PostgreSQL to test query plans and adjust indexes as needed
+9. Assume small growth (users: 20, projects/user: 10, flashcards/project: 200) and design with this in mind, using EXPLAIN ANALYZE in PostgreSQL to test query plans and adjust indexes as needed
 10. mplement a trigger on flashcards for updating project last_modified to ensure data consistency, reducing application complexity and preventing stale timestamps in the database.

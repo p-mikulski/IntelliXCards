@@ -1,6 +1,7 @@
 # REST API Plan
 
 ## 1. Resources
+
 - **Users**: Managed by Supabase Auth (authentication endpoints handled separately).
 - **Projects**: Corresponds to the `projects` table.
 - **Flashcards**: Corresponds to the `flashcards` table.
@@ -9,6 +10,7 @@
 ## 2. Endpoints
 
 ### Projects
+
 - **Create Project**
   - **Method:** POST
   - **URL Path:** `/projects`
@@ -66,23 +68,23 @@
   - **Error Codes:** 401 Unauthorized
 
 - **Get Project Detail**
-    - **Method:** GET
-    - **URL Path:** `/projects/{projectId}`
-    - **Description:** Retrieves full details for a single project.
-    - **JSON Response Payload:**
-        ```json
-        {
-            "id": "UUID",
-            "user_id": "UUID",
-            "title": "string",
-            "description": "string",
-            "tag": "string",
-            "created_at": "timestamp",
-            "last_modified": "timestamp"
-        }
-        ```
-    - **Success Codes:** 200 OK
-    - **Error Codes:** 404 Not Found, 401 Unauthorized
+  - **Method:** GET
+  - **URL Path:** `/projects/{projectId}`
+  - **Description:** Retrieves full details for a single project.
+  - **JSON Response Payload:**
+    ```json
+    {
+      "id": "UUID",
+      "user_id": "UUID",
+      "title": "string",
+      "description": "string",
+      "tag": "string",
+      "created_at": "timestamp",
+      "last_modified": "timestamp"
+    }
+    ```
+  - **Success Codes:** 200 OK
+  - **Error Codes:** 404 Not Found, 401 Unauthorized
 
 - **Update Project**
   - **Method:** PATCH
@@ -107,6 +109,7 @@
   - **Error Codes:** 401 Unauthorized, 404 Not Found
 
 ### Flashcards
+
 - **Create Flashcard (Manual Entry)**
   - **Method:** POST
   - **URL Path:** `/projects/{projectId}/flashcards`
@@ -164,25 +167,25 @@
   - **Error Codes:** 401 Unauthorized, 404 Not Found
 
 - **Get Flashcard Detail**
-    - **Method:** GET
-    - **URL Path:** `/flashcards/{flashcardId}`
-    - **Description:** Retrieves details of a specific flashcard.
-    - **JSON Response Payload:**
-        ```json
-        {
-            "id": "UUID",
-            "project_id": "UUID",
-            "front": "string",
-            "back": "string",
-            "next_review_date": "timestamp",
-            "ease_factor": "number",
-            "feedback": "accepted/rejected/null",
-            "feedback_timestamp": "timestamp",
-            "created_at": "timestamp"
-        }
-        ```
-    - **Success Codes:** 200 OK
-    - **Error Codes:** 404 Not Found, 401 Unauthorized
+  - **Method:** GET
+  - **URL Path:** `/flashcards/{flashcardId}`
+  - **Description:** Retrieves details of a specific flashcard.
+  - **JSON Response Payload:**
+    ```json
+    {
+      "id": "UUID",
+      "project_id": "UUID",
+      "front": "string",
+      "back": "string",
+      "next_review_date": "timestamp",
+      "ease_factor": "number",
+      "feedback": "accepted/rejected/null",
+      "feedback_timestamp": "timestamp",
+      "created_at": "timestamp"
+    }
+    ```
+  - **Success Codes:** 200 OK
+  - **Error Codes:** 404 Not Found, 401 Unauthorized
 
 - **Update Flashcard**
   - **Method:** PATCH
@@ -239,6 +242,7 @@
   - **Error Codes:** 400 Bad Request, 401 Unauthorized, 404 Not Found
 
 ### Study Sessions
+
 - **Start Study Session**
   - **Method:** POST
   - **URL Path:** `/projects/{projectId}/study-sessions`
@@ -284,8 +288,9 @@
 ## 3. Validation and Business Logic
 
 ### Validation Conditions
+
 - **Projects:**
-  - `title` is required. 
+  - `title` is required.
 - **Flashcards:**
   - `front` field: required and maximum 200 characters.
   - `back` field: required and maximum 500 characters.
@@ -293,9 +298,10 @@
   - `start_time` should be a valid timestamp.
 - All resources:
   - Enforce that the authenticated user's id matches the resource’s ownership.
-  
+
 ### Business Logic Implementation
-- **AI Flashcard Generation:** 
+
+- **AI Flashcard Generation:**
   - On POST `/projects/{projectId}/flashcards/ai-generate`, the API calls the AI service to generate flashcard drafts from the provided text. The drafts are returned for user review before manual confirmation.
 - **Flashcard Regeneration:**
   - On POST `/flashcards/{flashcardId}/regenerate`, the API triggers a regeneration process. The new flashcard content overwrites the existing content, and the revision is timestamped without version history.
@@ -305,6 +311,7 @@
   - Updating flashcard feedback (thumbs up/thumbs down) via PATCH on `/flashcards/{flashcardId}` updates the `feedback` field and sets `feedback_timestamp`.
 
 ### Security and Performance
+
 - **Security:**
   - Use JWT-based authentication.
   - Enforce database RLS policies (e.g., `user_id = auth.uid()`).

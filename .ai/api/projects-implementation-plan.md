@@ -7,8 +7,9 @@ Implementation plan for the Project Management REST API endpoints that provide C
 ## 2. Request Details
 
 ### Create Project (POST /projects)
+
 - Method: POST
-- Headers: 
+- Headers:
   - Content-Type: application/json
   - Authorization: Bearer token
 - Body (JSON):
@@ -21,6 +22,7 @@ Implementation plan for the Project Management REST API endpoints that provide C
   ```
 
 ### List Projects (GET /projects)
+
 - Method: GET
 - Headers: Authorization: Bearer token
 - Query Parameters:
@@ -29,14 +31,16 @@ Implementation plan for the Project Management REST API endpoints that provide C
   - sort?: string (format: field:direction)
 
 ### Get Project Detail (GET /projects/{projectId})
+
 - Method: GET
 - Headers: Authorization: Bearer token
 - URL Parameters:
   - projectId: UUID
 
 ### Update Project (PATCH /projects/{projectId})
+
 - Method: PATCH
-- Headers: 
+- Headers:
   - Content-Type: application/json
   - Authorization: Bearer token
 - URL Parameters:
@@ -51,6 +55,7 @@ Implementation plan for the Project Management REST API endpoints that provide C
   ```
 
 ### Delete Project (DELETE /projects/{projectId})
+
 - Method: DELETE
 - Headers: Authorization: Bearer token
 - URL Parameters:
@@ -60,22 +65,22 @@ Implementation plan for the Project Management REST API endpoints that provide C
 
 ```typescript
 // Command Models
-CreateProjectCommand
-UpdateProjectCommand
+CreateProjectCommand;
+UpdateProjectCommand;
 
 // Response DTOs
-ProjectDto
-ProjectListItemDto
-ProjectListDto
+ProjectDto;
+ProjectListItemDto;
+ProjectListDto;
 
 // Query Parameters
-ListQueryParams
-PaginationParams
-SortParams
+ListQueryParams;
+PaginationParams;
+SortParams;
 
 // Error Responses
-ErrorResponseDto
-ValidationErrorResponseDto
+ErrorResponseDto;
+ValidationErrorResponseDto;
 ```
 
 ## 4. Data Flow
@@ -84,6 +89,7 @@ ValidationErrorResponseDto
    - Request → Middleware (Auth) → Route Handler → Service → Database → Response
 
 2. Service Layer Organization:
+
    ```
    src/lib/services/
    └── project.service.ts
@@ -154,6 +160,7 @@ ValidationErrorResponseDto
 ## 8. Implementation Steps
 
 ### 1. Setup Project Structure
+
 1. Create project service file:
    ```
    src/lib/services/project.service.ts
@@ -169,6 +176,7 @@ ValidationErrorResponseDto
    ```
 
 ### 2. Implement Service Layer
+
 1. Create ProjectService class with methods:
    - createProject
    - listProjects
@@ -179,6 +187,7 @@ ValidationErrorResponseDto
 3. Add error handling and input validation
 
 ### 3. Implement Route Handlers
+
 1. Create Project (POST)
 2. List Projects (GET)
 3. Get Project Detail (GET)
@@ -186,6 +195,7 @@ ValidationErrorResponseDto
 5. Delete Project (DELETE)
 
 ### 4. Implement Validation
+
 1. Create Zod schemas for:
    - Create project payload
    - Update project payload
@@ -194,29 +204,34 @@ ValidationErrorResponseDto
 3. Add response type validation
 
 ### 5. Implement Error Handling
+
 1. Create custom error types
 2. Implement error handling middleware
 3. Add logging for errors
 
 ### 6. Implement Security
+
 1. Add authentication middleware
 2. Implement rate limiting
 3. Add request size limits
 4. Setup row level security policies
 
 ### 7. Testing
+
 1. Create unit tests for service layer
 2. Create integration tests for endpoints
 3. Create performance tests
 4. Test error scenarios
 
 ### 8. Documentation
+
 1. Update API documentation
 2. Add code comments
 3. Document error codes and messages
 4. Add usage examples
 
 ### 9. Optimization
+
 1. Implement caching strategy
 2. Add performance monitoring
 3. Optimize database queries

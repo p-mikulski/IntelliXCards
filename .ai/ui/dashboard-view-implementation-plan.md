@@ -1,13 +1,16 @@
 # View Implementation Plan: Dashboard (Projects List)
 
 ## 1. Overview
+
 The Dashboard view serves as the main hub for authenticated users, displaying a comprehensive list of their projects. It provides the primary interface for project management, allowing users to create, view, update, and delete projects. The view is designed to be interactive and responsive, featuring sorting, pagination, and optimistic UI updates for a seamless user experience. It also includes a welcoming empty state for new users to guide them through creating their first project.
 
 ## 2. View Routing
+
 - **Path:** `/dashboard`
 - **Access:** This is a protected route and requires user authentication. Unauthenticated users attempting to access this path should be redirected to the login page.
 
 ## 3. Component Structure
+
 The view will be composed of a main Astro page (`dashboard.astro`) that orchestrates several client-side React components.
 
 ```
@@ -34,6 +37,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
 ## 4. Component Details
 
 ### `DashboardView.tsx`
+
 - **Description:** The main client-side component that fetches project data and manages the overall state for the dashboard, including dialog visibility and project list data.
 - **Main Elements:** Renders `DashboardHeader`, `ProjectList`, `Pagination`, and all dialog components.
 - **Handled Interactions:**
@@ -44,6 +48,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
 - **Props:** None.
 
 ### `DashboardHeader.tsx`
+
 - **Description:** Displays the view title, project statistics (e.g., "You have 5 projects"), and the primary "Create Project" button.
 - **Main Elements:** `h1` for the title, `p` for stats, and a `Button` component.
 - **Handled Interactions:**
@@ -54,6 +59,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
   - `onOpenCreateDialog: () => void`
 
 ### `ProjectList.tsx`
+
 - **Description:** Renders the list of projects. It handles the display of the loading state (skeleton), empty state, or the actual project items.
 - **Main Elements:** A `div` container that conditionally renders `SkeletonLoader`, `EmptyState`, or a list of `ProjectListItem` components. It also includes the `ProjectListToolbar`.
 - **Handled Interactions:**
@@ -69,6 +75,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
   - `onFilterChange: (filterQuery: string) => void`
 
 ### `ProjectListItem.tsx`
+
 - **Description:** Represents a single project in the list, displaying its key details and action controls.
 - **Main Elements:** A clickable `div` or `a` tag that navigates to the project detail page. Contains text elements for title, creation date, and tag, along with the `ProjectActions` component.
 - **Handled Interactions:**
@@ -80,6 +87,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
   - `onDelete: (project: ProjectViewModel) => void`
 
 ### `CreateProjectDialog.tsx`
+
 - **Description:** A modal form for creating a new project.
 - **Main Elements:** A form with `Input` fields for `title`, `description`, and `tag`, and a "Save" button.
 - **Handled Interactions:**
@@ -95,6 +103,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
   - `onCreate: (data: CreateProjectCommand) => Promise<void>`
 
 ### `EditProjectDialog.tsx`
+
 - **Description:** A modal form for editing an existing project.
 - **Main Elements:** A form pre-filled with the project's current data, with `Input` fields for `title`, `description`, and `tag`.
 - **Handled Interactions:**
@@ -110,6 +119,7 @@ The view will be composed of a main Astro page (`dashboard.astro`) that orchestr
 ## 5. Types
 
 ### `ProjectViewModel`
+
 A client-side representation of a project, derived from `ProjectListItemDto` but with an added state for optimistic UI.
 
 ```typescript
@@ -117,22 +127,25 @@ import type { ProjectListItemDto } from "./types";
 
 export type ProjectViewModel = ProjectListItemDto & {
   /** 'syncing' for create/update, 'deleting' for delete */
-  optimisticState?: 'syncing' | 'deleting';
+  optimisticState?: "syncing" | "deleting";
   /** Formatted creation date string for display */
   formattedCreatedAt: string;
 };
 ```
 
 ### DTOs (from `src/types.ts`)
+
 - `ProjectListDto`: Used for the response of the `GET /api/projects` endpoint.
 - `ProjectListItemDto`: The shape of a single project within `ProjectListDto`.
 - `CreateProjectCommand`: The request payload for `POST /api/projects`.
 - `UpdateProjectCommand`: The request payload for `PATCH /api/projects/{projectId}`.
 
 ## 6. State Management
+
 State will be managed within the `DashboardView.tsx` component using React hooks. A custom hook, `useProjectDashboard`, will be created to encapsulate all business logic.
 
 ### `useProjectDashboard` Custom Hook
+
 - **Purpose:** To centralize data fetching, state management, and API interactions for the dashboard.
 - **State Variables:**
   - `projects: ProjectViewModel[]`: The list of projects to display.
@@ -205,17 +218,17 @@ State will be managed within the `DashboardView.tsx` component using React hooks
 2.  **Implement `dashboard.astro`:** Set up the page, handle authentication, and render the main `DashboardView` component with `client:load`.
 3.  **Develop `useProjectDashboard` Hook:** Implement the custom hook with all state variables and functions for API logic and state management.
 4.  **Build UI Components:**
-    -   Implement `DashboardView.tsx` to use the `useProjectDashboard` hook and orchestrate child components.
-    -   Create the static UI for `DashboardHeader`, `ProjectList`, `ProjectListItem`, `Pagination`, and the dialogs.
-    -   Implement the `SkeletonLoader` and `EmptyState` components.
+    - Implement `DashboardView.tsx` to use the `useProjectDashboard` hook and orchestrate child components.
+    - Create the static UI for `DashboardHeader`, `ProjectList`, `ProjectListItem`, `Pagination`, and the dialogs.
+    - Implement the `SkeletonLoader` and `EmptyState` components.
 5.  **Connect State and Props:** Wire up the state and event handlers from `DashboardView` down to the child components via props.
 6.  **Implement Forms and Validation:** Build the forms in `CreateProjectDialog` and `EditProjectDialog`. Use a library like `react-hook-form` with `zod` for robust validation.
 7.  **Implement Optimistic UI:**
-    -   On create, add a temporary `ProjectViewModel` with `optimisticState: 'syncing'` to the list.
-    -   On update, update the project in the list and set `optimisticState: 'syncing'`.
-    -   On delete, set `optimisticState: 'deleting'` on the project.
-    -   On API success, update the item with the response and remove the `optimisticState`.
-    -   On API failure, revert the change and show an error.
+    - On create, add a temporary `ProjectViewModel` with `optimisticState: 'syncing'` to the list.
+    - On update, update the project in the list and set `optimisticState: 'syncing'`.
+    - On delete, set `optimisticState: 'deleting'` on the project.
+    - On API success, update the item with the response and remove the `optimisticState`.
+    - On API failure, revert the change and show an error.
 8.  **Styling:** Apply Tailwind CSS classes to all components to match the application's design system.
 9.  **Testing:** Write unit tests for the `useProjectDashboard` hook and component tests to verify interactions and rendering based on state.
 10. **Final Review:** Ensure all user stories and acceptance criteria are met, and that the implementation is accessible and responsive.

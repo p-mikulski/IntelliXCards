@@ -5,6 +5,7 @@
 IntelliXCards features a responsive, accessible interface organized around three primary flows: authentication, project management, and flashcard creation/study. The architecture adopts a mobile-first approach with a clear hierarchy of information and task-focused views. The UI is designed to minimize friction in the AI-assisted flashcard creation process while ensuring a smooth learning experience through the spaced repetition system.
 
 Key architectural principles include:
+
 - Progressive disclosure of complexity
 - Context-aware navigation
 - Consistent feedback mechanisms
@@ -14,6 +15,7 @@ Key architectural principles include:
 ## 2. View List
 
 ### Landing Page
+
 - **View Path:** `/`
 - **Main Purpose:** Introduce the product to new users and provide entry points to authentication
 - **Key Information:**
@@ -31,6 +33,7 @@ Key architectural principles include:
   - Public-facing view (no authentication required)
 
 ### Registration View
+
 - **View Path:** `/register`
 - **Main Purpose:** Allow new users to create an account
 - **Key Information:**
@@ -49,6 +52,7 @@ Key architectural principles include:
   - SSL/TLS encrypted connection
 
 ### Login View
+
 - **View Path:** `/login`
 - **Main Purpose:** Allow returning users to authenticate
 - **Key Information:**
@@ -68,6 +72,7 @@ Key architectural principles include:
   - Automatic session timeout
 
 ### Dashboard (Projects List)
+
 - **View Path:** `/dashboard`
 - **Main Purpose:** Display all user projects and provide entry points to project management
 - **Key Information:**
@@ -85,6 +90,7 @@ Key architectural principles include:
   - Optimistic UI updates for project actions
 
 ### Project Detail View
+
 - **View Path:** `/projects/:projectId`
 - **Main Purpose:** Display project information and associated flashcards
 - **Key Information:**
@@ -105,6 +111,7 @@ Key architectural principles include:
   - Focus management for modal interactions
 
 ### AI Flashcard Generation View
+
 - **View Path:** `/projects/:projectId/generate`
 - **Main Purpose:** Facilitate creation of AI-generated flashcards from text
 - **Key Information:**
@@ -124,6 +131,7 @@ Key architectural principles include:
   - Keyboard shortcuts for common actions
 
 ### Flashcard Draft Review View
+
 - **View Path:** `/projects/:projectId/review-drafts`
 - **Main Purpose:** Review, edit, and save AI-generated flashcard drafts
 - **Key Information:**
@@ -144,6 +152,7 @@ Key architectural principles include:
   - Confirmation for discarding changes
 
 ### Flashcard Creation/Edit View
+
 - **View Path:** `/projects/:projectId/flashcards/new` or `/flashcards/:flashcardId/edit`
 - **Main Purpose:** Create or edit individual flashcards manually
 - **Key Information:**
@@ -161,6 +170,7 @@ Key architectural principles include:
   - Keyboard shortcuts for formatting
 
 ### Study Session View
+
 - **View Path:** `/projects/:projectId/study`
 - **Main Purpose:** Present flashcards for study using spaced repetition
 - **Key Information:**
@@ -180,6 +190,7 @@ Key architectural principles include:
   - Focus management for card interactions
 
 ### Study Session Summary View
+
 - **View Path:** `/projects/:projectId/study/:sessionId/summary`
 - **Main Purpose:** Display performance metrics after study session
 - **Key Information:**
@@ -199,6 +210,7 @@ Key architectural principles include:
   - Progress tracking over time
 
 ### Account Settings View
+
 - **View Path:** `/settings`
 - **Main Purpose:** Manage user profile and preferences
 - **Key Information:**
@@ -217,6 +229,7 @@ Key architectural principles include:
   - Session invalidation on password change
 
 ### Error View
+
 - **View Path:** Various (404, 500, etc.)
 - **Main Purpose:** Display user-friendly error messages
 - **Key Information:**
@@ -237,6 +250,7 @@ Key architectural principles include:
 ## 3. User Journey Map
 
 ### Primary Journey: AI Flashcard Creation and Study
+
 1. **User Registration and Onboarding**
    - User lands on Landing Page
    - User completes registration form
@@ -280,18 +294,21 @@ Key architectural principles include:
 ### Secondary Journeys
 
 **Manual Flashcard Creation:**
+
 1. User clicks "Create Flashcard" in Project Detail View
 2. User completes flashcard form with front/back content
 3. User saves flashcard
 4. New flashcard appears in Project Detail View
 
 **Project Management:**
+
 1. User navigates to Dashboard
 2. User locates project and clicks edit/delete
 3. User confirms action
 4. Dashboard updates to reflect changes
 
 **Account Management:**
+
 1. User clicks account icon in navigation
 2. User selects "Settings" from dropdown
 3. User modifies account settings as needed
@@ -300,11 +317,11 @@ Key architectural principles include:
 ## 4. Layout and Navigation Structure
 
 ### Global Navigation
+
 - **Top Header (Desktop and Tablet)**
   - Logo/product name (links to Dashboard)
   - Account dropdown menu (Settings, Logout)
   - Dark mode toggle
-  
 - **Bottom Navigation Bar (Mobile)**
   - Dashboard icon
   - Recent projects icon
@@ -312,16 +329,15 @@ Key architectural principles include:
   - Menu icon (for additional options)
 
 ### Contextual Navigation
+
 - **Dashboard**
   - Create Project button
   - Sort/Filter controls
   - Search bar
-  
 - **Project Detail View**
   - Breadcrumb navigation (Dashboard > Project Name)
   - Tab navigation (Flashcards, Study History)
   - Action buttons (Generate with AI, Study, Create Flashcard)
-  
 - **Study Session View**
   - Minimalist navigation to reduce distraction
   - Exit button
@@ -329,29 +345,27 @@ Key architectural principles include:
   - Card navigation controls
 
 ### Navigation Patterns
+
 - **Hierarchical Navigation**
   - Dashboard → Project → Flashcards → Individual Flashcard
   - Settings → Specific Setting Category
-  
 - **Task-Based Navigation**
   - Direct action buttons for primary workflows
   - Context-specific options in secondary menus
-  
 - **State-Based Navigation**
   - Different options based on authentication state
   - Different options based on project content (empty vs. populated)
 
 ### Responsive Considerations
+
 - **Desktop**
   - Sidebar navigation with expanded labels
   - Multi-column layouts for data-dense views
   - Hover states for interactive elements
-  
 - **Tablet**
   - Collapsible sidebar or top navigation
   - Adapted grid layouts
   - Touch-friendly target sizes
-  
 - **Mobile**
   - Bottom navigation bar for primary actions
   - Stack layouts for forms and content
@@ -361,8 +375,9 @@ Key architectural principles include:
 ## 5. Key Components
 
 ### Flashcard Component
+
 - **Purpose:** Display and interact with flashcard content
-- **Variants:** 
+- **Variants:**
   - Study mode (flippable)
   - Edit mode (editable fields)
   - Preview mode (front only with expand option)
@@ -371,12 +386,13 @@ Key architectural principles include:
   - Flip animation
   - Character counters for editing
   - Action buttons (contextual)
-- **Accessibility:** 
+- **Accessibility:**
   - Keyboard flipping with Space/Enter
   - ARIA live regions for dynamic content
   - Focus management during interactions
 
 ### Project Card Component
+
 - **Purpose:** Display project summary in Dashboard
 - **Features:**
   - Title, description, tag display
@@ -389,6 +405,7 @@ Key architectural principles include:
   - ARIA labels for interactive elements
 
 ### Form Components
+
 - **Purpose:** Handle user input consistently across views
 - **Variants:**
   - Text input with validation
@@ -405,6 +422,7 @@ Key architectural principles include:
   - Keyboard accessible controls
 
 ### Action Button Component
+
 - **Purpose:** Provide consistent interaction points
 - **Variants:**
   - Primary action (high emphasis)
@@ -421,6 +439,7 @@ Key architectural principles include:
   - ARIA roles and states
 
 ### Notification Component
+
 - **Purpose:** Provide feedback on system events
 - **Variants:**
   - Success
@@ -437,6 +456,7 @@ Key architectural principles include:
   - Keyboard dismissal
 
 ### Modal Dialog Component
+
 - **Purpose:** Focus user attention on specific tasks
 - **Variants:**
   - Form modal
@@ -452,6 +472,7 @@ Key architectural principles include:
   - Return focus on close
 
 ### Progress Indicator Components
+
 - **Purpose:** Show system status and user progress
 - **Variants:**
   - Linear progress bar
@@ -468,6 +489,7 @@ Key architectural principles include:
   - Screen reader text alternatives
 
 ### Navigation Components
+
 - **Purpose:** Enable movement between views
 - **Variants:**
   - Top navigation bar
