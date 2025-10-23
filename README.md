@@ -56,15 +56,15 @@ Many learners understand the value of spaced repetition for long-term knowledge 
 
 ## Available Scripts
 
-| Script          | Description                          |
-|-----------------|--------------------------------------|
-| `npm run dev`  | Start the development server with hot reload |
-| `npm run build`| Build the project for production     |
-| `npm run preview` | Preview the production build locally |
-| `npm run astro`| Run Astro CLI commands               |
-| `npm run lint` | Run ESLint to check code quality     |
-| `npm run lint:fix` | Automatically fix ESLint issues   |
-| `npm run format` | Format code using Prettier          |
+| Script             | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `npm run dev`      | Start the development server with hot reload |
+| `npm run build`    | Build the project for production             |
+| `npm run preview`  | Preview the production build locally         |
+| `npm run astro`    | Run Astro CLI commands                       |
+| `npm run lint`     | Run ESLint to check code quality             |
+| `npm run lint:fix` | Automatically fix ESLint issues              |
+| `npm run format`   | Format code using Prettier                   |
 
 ## Project Scope
 
