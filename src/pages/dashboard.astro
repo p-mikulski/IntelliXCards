@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DashboardView from "@/components/dashboard/DashboardView.tsx";
+
+// Using default user for development/testing
+// TODO: Implement proper authentication
+---
+
+<Layout title='Dashboard'>
+  <DashboardView client:load />
+</Layout>

@@ -68,13 +68,25 @@ export const POST: APIRoute = async ({ request, locals }) => {
  * GET /api/projects
  * Lists all projects for the current user
  */
-export const GET: APIRoute = async ({ locals }) => {
+export const GET: APIRoute = async ({ locals, url }) => {
   try {
-    // Get all projects for the user
+    // Parse query parameters for pagination
+    const page = parseInt(url.searchParams.get("page") || "1");
+    const limit = parseInt(url.searchParams.get("limit") || "10");
+
+    // Get all projects for the user (for now, ignoring pagination)
     const projectService = new ProjectService(locals.supabase);
     const projects = await projectService.listProjects(DEFAULT_USER_ID);
 
-    return new Response(JSON.stringify(projects), {
+    // For now, return all projects with basic pagination info
+    const response = {
+      projects,
+      page,
+      limit,
+      total: projects.length,
+    };
+
+    return new Response(JSON.stringify(response), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
