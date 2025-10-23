@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ProjectDetailView from "@/components/project/ProjectDetailView";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Project Detail">
+  <ProjectDetailView client:load projectId={projectId} />
+</Layout>

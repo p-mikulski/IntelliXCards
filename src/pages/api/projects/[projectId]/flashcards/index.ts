@@ -6,6 +6,68 @@ import { DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 export const prerender = false;
 
+/**
+ * GET /api/projects/[projectId]/flashcards
+ * Get all flashcards for a project
+ */
+export const GET: APIRoute = async ({ locals, params }) => {
+  try {
+    const projectId = params.projectId;
+    if (!projectId) {
+      return new Response(
+        JSON.stringify({
+          error: "Bad Request",
+          message: "Project ID is required",
+          statusCode: 400,
+        } satisfies ErrorResponseDto),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const flashcardService = new FlashcardService(locals.supabase);
+    const flashcards = await flashcardService.getFlashcardsByProject(projectId, DEFAULT_USER_ID);
+
+    return new Response(
+      JSON.stringify({
+        flashcards,
+        page: 1,
+        limit: flashcards.length,
+        total: flashcards.length,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message === "Project not found or access denied") {
+      return new Response(
+        JSON.stringify({
+          error: "Not Found",
+          message: error.message,
+          statusCode: 404,
+        } satisfies ErrorResponseDto),
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // eslint-disable-next-line no-console
+    console.error("Error fetching flashcards:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Internal Server Error",
+        message: "An unexpected error occurred",
+        statusCode: 500,
+      } satisfies ErrorResponseDto),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
+
+/**
+ * POST /api/projects/[projectId]/flashcards
+ * Create a new flashcard for a project
+ */
 export const POST: APIRoute = async ({ request, locals, params }) => {
   try {
     // 1. Extract and validate projectId
@@ -64,6 +126,7 @@ export const POST: APIRoute = async ({ request, locals, params }) => {
     }
 
     // Log unexpected errors but don't expose details to client
+    // eslint-disable-next-line no-console
     console.error("Error creating flashcard:", error);
     return new Response(
       JSON.stringify({

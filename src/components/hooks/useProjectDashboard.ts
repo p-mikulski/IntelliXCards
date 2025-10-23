@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import type { ProjectViewModel } from "@/components/dashboard/types";
 import type { CreateProjectCommand, UpdateProjectCommand, ProjectListDto, ProjectDto } from "@/types";
 
@@ -88,8 +89,13 @@ export const useProjectDashboard = () => {
             : p
         )
       );
+
+      toast.success(`Project "${newProject.title}" created successfully!`);
     } catch (e) {
       setError(e as Error);
+      toast.error(`Failed to create project "${data.title}"`, {
+        description: e instanceof Error ? e.message : "An unknown error occurred",
+      });
       setProjects((prev) => prev.filter((p) => p.id !== tempId));
     }
   };
@@ -122,14 +128,22 @@ export const useProjectDashboard = () => {
             : p
         )
       );
+
+      toast.success(`Project "${updatedProject.title}" updated successfully!`);
     } catch (e) {
       setError(e as Error);
+      toast.error(`Failed to update project "${data.title || "Untitled"}"`, {
+        description: e instanceof Error ? e.message : "An unknown error occurred",
+      });
       setProjects(originalProjects);
     }
   };
 
   const handleDeleteProject = async (projectId: string) => {
     const originalProjects = projects;
+    const projectToDelete = projects.find((p) => p.id === projectId);
+    const projectTitle = projectToDelete?.title || "Untitled";
+
     setProjects((prev) => prev.map((p) => (p.id === projectId ? { ...p, optimisticState: "deleting" } : p)));
 
     try {
@@ -142,8 +156,13 @@ export const useProjectDashboard = () => {
       }
 
       setProjects((prev) => prev.filter((p) => p.id !== projectId));
+
+      toast.success(`Project "${projectTitle}" deleted successfully!`);
     } catch (e) {
       setError(e as Error);
+      toast.error(`Failed to delete project "${projectTitle}"`, {
+        description: e instanceof Error ? e.message : "An unknown error occurred",
+      });
       setProjects(originalProjects);
     }
   };
