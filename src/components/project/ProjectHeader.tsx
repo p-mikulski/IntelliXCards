@@ -1,4 +1,6 @@
 import type { Project } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface ProjectHeaderProps {
   project: Project;
@@ -14,49 +16,43 @@ export default function ProjectHeader({ project, onStudyClick, onGenerateAIClick
   return (
     <div className="flex flex-col gap-4">
       <nav aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-sm">
+        <ol className="flex items-center gap-2 text-sm text-muted-foreground">
           <li>
-            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <a href="/dashboard" className="hover:text-foreground transition-colors">
               Dashboard
             </a>
           </li>
-          <li className="text-gray-400" aria-hidden="true">
-            /
-          </li>
-          <li className="text-gray-900 font-medium" aria-current="page">
+          <li aria-hidden="true">/</li>
+          <li className="text-foreground font-medium" aria-current="page">
             {project.title}
           </li>
         </ol>
       </nav>
 
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <h1 className="text-3xl font-bold text-gray-900 break-words">{project.title}</h1>
-          {project.description && <p className="mt-2 text-gray-600 break-words">{project.description}</p>}
-          {project.tag && (
-            <span className="inline-block mt-3 px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full">
-              {project.tag}
-            </span>
-          )}
-        </div>
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-3xl font-bold break-words">{project.title}</h1>
+              {project.description && <p className="mt-2 text-muted-foreground break-words">{project.description}</p>}
+              {project.tag && (
+                <span className="inline-block mt-3 px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
+                  {project.tag}
+                </span>
+              )}
+            </div>
 
-        <div className="flex gap-3 flex-shrink-0">
-          <button
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors"
-            onClick={onStudyClick}
-            type="button"
-          >
-            Study
-          </button>
-          <button
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors"
-            onClick={onGenerateAIClick}
-            type="button"
-          >
-            Generate with AI
-          </button>
-        </div>
-      </div>
+            <div className="flex gap-3 flex-shrink-0">
+              <Button variant="outline" onClick={onStudyClick} type="button">
+                Study
+              </Button>
+              <Button onClick={onGenerateAIClick} type="button">
+                Generate with AI
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

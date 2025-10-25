@@ -39,7 +39,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   // Loading state
   if (viewModel.isLoading) {
     return (
-      <div className="container mx-auto p-6 space-y-6">
+      <div className="container mx-auto p-6 space-y-6 max-w-7xl">
         <SkeletonLoader />
       </div>
     );
@@ -48,8 +48,11 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   // Error state
   if (viewModel.error) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg" role="alert">
+      <div className="container mx-auto p-6 max-w-7xl">
+        <div
+          className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg"
+          role="alert"
+        >
           <p className="font-medium">Error</p>
           <p className="text-sm">{viewModel.error}</p>
         </div>
@@ -60,8 +63,11 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   // Project not found
   if (!viewModel.project) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg" role="alert">
+      <div className="container mx-auto p-6 max-w-7xl">
+        <div
+          className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-700 dark:text-yellow-500 px-4 py-3 rounded-lg"
+          role="alert"
+        >
           <p className="font-medium">Project not found</p>
           <p className="text-sm">The requested project could not be found.</p>
         </div>
@@ -70,7 +76,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
       <ProjectHeader
         project={viewModel.project}
         onStudyClick={() => {

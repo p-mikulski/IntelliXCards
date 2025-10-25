@@ -1,5 +1,6 @@
 import type { FlashcardListItemDto } from "@/types";
 import FlashcardListItem from "./FlashcardListItem";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface FlashcardListProps {
   flashcards: FlashcardListItemDto[];
@@ -14,11 +15,13 @@ interface FlashcardListProps {
 export default function FlashcardList({ flashcards, onEdit, onDelete }: FlashcardListProps) {
   if (flashcards.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-lg text-gray-500">📚</p>
-        <p className="mt-2 text-gray-600 font-medium">No flashcards yet</p>
-        <p className="text-sm text-gray-500">Create your first flashcard to start learning!</p>
-      </div>
+      <Card>
+        <CardContent className="text-center py-12">
+          <p className="text-4xl mb-4">📚</p>
+          <p className="mt-2 font-medium">No flashcards yet</p>
+          <p className="text-sm text-muted-foreground">Create your first flashcard to start learning!</p>
+        </CardContent>
+      </Card>
     );
   }
 
