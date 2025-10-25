@@ -5,7 +5,6 @@ import FlashcardListToolbar from "./FlashcardListToolbar";
 import FlashcardList from "./FlashcardList";
 import CreateFlashcardDialog from "./CreateFlashcardDialog";
 import EditFlashcardDialog from "./EditFlashcardDialog";
-import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -78,9 +77,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           window.location.href = `/projects/${projectId}/study`;
         }}
         onGenerateAIClick={() => {
-          toast.info("AI generation feature coming soon!", {
-            description: "This feature will use AI to generate flashcards from your text.",
-          });
+          window.location.href = `/projects/${projectId}/generate`;
         }}
       />
 

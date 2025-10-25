@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import {
   FlashcardGenerationService,
+  OpenRouterAPIError,
   generateFlashcardsSchema,
 } from "../../../../../lib/services/flashcard-generation.service";
 import type { ErrorResponseDto, GenerateFlashcardsCommand, ValidationErrorResponseDto } from "../../../../../types";
@@ -86,6 +87,26 @@ export const POST: APIRoute = async ({ params, request }) => {
       };
       return new Response(JSON.stringify(validationError), {
         status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (error instanceof OpenRouterAPIError) {
+      const statusCode = error.status ?? 502;
+      const details =
+        error.details && typeof error.details === "object" && !Array.isArray(error.details)
+          ? (error.details as Record<string, unknown>)
+          : undefined;
+
+      const aiError: ErrorResponseDto = {
+        error: "AIServiceError",
+        message: error.message,
+        statusCode,
+        ...(details ? { details } : {}),
+      };
+
+      return new Response(JSON.stringify(aiError), {
+        status: statusCode,
         headers: { "Content-Type": "application/json" },
       });
     }

@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AIGenerationView from "@/components/project/ai-generation/AIGenerationView";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/dashboard");
+}
+
+export const prerender = false;
+---
+
+<Layout title="Generate Flashcards">
+  <AIGenerationView client:load projectId={projectId} />
+</Layout>
