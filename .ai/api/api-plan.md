@@ -1,8 +1,112 @@
 # REST API Plan
 
-## 1. Resources
+## 1. Authentication Endpoints (Managed by Supabase Auth)
 
-- **Users**: Managed by Supabase Auth (authentication endpoints handled separately).
+All authentication endpoints are automatically provided and managed by Supabase Auth service:
+
+### POST /auth/v1/signup
+- **Description:** Create a new user account
+- **Authentication:** None
+- **Request Body:**
+  ```typescript
+  {
+    email: string;     // User's email address
+    password: string;  // User's password (min 6 characters)
+  }
+  ```
+- **Response:**
+  - 200 OK: User created successfully
+    ```typescript
+    {
+      user: {
+        id: string;
+        email: string;
+        created_at: string;
+      };
+      session: {
+        access_token: string;
+        refresh_token: string;
+        expires_in: number;
+      };
+    }
+    ```
+  - 400 Bad Request: Invalid input
+  - 409 Conflict: Email already registered
+
+### POST /auth/v1/token
+- **Description:** Sign in with email and password
+- **Authentication:** None
+- **Request Body:**
+  ```typescript
+  {
+    email: string;     // User's email
+    password: string;  // User's password
+  }
+  ```
+- **Response:**
+  - 200 OK: Login successful
+    ```typescript
+    {
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+      user: {
+        id: string;
+        email: string;
+      };
+    }
+    ```
+  - 400 Bad Request: Invalid credentials
+  - 401 Unauthorized: Wrong email/password
+
+### POST /auth/v1/logout
+- **Description:** Sign out the current user
+- **Authentication:** Bearer token required
+- **Request Body:** None
+- **Response:**
+  - 200 OK: Logout successful
+  - 401 Unauthorized: Invalid token
+
+### POST /auth/v1/token/refresh
+- **Description:** Refresh expired access token
+- **Authentication:** None
+- **Request Body:**
+  ```typescript
+  {
+    refresh_token: string;  // The refresh token from login
+  }
+  ```
+- **Response:**
+  - 200 OK: Token refreshed
+    ```typescript
+    {
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }
+    ```
+  - 401 Unauthorized: Invalid refresh token
+
+### DELETE /auth/v1/user
+- **Description:** Delete current user's account
+- **Authentication:** Bearer token required
+- **Request Body:** None
+- **Response:**
+  - 200 OK: Account deleted successfully
+  - 401 Unauthorized: Invalid token
+
+### Authentication Implementation Notes
+
+1. Authentication is handled entirely by Supabase Auth service
+2. All authenticated API endpoints require a valid JWT token in the Authorization header
+3. Token management and session persistence are handled by Supabase Client
+4. CORS is pre-configured by Supabase
+5. Rate limiting is automatically applied by Supabase
+6. Password reset and email verification flows are available but not configured for MVP
+
+## 2. Resources
+
+- **Users**: Managed by Supabase Auth (endpoints detailed above).
 - **Projects**: Corresponds to the `projects` table.
 - **Flashcards**: Corresponds to the `flashcards` table.
 - **StudySessions**: Corresponds to the `study_sessions` table.
