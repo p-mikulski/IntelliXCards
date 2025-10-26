@@ -14,17 +14,13 @@ interface FlashcardListItemProps {
  */
 export default function FlashcardListItem({ flashcard, onEdit, onDelete }: FlashcardListItemProps) {
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Front</h3>
-            <p className="break-words">{flashcard.front}</p>
-          </div>
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Back</h3>
-            <p className="break-words">{flashcard.back}</p>
-          </div>
+    <Card className="min-h-[200px]">
+      <CardContent className="pt-6 flex flex-col gap-4">
+        <div>
+          <p className="font-semibold text-lg line-clamp-2 break-words">{flashcard.front}</p>
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground break-words">{flashcard.back}</p>
         </div>
 
         {flashcard.feedback && (
@@ -36,7 +32,7 @@ export default function FlashcardListItem({ flashcard, onEdit, onDelete }: Flash
         )}
       </CardContent>
 
-      <CardFooter className="justify-end gap-2 border-t">
+      <CardFooter className="justify-end gap-2 border-t h-12">
         <Button
           variant="ghost"
           size="sm"
