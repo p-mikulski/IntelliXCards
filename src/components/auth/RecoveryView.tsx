@@ -9,7 +9,7 @@ import { useState } from "react";
 import { z } from "zod";
 
 const recoverySchema = z.object({
-  email: z.string().email({ message: "Nieprawidłowy adres email" }),
+  email: z.string().email({ message: "Invalid email address" }),
 });
 
 type RecoveryFormData = z.infer<typeof recoverySchema>;
@@ -28,10 +28,10 @@ export default function RecoveryView() {
     setIsLoading(true);
     try {
       // TODO: Implement password recovery
-      console.log(data);
+      void data;
       setIsEmailSent(true);
     } catch (error) {
-      console.error(error);
+      void error;
     } finally {
       setIsLoading(false);
     }
@@ -42,12 +42,12 @@ export default function RecoveryView() {
       <div className="mx-auto max-w-sm space-y-6 p-6">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Sprawdź swoją pocztę</CardTitle>
-            <CardDescription>Wysłaliśmy instrukcje resetowania hasła na podany adres email.</CardDescription>
+            <CardTitle className="text-2xl">Check your email</CardTitle>
+            <CardDescription>We&apos;ve sent password reset instructions to your email address.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="w-full" onClick={() => setIsEmailSent(false)}>
-              Wyślij ponownie
+              Send again
             </Button>
           </CardContent>
         </Card>
@@ -59,8 +59,10 @@ export default function RecoveryView() {
     <div className="mx-auto max-w-sm space-y-6 p-6">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Odzyskaj hasło</CardTitle>
-          <CardDescription>Wprowadź swój adres email, a wyślemy Ci instrukcje resetowania hasła</CardDescription>
+          <CardTitle className="text-2xl">Recover password</CardTitle>
+          <CardDescription>
+            Enter your email address and we&apos;ll send you password reset instructions
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -73,13 +75,13 @@ export default function RecoveryView() {
                 )}
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Wysyłanie..." : "Wyślij instrukcje"}
+                {isLoading ? "Sending..." : "Send instructions"}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center">
             <a href="/auth/login" className="text-sm text-muted-foreground underline hover:text-primary">
-              Wróć do logowania
+              Back to sign in
             </a>
           </div>
         </CardContent>

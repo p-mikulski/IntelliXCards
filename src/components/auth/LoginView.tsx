@@ -9,8 +9,8 @@ import { useState } from "react";
 import { z } from "zod";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Nieprawidłowy adres email" }),
-  password: z.string().min(8, { message: "Hasło musi mieć minimum 8 znaków" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -29,9 +29,9 @@ export default function LoginView() {
     setIsLoading(true);
     try {
       // TODO: Implement authentication
-      console.log(data);
+      void data;
     } catch (error) {
-      console.error(error);
+      void error;
     } finally {
       setIsLoading(false);
     }
@@ -41,8 +41,8 @@ export default function LoginView() {
     <div className="mx-auto max-w-sm space-y-6 p-6">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Zaloguj się</CardTitle>
-          <CardDescription>Wprowadź swoje dane aby się zalogować do IntelliXCards</CardDescription>
+          <CardTitle className="text-2xl">Sign in</CardTitle>
+          <CardDescription>Enter your credentials to sign in to IntelliXCards</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -55,25 +55,25 @@ export default function LoginView() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Hasło</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" {...form.register("password")} />
                 {form.formState.errors.password && (
                   <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
                 )}
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logowanie..." : "Zaloguj się"}
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
             <a href="/auth/recovery" className="text-sm text-muted-foreground underline hover:text-primary">
-              Zapomniałeś hasła?
+              Forgot your password?
             </a>
             <p className="mt-2 text-sm text-muted-foreground">
-              Nie masz jeszcze konta?{" "}
+              Don&apos;t have an account yet?{" "}
               <a href="/auth/register" className="underline hover:text-primary">
-                Zarejestruj się
+                Sign up
               </a>
             </p>
           </div>
