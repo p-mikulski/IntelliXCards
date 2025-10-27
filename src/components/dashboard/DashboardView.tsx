@@ -6,7 +6,16 @@ import CreateProjectDialog from "./CreateProjectDialog";
 import EditProjectDialog from "./EditProjectDialog";
 import ConfirmDialog from "../common/ConfirmDialog";
 
-const DashboardView = () => {
+interface User {
+  id: string;
+  email: string;
+}
+
+interface DashboardViewProps {
+  user: User;
+}
+
+const DashboardView: React.FC<DashboardViewProps> = ({ user }) => {
   const {
     projects,
     pagination,
@@ -24,7 +33,7 @@ const DashboardView = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <DashboardHeader projectCount={pagination.total} onOpenCreateDialog={openCreateDialog} />
+      <DashboardHeader projectCount={pagination.total} onOpenCreateDialog={openCreateDialog} user={user} />
       {error && <div className="text-red-500">Error: {error.message}</div>}
       <ProjectList
         projects={projects}

@@ -3,7 +3,6 @@ import { ProjectService } from "../../../lib/services/project.service";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../types";
 import { updateProjectSchema } from "../../../lib/validation/project.schema";
 import { ZodError } from "zod";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -25,9 +24,24 @@ export const GET: APIRoute = async ({ locals, params }) => {
       }
     );
   }
+
+  if (!locals.user) {
+    return new Response(
+      JSON.stringify({
+        error: "Unauthorized",
+        message: "You must be logged in",
+        statusCode: 401,
+      } satisfies ErrorResponseDto),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   try {
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.getProjectById(params.projectId, DEFAULT_USER_ID);
+    const project = await projectService.getProjectById(params.projectId, locals.user.id);
 
     return new Response(JSON.stringify(project), {
       status: 200,
@@ -81,12 +95,27 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
       }
     );
   }
+
+  if (!locals.user) {
+    return new Response(
+      JSON.stringify({
+        error: "Unauthorized",
+        message: "You must be logged in",
+        statusCode: 401,
+      } satisfies ErrorResponseDto),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   try {
     const requestData = await request.json();
     const validatedData = updateProjectSchema.parse(requestData);
 
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.updateProject(params.projectId, DEFAULT_USER_ID, validatedData);
+    const project = await projectService.updateProject(params.projectId, locals.user.id, validatedData);
 
     return new Response(JSON.stringify(project), {
       status: 200,
@@ -161,9 +190,24 @@ export const DELETE: APIRoute = async ({ locals, params }) => {
       }
     );
   }
+
+  if (!locals.user) {
+    return new Response(
+      JSON.stringify({
+        error: "Unauthorized",
+        message: "You must be logged in",
+        statusCode: 401,
+      } satisfies ErrorResponseDto),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   try {
     const projectService = new ProjectService(locals.supabase);
-    await projectService.deleteProject(params.projectId, DEFAULT_USER_ID);
+    await projectService.deleteProject(params.projectId, locals.user.id);
 
     return new Response(null, { status: 204 });
   } catch (error) {

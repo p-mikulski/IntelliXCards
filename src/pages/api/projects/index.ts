@@ -3,7 +3,6 @@ import { ProjectService } from "../../../lib/services/project.service";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../types";
 import { createProjectSchema } from "../../../lib/validation/project.schema";
 import { ZodError } from "zod";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -13,13 +12,28 @@ export const prerender = false;
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // Check if user is authenticated
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to create a project",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Parse and validate request body
     const requestData = await request.json();
     const validatedData = createProjectSchema.parse(requestData);
 
     // Create project
     const projectService = new ProjectService(locals.supabase);
-    const project = await projectService.createProject(validatedData, DEFAULT_USER_ID);
+    const project = await projectService.createProject(validatedData, locals.user.id);
 
     return new Response(JSON.stringify(project), {
       status: 201,
@@ -70,13 +84,28 @@ export const POST: APIRoute = async ({ request, locals }) => {
  */
 export const GET: APIRoute = async ({ locals, url }) => {
   try {
+    // Check if user is authenticated
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to view projects",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Parse query parameters for pagination
     const page = parseInt(url.searchParams.get("page") || "1");
     const limit = parseInt(url.searchParams.get("limit") || "10");
 
     // Get all projects for the user (for now, ignoring pagination)
     const projectService = new ProjectService(locals.supabase);
-    const projects = await projectService.listProjects(DEFAULT_USER_ID);
+    const projects = await projectService.listProjects(locals.user.id);
 
     // For now, return all projects with basic pagination info
     const response = {

@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { FlashcardService } from "../../../../../lib/services/flashcard.service";
 import { createFlashcardSchema } from "../../../../../lib/validation/flashcard.schema";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../../../types";
-import { DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -24,8 +23,19 @@ export const GET: APIRoute = async ({ locals, params }) => {
       );
     }
 
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const flashcardService = new FlashcardService(locals.supabase);
-    const flashcards = await flashcardService.getFlashcardsByProject(projectId, DEFAULT_USER_ID);
+    const flashcards = await flashcardService.getFlashcardsByProject(projectId, locals.user.id);
 
     return new Response(
       JSON.stringify({
@@ -83,6 +93,17 @@ export const POST: APIRoute = async ({ request, locals, params }) => {
       );
     }
 
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        { status: 401 }
+      );
+    }
+
     // 2. Parse and validate request body
     const body = await request.json();
     const validationResult = createFlashcardSchema.safeParse(body);
@@ -103,7 +124,7 @@ export const POST: APIRoute = async ({ request, locals, params }) => {
 
     // 3. Create flashcard using service
     const flashcardService = new FlashcardService(locals.supabase);
-    const flashcard = await flashcardService.createFlashcard(projectId, validationResult.data, DEFAULT_USER_ID);
+    const flashcard = await flashcardService.createFlashcard(projectId, validationResult.data, locals.user.id);
 
     // 4. Return success response
     return new Response(JSON.stringify(flashcard), {

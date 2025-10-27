@@ -6,7 +6,6 @@ import {
 } from "../../../../../lib/services/flashcard-generation.service";
 import type { ErrorResponseDto, GenerateFlashcardsCommand, ValidationErrorResponseDto } from "../../../../../types";
 import { ZodError } from "zod";
-import { supabaseClient, DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 // Disable prerendering as this is a dynamic API endpoint
 export const prerender = false;
@@ -21,7 +20,7 @@ export const prerender = false;
  * @param desired_count - Number of flashcards to generate
  * @returns Generated flashcard drafts or error response
  */
-export const POST: APIRoute = async ({ params, request }) => {
+export const POST: APIRoute = async ({ params, request, locals }) => {
   try {
     // Extract and validate project ID
     const { projectId } = params;
@@ -36,12 +35,24 @@ export const POST: APIRoute = async ({ params, request }) => {
       );
     }
 
+    // Check authentication
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in",
+          statusCode: 401,
+        } as ErrorResponseDto),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     // Verify project exists and user has access
-    const { data: project, error: projectError } = await supabaseClient
+    const { data: project, error: projectError } = await locals.supabase
       .from("projects")
       .select("id")
       .eq("id", projectId)
-      .eq("user_id", DEFAULT_USER_ID)
+      .eq("user_id", locals.user.id)
       .single();
 
     if (projectError || !project) {

@@ -2,10 +2,17 @@
 import Layout from "@/layouts/Layout.astro";
 import DashboardView from "@/components/dashboard/DashboardView.tsx";
 
-// Using default user for development/testing
-// TODO: Implement proper authentication
+export const prerender = false;
+
+// Get authenticated user from middleware
+const user = Astro.locals.user;
+
+// Redirect to login if not authenticated (middleware should handle this, but just in case)
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
 ---
 
-<Layout title='Dashboard'>
-  <DashboardView client:load />
+<Layout title="Dashboard">
+  <DashboardView client:load user={user} />
 </Layout>

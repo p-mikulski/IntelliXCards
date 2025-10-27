@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { FlashcardService } from "../../../../../lib/services/flashcard.service";
 import { updateFlashcardSchema } from "../../../../../lib/validation/flashcard.schema";
 import type { ErrorResponseDto, ValidationErrorResponseDto } from "../../../../../types";
-import { DEFAULT_USER_ID } from "../../../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -21,6 +20,17 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
           statusCode: 400,
         } satisfies ErrorResponseDto),
         { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        { status: 401, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -44,7 +54,7 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
     }
 
     const flashcardService = new FlashcardService(locals.supabase);
-    const flashcard = await flashcardService.updateFlashcard(flashcardId, validationResult.data, DEFAULT_USER_ID);
+    const flashcard = await flashcardService.updateFlashcard(flashcardId, validationResult.data, locals.user.id);
 
     return new Response(JSON.stringify(flashcard), {
       status: 200,
@@ -91,8 +101,19 @@ export const DELETE: APIRoute = async ({ locals, params }) => {
       );
     }
 
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in",
+          statusCode: 401,
+        } satisfies ErrorResponseDto),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const flashcardService = new FlashcardService(locals.supabase);
-    await flashcardService.deleteFlashcard(flashcardId, DEFAULT_USER_ID);
+    await flashcardService.deleteFlashcard(flashcardId, locals.user.id);
 
     return new Response(null, { status: 204 });
   } catch (error) {
