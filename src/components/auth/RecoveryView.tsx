@@ -39,18 +39,20 @@ export default function RecoveryView() {
 
   if (isEmailSent) {
     return (
-      <div className="mx-auto max-w-sm space-y-6 p-6">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Check your email</CardTitle>
-            <CardDescription>We&apos;ve sent password reset instructions to your email address.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" onClick={() => setIsEmailSent(false)}>
-              Send again
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="flex min-h-screen items-center justify-center p-6">
+        <div className="mx-auto w-md max-w-lg space-y-6">
+          <Card>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Check your email</CardTitle>
+              <CardDescription>We&apos;ve sent password reset instructions to your email address.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" onClick={() => setIsEmailSent(false)}>
+                Send again
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }

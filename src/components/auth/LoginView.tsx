@@ -38,47 +38,49 @@ export default function LoginView() {
   }
 
   return (
-    <div className="mx-auto max-w-sm space-y-6 p-6">
-      <Card>
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Sign in</CardTitle>
-          <CardDescription>Enter your credentials to sign in to IntelliXCards</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="jan.kowalski@example.com" {...form.register("email")} />
-                {form.formState.errors.email && (
-                  <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" {...form.register("password")} />
-                {form.formState.errors.password && (
-                  <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
-                )}
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign in"}
-              </Button>
-            </form>
-          </Form>
-          <div className="mt-4 text-center text-sm">
-            <a href="/auth/recovery" className="text-sm text-muted-foreground underline hover:text-primary">
-              Forgot your password?
-            </a>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Don&apos;t have an account yet?{" "}
-              <a href="/auth/register" className="underline hover:text-primary">
-                Sign up
+    <div className="flex min-h-screen items-center justify-center p-6">
+      <div className="mx-auto w-md max-w-lg space-y-6">
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Sign in</CardTitle>
+            <CardDescription>Enter your credentials to sign in to IntelliXCards</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="jan.kowalski@example.com" {...form.register("email")} />
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input id="password" type="password" {...form.register("password")} />
+                  {form.formState.errors.password && (
+                    <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
+                  )}
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Signing in..." : "Sign in"}
+                </Button>
+              </form>
+            </Form>
+            <div className="mt-4 text-center text-sm">
+              <a href="/auth/recovery" className="text-sm text-muted-foreground underline hover:text-primary">
+                Forgot your password?
               </a>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Don&apos;t have an account yet?{" "}
+                <a href="/auth/register" className="underline hover:text-primary">
+                  Sign up
+                </a>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

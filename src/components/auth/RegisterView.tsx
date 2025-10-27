@@ -45,51 +45,53 @@ export default function RegisterView() {
   }
 
   return (
-    <div className="mx-auto max-w-sm space-y-6 p-6">
-      <Card>
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Create account</CardTitle>
-          <CardDescription>Enter your details to create an account in IntelliXCards</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="jan.kowalski@example.com" {...form.register("email")} />
-                {form.formState.errors.email && (
-                  <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" {...form.register("password")} />
-                {form.formState.errors.password && (
-                  <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm password</Label>
-                <Input id="confirmPassword" type="password" {...form.register("confirmPassword")} />
-                {form.formState.errors.confirmPassword && (
-                  <p className="text-sm text-destructive">{form.formState.errors.confirmPassword.message}</p>
-                )}
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating account..." : "Create account"}
-              </Button>
-            </form>
-          </Form>
-          <div className="mt-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <a href="/auth/login" className="underline hover:text-primary">
-                Sign in
-              </a>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="flex min-h-screen items-center justify-center p-6">
+      <div className="mx-auto w-md max-w-lg space-y-6">
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Create account</CardTitle>
+            <CardDescription>Enter your details to create an account in IntelliXCards</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="jan.kowalski@example.com" {...form.register("email")} />
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input id="password" type="password" {...form.register("password")} />
+                  {form.formState.errors.password && (
+                    <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
+                  <Input id="confirmPassword" type="password" {...form.register("confirmPassword")} />
+                  {form.formState.errors.confirmPassword && (
+                    <p className="text-sm text-destructive">{form.formState.errors.confirmPassword.message}</p>
+                  )}
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating account..." : "Create account"}
+                </Button>
+              </form>
+            </Form>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <a href="/auth/login" className="underline hover:text-primary">
+                  Sign in
+                </a>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
