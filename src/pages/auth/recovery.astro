@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import RecoveryView from "@/components/auth/RecoveryView";
+
+const pageTitle = "Resetuj haslo | IntelliXCards";
+const pageDescription = "Odzyskaj dostep do konta IntelliXCards w kilku prostych krokach.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <RecoveryView client:load />
+</Layout>

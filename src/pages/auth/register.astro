@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import RegisterView from "@/components/auth/RegisterView";
+
+const pageTitle = "Zarejestruj sie | IntelliXCards";
+const pageDescription = "Dolacz do IntelliXCards i buduj swoje talie fiszek szybciej.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <RegisterView client:load />
+</Layout>

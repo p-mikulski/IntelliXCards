@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoginView from "@/components/auth/LoginView";
+
+const pageTitle = "Zaloguj sie | IntelliXCards";
+const pageDescription = "Uzyskaj dostep do swojej tablicy i kontynuuj nauke z IntelliXCards.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <LoginView client:load />
+</Layout>

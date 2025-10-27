@@ -91,6 +91,8 @@ Many learners, including students and professionals, understand the value of spa
 
 ### 5.1. Authentication
 
+Authentication will be on a separate page and only after account creation will the user have access to the app.
+
 - ID: US-001
 - Title: User Registration
 - Description: As a new user, I want to create an account using my email and a password so that I can store my flashcards and access them later.

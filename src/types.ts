@@ -190,6 +190,47 @@ export type StudySessionQueryParams = ListQueryParams & {
 };
 
 // ============================================================================
+// AUTH DTOs
+// ============================================================================
+
+/**
+ * Basic credential payload shared between auth forms and API endpoints
+ */
+export interface AuthCredentials {
+  email: string;
+  password: string;
+}
+
+/**
+ * Simplified session payload passed to client components after login/registration
+ */
+export interface AuthSession {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+  refresh_token?: string;
+  user: {
+    id: string;
+    email?: string | null;
+    full_name?: string | null;
+  };
+}
+
+/**
+ * Standardized auth error response shared across forms and server endpoints
+ */
+export interface AuthErrorResponse {
+  code: string;
+  message: string;
+  fields?: Record<string, string[]>;
+}
+
+/**
+ * Payload used by password recovery flows
+ */
+export type AuthRecoveryCommand = Pick<AuthCredentials, "email">;
+
+// ============================================================================
 // ERROR RESPONSE DTOs
 // ============================================================================
 
