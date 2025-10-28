@@ -1,6 +1,6 @@
 import type { FlashcardListItemDto } from "@/types";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Trash } from "lucide-react";
 
 interface FlashcardListItemProps {
   flashcard: FlashcardListItemDto;
@@ -14,8 +14,8 @@ interface FlashcardListItemProps {
  */
 export default function FlashcardListItem({ flashcard, onEdit, onDelete }: FlashcardListItemProps) {
   return (
-    <Card className="min-h-[200px] hover:border-foreground cursor-pointer" onClick={onEdit}>
-      <CardContent className="pt-6 flex flex-col gap-4">
+    <Card className="min-h-[200px] hover:border-foreground cursor-pointer relative group" onClick={onEdit}>
+      <CardContent className="flex flex-col gap-4">
         <div>
           <p className="font-semibold text-lg line-clamp-2 break-words">{flashcard.front}</p>
         </div>
@@ -32,17 +32,14 @@ export default function FlashcardListItem({ flashcard, onEdit, onDelete }: Flash
         )}
       </CardContent>
 
-      <CardFooter className="justify-end gap-2 border-t h-12">
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={onDelete}
-          type="button"
-          aria-label={`Delete flashcard: ${flashcard.front}`}
-        >
-          Delete
-        </Button>
-      </CardFooter>
+      <Trash
+        className="absolute top-2 right-2 w-5 h-5 opacity-0 group-hover:opacity-100 text-destructive/30 hover:text-destructive/80 cursor-pointer transition-opacity"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        aria-label={`Delete flashcard: ${flashcard.front}`}
+      />
     </Card>
   );
 }
