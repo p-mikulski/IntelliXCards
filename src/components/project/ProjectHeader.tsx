@@ -15,20 +15,6 @@ interface ProjectHeaderProps {
 export default function ProjectHeader({ project, onStudyClick, onGenerateAIClick }: ProjectHeaderProps) {
   return (
     <div className="flex flex-col gap-4">
-      <nav aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-sm text-muted-foreground">
-          <li>
-            <a href="/dashboard" className="hover:text-foreground transition-colors">
-              Dashboard
-            </a>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li className="text-foreground font-medium" aria-current="page">
-            {project.title}
-          </li>
-        </ol>
-      </nav>
-
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-start justify-between gap-4">

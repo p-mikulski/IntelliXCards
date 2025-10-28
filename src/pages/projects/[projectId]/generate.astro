@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import AIGenerationView from "@/components/project/ai-generation/AIGenerationView";
+import MainToolbar from "@/components/common/MainToolbar";
 
 const { projectId } = Astro.params;
 
@@ -9,8 +10,22 @@ if (!projectId) {
 }
 
 export const prerender = false;
+
+// Get authenticated user from middleware
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+
+const breadcrumbs = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Project", href: `/projects/${projectId}` },
+  { label: "Generate AI", href: undefined },
+];
 ---
 
 <Layout title="Generate Flashcards">
+  <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
   <AIGenerationView client:load projectId={projectId} />
 </Layout>

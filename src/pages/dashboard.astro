@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import DashboardView from "@/components/dashboard/DashboardView.tsx";
+import MainToolbar from "@/components/common/MainToolbar";
 
 export const prerender = false;
 
@@ -11,8 +12,11 @@ const user = Astro.locals.user;
 if (!user) {
   return Astro.redirect("/auth/login");
 }
+
+const breadcrumbs = [{ label: "Dashboard", href: undefined }];
 ---
 
 <Layout title="Dashboard">
-  <DashboardView client:load user={user} />
+  <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
+  <DashboardView client:load />
 </Layout>

@@ -1,14 +1,31 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import StudySessionView from "@/components/study/StudySessionView";
+import MainToolbar from "@/components/common/MainToolbar";
+
+export const prerender = false;
 
 const { projectId } = Astro.params;
 
 if (!projectId) {
   return Astro.redirect("/dashboard");
 }
+
+// Get authenticated user from middleware
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+
+const breadcrumbs = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Project", href: `/projects/${projectId}` },
+  { label: "Study", href: undefined },
+];
 ---
 
 <Layout title="Study Session">
+  <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
   <StudySessionView client:load projectId={projectId} />
 </Layout>

@@ -1,14 +1,32 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import ProjectDetailView from "@/components/project/ProjectDetailView";
+import MainToolbar from "@/components/common/MainToolbar";
+
+export const prerender = false;
 
 const { projectId } = Astro.params;
 
 if (!projectId) {
   return Astro.redirect("/dashboard");
 }
+
+// Get authenticated user from middleware
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+
+// Note: Project title will be loaded on the client side
+// For now, we'll show a generic breadcrumb
+const breadcrumbs = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Project", href: undefined }, // Will be updated by client component
+];
 ---
 
 <Layout title="Project Detail">
+  <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
   <ProjectDetailView client:load projectId={projectId} />
 </Layout>
