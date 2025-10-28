@@ -14,7 +14,7 @@ interface FlashcardListItemProps {
  */
 export default function FlashcardListItem({ flashcard, onEdit, onDelete }: FlashcardListItemProps) {
   return (
-    <Card className="min-h-[200px]">
+    <Card className="min-h-[200px] hover:border-foreground cursor-pointer" onClick={onEdit}>
       <CardContent className="pt-6 flex flex-col gap-4">
         <div>
           <p className="font-semibold text-lg line-clamp-2 break-words">{flashcard.front}</p>
@@ -33,15 +33,6 @@ export default function FlashcardListItem({ flashcard, onEdit, onDelete }: Flash
       </CardContent>
 
       <CardFooter className="justify-end gap-2 border-t h-12">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onEdit}
-          type="button"
-          aria-label={`Edit flashcard: ${flashcard.front}`}
-        >
-          Edit
-        </Button>
         <Button
           variant="destructive"
           size="sm"
