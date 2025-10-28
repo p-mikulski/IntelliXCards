@@ -92,10 +92,10 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
         {/* Right section: User info and logout */}
         {user && (
           <div className="flex items-center gap-4">
-            <ThemeToggle />
             <div className="text-sm text-muted-foreground hidden sm:block">
               <span className="font-medium text-primary-foreground">{user.email}</span>
             </div>
+            <ThemeToggle />
             <Button variant="outline" onClick={handleLogout} disabled={isLoggingOut} size="sm">
               {isLoggingOut ? "Logging out..." : "Logout"}
             </Button>

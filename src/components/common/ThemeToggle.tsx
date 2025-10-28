@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 /**
- * Theme toggle button that switches between light and dark mode
+ * Theme toggle switch that switches between light and dark mode
  * Uses localStorage to persist user preference
+ * Displays as a toggle switch with icon inside the thumb
  */
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -43,25 +43,36 @@ export default function ThemeToggle() {
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" disabled aria-label="Toggle theme">
-        <Sun className="h-5 w-5" />
-      </Button>
+      <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-input opacity-50">
+        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-sm transition-transform">
+          <Sun className="h-3 w-3" />
+        </span>
+      </div>
     );
   }
 
+  const isDark = theme === "dark";
+
   return (
-    <Button
-      variant="ghost"
-      size="icon"
+    <button
+      type="button"
       onClick={toggleTheme}
+      className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      style={{
+        backgroundColor: isDark ? "oklch(0.488 0.243 264.376)" : "oklch(0.8634 0.0263 295.4938)",
+      }}
+      role="switch"
+      aria-checked={isDark}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
-      {theme === "light" ? (
-        <Sun className="h-5 w-5 text-primary-foreground hover:text-foreground transition-colors" />
-      ) : (
-        <Moon className="h-5 w-5 text-primary-foreground hover:text-foreground transition-colors" />
-      )}
-    </Button>
+      <span
+        className={`inline-flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-sm transition-transform ${
+          isDark ? "translate-x-6" : "translate-x-0.5"
+        }`}
+      >
+        {isDark ? <Moon className="h-3 w-3 text-foreground" /> : <Sun className="h-3 w-3 text-foreground" />}
+      </span>
+    </button>
   );
 }
