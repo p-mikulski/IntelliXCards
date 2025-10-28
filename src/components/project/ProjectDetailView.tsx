@@ -30,10 +30,14 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     handleCreateFlashcard,
     handleUpdateFlashcard,
     handleDeleteFlashcard,
+    handleBatchDeleteFlashcards,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
+    openBatchDeleteDialog,
     closeDialogs,
+    toggleSelectMode,
+    toggleSelectFlashcard,
   } = useProjectDetail(projectId);
 
   // Loading state
@@ -87,9 +91,22 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         }}
       />
 
-      <FlashcardListToolbar flashcardCount={viewModel.flashcards.length} onCreateClick={openCreateDialog} />
+      <FlashcardListToolbar
+        flashcardCount={viewModel.flashcards.length}
+        onCreateClick={openCreateDialog}
+        selectedCount={viewModel.selection.selectedIds.size}
+        onDeleteSelected={openBatchDeleteDialog}
+        onToggleSelectMode={toggleSelectMode}
+        isSelectMode={viewModel.selection.isSelectMode}
+      />
 
-      <FlashcardList flashcards={viewModel.flashcards} onEdit={openEditDialog} onDelete={openDeleteDialog} />
+      <FlashcardList
+        flashcards={viewModel.flashcards}
+        onEdit={openEditDialog}
+        onDelete={openDeleteDialog}
+        selectedIds={viewModel.selection.isSelectMode ? viewModel.selection.selectedIds : undefined}
+        onToggleSelect={viewModel.selection.isSelectMode ? toggleSelectFlashcard : undefined}
+      />
 
       {/* Create Flashcard Dialog */}
       <CreateFlashcardDialog
@@ -136,6 +153,30 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
               className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
             >
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Batch Delete Confirmation Dialog */}
+      <AlertDialog open={viewModel.dialogs.batchDelete.isOpen} onOpenChange={(open) => !open && closeDialogs()}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Selected Flashcards</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {viewModel.selection.selectedIds.size} flashcard(s)? This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={closeDialogs}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                handleBatchDeleteFlashcards();
+              }}
+              className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
+            >
+              Delete {viewModel.selection.selectedIds.size} Flashcard(s)
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

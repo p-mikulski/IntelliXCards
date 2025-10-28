@@ -23,6 +23,11 @@ export interface ProjectDetailViewModel {
     create: { isOpen: boolean };
     edit: { isOpen: boolean; flashcardId: string | null };
     delete: { isOpen: boolean; flashcardId: string | null };
+    batchDelete: { isOpen: boolean };
+  };
+  selection: {
+    isSelectMode: boolean;
+    selectedIds: Set<string>;
   };
 }
 
@@ -41,6 +46,11 @@ export const useProjectDetail = (projectId: string) => {
       create: { isOpen: false },
       edit: { isOpen: false, flashcardId: null },
       delete: { isOpen: false, flashcardId: null },
+      batchDelete: { isOpen: false },
+    },
+    selection: {
+      isSelectMode: false,
+      selectedIds: new Set(),
     },
   });
 
@@ -308,18 +318,124 @@ export const useProjectDetail = (projectId: string) => {
         create: { isOpen: false },
         edit: { isOpen: false, flashcardId: null },
         delete: { isOpen: false, flashcardId: null },
+        batchDelete: { isOpen: false },
       },
     }));
   }, []);
+
+  /**
+   * Selection management functions
+   */
+  const toggleSelectMode = useCallback(() => {
+    setViewModel((prev) => ({
+      ...prev,
+      selection: {
+        isSelectMode: !prev.selection.isSelectMode,
+        selectedIds: new Set(), // Clear selection when toggling mode
+      },
+    }));
+  }, []);
+
+  const toggleSelectFlashcard = useCallback((flashcardId: string) => {
+    setViewModel((prev) => {
+      const newSelectedIds = new Set(prev.selection.selectedIds);
+      if (newSelectedIds.has(flashcardId)) {
+        newSelectedIds.delete(flashcardId);
+      } else {
+        newSelectedIds.add(flashcardId);
+      }
+      return {
+        ...prev,
+        selection: {
+          ...prev.selection,
+          selectedIds: newSelectedIds,
+        },
+      };
+    });
+  }, []);
+
+  const openBatchDeleteDialog = useCallback(() => {
+    setViewModel((prev) => ({
+      ...prev,
+      dialogs: { ...prev.dialogs, batchDelete: { isOpen: true } },
+    }));
+  }, []);
+
+  /**
+   * Deletes multiple flashcards
+   */
+  const handleBatchDeleteFlashcards = useCallback(async () => {
+    const flashcardIds = Array.from(viewModel.selection.selectedIds);
+    if (flashcardIds.length === 0) return;
+
+    setViewModel((prev) => ({ ...prev, isSubmitting: true }));
+
+    // Store original flashcards for rollback on error
+    const originalFlashcards = viewModel.flashcards;
+
+    // Optimistically remove from UI
+    setViewModel((prev) => ({
+      ...prev,
+      flashcards: prev.flashcards.filter((f) => !flashcardIds.includes(f.id)),
+    }));
+
+    try {
+      // Delete all flashcards in parallel
+      const deletePromises = flashcardIds.map((flashcardId) =>
+        fetch(`/api/projects/${projectId}/flashcards/${flashcardId}`, {
+          method: "DELETE",
+        })
+      );
+
+      const responses = await Promise.all(deletePromises);
+      const failedDeletes = responses.filter((r) => !r.ok);
+
+      if (failedDeletes.length > 0) {
+        throw new Error(`Failed to delete ${failedDeletes.length} flashcard(s)`);
+      }
+
+      // Success - close dialog and clear selection
+      setViewModel((prev) => ({
+        ...prev,
+        isSubmitting: false,
+        selection: {
+          isSelectMode: false,
+          selectedIds: new Set(),
+        },
+        dialogs: {
+          ...prev.dialogs,
+          batchDelete: { isOpen: false },
+        },
+      }));
+
+      toast.success(`Successfully deleted ${flashcardIds.length} flashcard(s)!`);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+      toast.error("Failed to delete flashcards", {
+        description: errorMessage,
+      });
+      // Rollback on error
+      setViewModel((prev) => ({
+        ...prev,
+        flashcards: originalFlashcards,
+        error: errorMessage,
+        isSubmitting: false,
+      }));
+    }
+  }, [projectId, viewModel.flashcards, viewModel.selection.selectedIds]);
 
   return {
     viewModel,
     handleCreateFlashcard,
     handleUpdateFlashcard,
     handleDeleteFlashcard,
+    handleBatchDeleteFlashcards,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
+    openBatchDeleteDialog,
     closeDialogs,
+    toggleSelectMode,
+    toggleSelectFlashcard,
   };
 };

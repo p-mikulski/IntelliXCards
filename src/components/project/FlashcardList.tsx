@@ -6,13 +6,21 @@ interface FlashcardListProps {
   flashcards: FlashcardListItemDto[];
   onEdit: (flashcardId: string) => void;
   onDelete: (flashcardId: string) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (flashcardId: string) => void;
 }
 
 /**
  * Renders the list of flashcards
  * Shows an empty state when no flashcards exist
  */
-export default function FlashcardList({ flashcards, onEdit, onDelete }: FlashcardListProps) {
+export default function FlashcardList({
+  flashcards,
+  onEdit,
+  onDelete,
+  selectedIds,
+  onToggleSelect,
+}: FlashcardListProps) {
   if (flashcards.length === 0) {
     return (
       <Card>
@@ -33,6 +41,8 @@ export default function FlashcardList({ flashcards, onEdit, onDelete }: Flashcar
           flashcard={flashcard}
           onEdit={() => onEdit(flashcard.id)}
           onDelete={() => onDelete(flashcard.id)}
+          isSelected={selectedIds?.has(flashcard.id)}
+          onToggleSelect={onToggleSelect ? () => onToggleSelect(flashcard.id) : undefined}
         />
       ))}
     </div>
