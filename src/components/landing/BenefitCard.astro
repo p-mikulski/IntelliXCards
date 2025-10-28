@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+const { title, description, icon } = Astro.props;
+---
+
+<article
+  class="group flex flex-col items-center text-center rounded-lg border border-border bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/50 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+  tabindex="0"
+  role="article"
+  aria-labelledby={`benefit-${title.toLowerCase().replace(/\s+/g, '-')}`}
+>
+  <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110">
+    <span class="text-3xl" aria-hidden="true">{icon}</span>
+  </div>
+  <h3 id={`benefit-${title.toLowerCase().replace(/\s+/g, '-')}`} class="mb-2 text-xl font-semibold text-foreground">
+    {title}
+  </h3>
+  <p class="text-sm text-muted-foreground leading-relaxed">
+    {description}
+  </p>
+</article>

@@ -1,0 +1,79 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+
+const features = [
+  {
+    title: "AI-Powered Generation",
+    description: "Transform any text into comprehensive flashcards instantly using advanced AI technology. Save hours of manual card creation.",
+    icon: "🤖",
+  },
+  {
+    title: "Smart Organization",
+    description: "Organize flashcards into projects with custom tags and categories. Keep your study materials structured and accessible.",
+    icon: "📁",
+  },
+  {
+    title: "Spaced Repetition",
+    description: "Built-in spaced repetition algorithm optimizes your learning schedule based on your performance and recall.",
+    icon: "📊",
+  },
+  {
+    title: "Quick Review Sessions",
+    description: "Start focused study sessions anytime. Track your progress and see your improvement over time.",
+    icon: "⚡",
+  },
+  {
+    title: "Easy Editing",
+    description: "Fine-tune AI-generated flashcards or create your own from scratch. Full control over your study materials.",
+    icon: "✏️",
+  },
+  {
+    title: "Progress Tracking",
+    description: "Monitor your learning journey with detailed statistics and insights about your study sessions.",
+    icon: "📈",
+  },
+];
+---
+
+<section class="py-20 sm:py-32 bg-background" id="features">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center space-y-4 mb-16 animate-fade-in">
+      <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+        Everything You Need to Study Smarter
+      </h2>
+      <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
+        Powerful features designed to accelerate your learning and help you retain information more effectively.
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in" style="animation-delay: 0.2s;">
+      {features.map((feature) => (
+        <FeatureCard
+          title={feature.title}
+          description={feature.description}
+          icon={feature.icon}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+    opacity: 0;
+  }
+</style>

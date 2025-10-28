@@ -1,0 +1,96 @@
+---
+import { AuthCTA } from "./AuthCTA";
+---
+
+<section class="relative overflow-hidden bg-gradient-to-b from-background to-secondary/20 py-20 sm:py-32" aria-label="Hero section">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+      <!-- Content Column -->
+      <div class="flex flex-col justify-center space-y-8">
+        <header class="space-y-4">
+          <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+            <span class="block">IntelliXCards</span>
+            <span class="block text-primary mt-2">AI-Powered Flashcards</span>
+          </h1>
+          <p class="text-xl text-muted-foreground sm:text-2xl md:text-3xl max-w-2xl">
+            Transform your study materials into smart flashcards instantly with the power of AI
+          </p>
+        </header>
+
+        <!-- CTA Buttons -->
+        <nav class="flex flex-col sm:flex-row gap-4" role="navigation" aria-label="Authentication actions">
+          <AuthCTA
+            client:load
+            variant="primary"
+            text="Get Started Free"
+            href="/auth/register"
+          />
+          <AuthCTA
+            client:load
+            variant="secondary"
+            text="Sign In"
+            href="/auth/login"
+          />
+        </nav>
+
+        <!-- Social Proof / Trust Indicators -->
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <svg
+            class="h-5 w-5 text-green-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          <span>No credit card required • Free forever • Start learning in seconds</span>
+        </div>
+      </div>
+
+      <!-- Visual Column -->
+      <div class="relative lg:order-last">
+        <div class="relative aspect-[4/3] rounded-lg border border-border bg-card shadow-2xl overflow-hidden">
+          <!-- Placeholder for product screenshot/illustration -->
+          <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center">
+            <div class="text-center space-y-4 p-8">
+              <div class="text-6xl" aria-hidden="true">🎓</div>
+              <p class="text-lg font-semibold text-muted-foreground">
+                Product Screenshot Coming Soon
+              </p>
+            </div>
+          </div>
+          <!-- Floating Cards Animation -->
+          <div class="absolute top-4 right-4 bg-card border border-border rounded-lg p-3 shadow-lg animate-float" aria-hidden="true">
+            <div class="text-sm font-medium">AI Generated</div>
+            <div class="text-xs text-muted-foreground">In seconds</div>
+          </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute -top-4 -right-4 h-72 w-72 bg-primary/10 rounded-full blur-3xl -z-10" aria-hidden="true"></div>
+        <div class="absolute -bottom-4 -left-4 h-72 w-72 bg-secondary/10 rounded-full blur-3xl -z-10" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+// Social proof stats for the landing page
+const stats = [
+  {
+    value: "10,000+",
+    label: "Flashcards Generated",
+    icon: "📝",
+  },
+  {
+    value: "98%",
+    label: "Learning Efficiency",
+    icon: "📈",
+  },
+  {
+    value: "5min",
+    label: "Average Setup Time",
+    icon: "⚡",
+  },
+  {
+    value: "24/7",
+    label: "Study Access",
+    icon: "🌐",
+  },
+];
+---
+
+<section class="py-12 sm:py-16 bg-primary/5 border-y border-border" aria-label="Statistics">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
+      {stats.map((stat) => (
+        <div class="flex flex-col items-center text-center space-y-2">
+          <div class="text-3xl mb-2" aria-hidden="true">{stat.icon}</div>
+          <div class="text-3xl sm:text-4xl font-bold text-primary" aria-label={`${stat.value} ${stat.label}`}>
+            {stat.value}
+          </div>
+          <div class="text-sm text-muted-foreground font-medium">
+            {stat.label}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,93 @@
+---
+import { AuthCTA } from "./AuthCTA";
+---
+
+<section class="py-20 sm:py-32 bg-gradient-to-t from-secondary/20 to-background">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl text-center">
+      <!-- CTA Content -->
+      <div class="space-y-6">
+        <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          Ready to Transform Your Study Habits?
+        </h2>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Join thousands of students and professionals who are already learning smarter with AI-powered flashcards.
+          Start creating your first deck today—no credit card required.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4" role="group" aria-label="Authentication actions">
+          <AuthCTA
+            client:load
+            variant="primary"
+            text="Start Learning Free"
+            href="/auth/register"
+          />
+          <AuthCTA
+            client:load
+            variant="secondary"
+            text="Sign In to Your Account"
+            href="/auth/login"
+          />
+        </div>
+
+        <!-- Trust Badge -->
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground">
+          <div class="flex items-center gap-2">
+            <svg
+              class="h-5 w-5 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+            <span>Free forever</span>
+          </div>
+          <div class="hidden sm:block text-muted-foreground/50">•</div>
+          <div class="flex items-center gap-2">
+            <svg
+              class="h-5 w-5 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+            <span>No credit card required</span>
+          </div>
+          <div class="hidden sm:block text-muted-foreground/50">•</div>
+          <div class="flex items-center gap-2">
+            <svg
+              class="h-5 w-5 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+            <span>Start in seconds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
