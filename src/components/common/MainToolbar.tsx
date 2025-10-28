@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 interface User {
   id: string;
@@ -91,6 +92,7 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
         {/* Right section: User info and logout */}
         {user && (
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="text-sm text-muted-foreground hidden sm:block">
               <span className="font-medium text-primary-foreground">{user.email}</span>
             </div>
