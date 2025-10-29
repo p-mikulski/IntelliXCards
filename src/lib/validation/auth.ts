@@ -1,22 +1,22 @@
 import { z } from "zod";
 
-const emailMessage = "Podaj poprawny adres email.";
+const emailMessage = "Please provide a valid email address.";
 const passwordMinLength = 8;
 const passwordMaxLength = 64;
 
 export const authEmailSchema = z
-  .string({ required_error: "Adres email jest wymagany." })
+  .string({ required_error: "Email address is required." })
   .trim()
-  .min(1, "Adres email jest wymagany.")
-  .max(254, "Adres email jest zbyt dlugi.")
+  .min(1, "Email address is required.")
+  .max(254, "Email address is too long.")
   .email(emailMessage);
 
 export const authPasswordSchema = z
-  .string({ required_error: "Haslo jest wymagane." })
-  .min(passwordMinLength, `Haslo musi miec co najmniej ${passwordMinLength} znakow.`)
-  .max(passwordMaxLength, `Haslo moze miec maksymalnie ${passwordMaxLength} znakow.`)
-  .regex(/[a-zA-Z]/, "Haslo musi zawierac co najmniej jedna litere.")
-  .regex(/\d/, "Haslo musi zawierac co najmniej jedna cyfre.");
+  .string({ required_error: "Password is required." })
+  .min(passwordMinLength, `Password must be at least ${passwordMinLength} characters long.`)
+  .max(passwordMaxLength, `Password can be at most ${passwordMaxLength} characters long.`)
+  .regex(/[a-zA-Z]/, "Password must contain at least one letter.")
+  .regex(/\d/, "Password must contain at least one digit.");
 
 export const registerSchema = z.object({
   email: authEmailSchema,
@@ -25,21 +25,23 @@ export const registerSchema = z.object({
 
 export const registerFormSchema = registerSchema
   .extend({
-    confirmPassword: z.string({ required_error: "Potwierdz haslo." }).min(passwordMinLength, "Potwierdz haslo."),
+    confirmPassword: z
+      .string({ required_error: "Please confirm your password." })
+      .min(passwordMinLength, "Please confirm your password."),
   })
   .superRefine((values, ctx) => {
     if (values.password !== values.confirmPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["confirmPassword"],
-        message: "Hasla musza byc identyczne.",
+        message: "Passwords must match.",
       });
     }
   });
 
 export const loginSchema = z.object({
   email: authEmailSchema,
-  password: z.string({ required_error: "Haslo jest wymagane." }).min(1, "Haslo jest wymagane."),
+  password: z.string({ required_error: "Password is required." }).min(1, "Password is required."),
 });
 
 export const recoverySchema = z.object({

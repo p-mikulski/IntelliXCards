@@ -55,7 +55,7 @@ export default function LoginView() {
               message: messages[0],
             });
           });
-          toast.error("Sprawdz poprawnosc wprowadzonych danych.");
+          toast.error("Please check the entered data.");
           return;
         }
 
@@ -73,16 +73,16 @@ export default function LoginView() {
         }
 
         // Fallback for unexpected errors
-        toast.error("Wystapil nieoczekiwany blad. Sprobuj ponownie.");
+        toast.error("An unexpected error occurred. Please try again.");
         return;
       }
 
       // Success - redirect to dashboard
-      toast.success("Zalogowano pomyslnie!");
+      toast.success("Logged in successfully!");
       window.location.href = "/dashboard";
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Nie mozna polaczyc sie z serwerem. Sprawdz polaczenie internetowe.");
+      toast.error("Unable to connect to the server. Please check your internet connection.");
     } finally {
       setIsLoading(false);
     }
