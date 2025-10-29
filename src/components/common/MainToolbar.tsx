@@ -56,8 +56,8 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
         <div className="flex items-center gap-6">
           {/* App Logo */}
           <a href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <img src="/favicon.png" alt="App Logo" className="h-8 w-8" />
-            <span className="font-bold text-lg text-primary-foreground">10xDevs Anki</span>
+            <img src="/logo.png" alt="App Logo" className="h-8" />
+            {/* <span className="font-bold text-lg text-primary-foreground">10xDevs Anki</span> */}
           </a>
 
           {/* Breadcrumb Navigation */}
