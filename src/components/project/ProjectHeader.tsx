@@ -8,6 +8,7 @@ interface ProjectHeaderProps {
   onCreateClick: () => void;
   onGenerateAIClick: () => void;
   isLoading?: boolean;
+  showButtons?: boolean;
 }
 
 /**
@@ -21,20 +22,25 @@ export default function ProjectHeader({
   onCreateClick,
   onGenerateAIClick,
   isLoading = false,
+  showButtons = true,
 }: ProjectHeaderProps) {
-  // Render with loading skeleton for title/subtitle, but always show buttons
+  // Render with loading skeleton for title/subtitle, but show buttons only if enabled
   if (isLoading || !project) {
     return (
       <PageHeader isLoading={true}>
-        <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
-          Study
-        </Button>
-        <Button onClick={onCreateClick} type="button" size="sm">
-          Create Flashcard
-        </Button>
-        <Button onClick={onGenerateAIClick} type="button" size="sm">
-          ✨ Generate with AI
-        </Button>
+        {showButtons && (
+          <>
+            <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
+              Study
+            </Button>
+            <Button onClick={onCreateClick} type="button" size="sm">
+              Create Flashcard
+            </Button>
+            <Button onClick={onGenerateAIClick} type="button" size="sm">
+              ✨ Generate with AI
+            </Button>
+          </>
+        )}
       </PageHeader>
     );
   }
@@ -53,15 +59,19 @@ export default function ProjectHeader({
       }
       subtitle={project.description || undefined}
     >
-      <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
-        Study
-      </Button>
-      <Button onClick={onCreateClick} type="button" size="sm">
-        Create Flashcard
-      </Button>
-      <Button onClick={onGenerateAIClick} type="button" size="sm">
-        ✨ Generate with AI
-      </Button>
+      {showButtons && (
+        <>
+          <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
+            Study
+          </Button>
+          <Button onClick={onCreateClick} type="button" size="sm">
+            Create Flashcard
+          </Button>
+          <Button onClick={onGenerateAIClick} type="button" size="sm">
+            ✨ Generate with AI
+          </Button>
+        </>
+      )}
     </PageHeader>
   );
 }

@@ -55,6 +55,7 @@ export default function GeneratePageView({ projectId }: GeneratePageViewProps) {
         onCreateClick={handleCreateClick}
         onGenerateAIClick={handleGenerateAIClick}
         isLoading={isLoading}
+        showButtons={false}
       />
 
       <div className="flex-1 w-full py-4 px-90 space-y-4 bg-muted overflow-auto">
