@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { CreateProjectCommand } from "@/types";
 import { createProjectSchema } from "@/lib/validation/project.schema";
 
@@ -69,7 +70,7 @@ const CreateProjectDialog: React.FC<CreateProjectDialogProps> = ({ isOpen, onClo
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project description" {...field} />
+                    <Textarea className="min-h-40" placeholder="Project description" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
