@@ -36,8 +36,9 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     openDeleteDialog,
     openBatchDeleteDialog,
     closeDialogs,
-    toggleSelectMode,
     toggleSelectFlashcard,
+    selectAllFlashcards,
+    unselectAllFlashcards,
   } = useProjectDetail(projectId);
 
   // Loading state
@@ -96,16 +97,16 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         onCreateClick={openCreateDialog}
         selectedCount={viewModel.selection.selectedIds.size}
         onDeleteSelected={openBatchDeleteDialog}
-        onToggleSelectMode={toggleSelectMode}
-        isSelectMode={viewModel.selection.isSelectMode}
+        onSelectAll={selectAllFlashcards}
+        onUnselectAll={unselectAllFlashcards}
       />
 
       <FlashcardList
         flashcards={viewModel.flashcards}
         onEdit={openEditDialog}
         onDelete={openDeleteDialog}
-        selectedIds={viewModel.selection.isSelectMode ? viewModel.selection.selectedIds : undefined}
-        onToggleSelect={viewModel.selection.isSelectMode ? toggleSelectFlashcard : undefined}
+        selectedIds={viewModel.selection.selectedIds}
+        onToggleSelect={toggleSelectFlashcard}
       />
 
       {/* Create Flashcard Dialog */}

@@ -33,7 +33,7 @@ export default function ProjectHeader({ project, onStudyClick, onGenerateAIClick
                 Study
               </Button>
               <Button onClick={onGenerateAIClick} type="button">
-                Generate with AI
+                ✨ Generate with AI
               </Button>
             </div>
           </div>

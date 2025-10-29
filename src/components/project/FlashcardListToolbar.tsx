@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, CheckSquare, Square } from "lucide-react";
 
 interface FlashcardListToolbarProps {
   flashcardCount: number;
   onCreateClick: () => void;
   selectedCount?: number;
   onDeleteSelected?: () => void;
-  onToggleSelectMode?: () => void;
-  isSelectMode?: boolean;
+  onSelectAll?: () => void;
+  onUnselectAll?: () => void;
 }
 
 /**
@@ -18,9 +18,11 @@ export default function FlashcardListToolbar({
   onCreateClick,
   selectedCount = 0,
   onDeleteSelected,
-  onToggleSelectMode,
-  isSelectMode = false,
+  onSelectAll,
+  onUnselectAll,
 }: FlashcardListToolbarProps) {
+  const allSelected = selectedCount === flashcardCount && flashcardCount > 0;
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-4">
@@ -30,20 +32,27 @@ export default function FlashcardListToolbar({
         </h2>
       </div>
       <div className="flex gap-2">
+        <Button onClick={onCreateClick} type="button">
+          Create Flashcard
+        </Button>
         {selectedCount > 0 && onDeleteSelected && (
           <Button onClick={onDeleteSelected} variant="destructive" size="default" type="button">
             <Trash2 className="w-4 h-4 mr-2" />
             Delete Selected ({selectedCount})
           </Button>
         )}
-        {onToggleSelectMode && (
-          <Button onClick={onToggleSelectMode} variant="outline" type="button">
-            {isSelectMode ? "Cancel Selection" : "Select Multiple"}
+        {!allSelected && onSelectAll && flashcardCount > 0 && (
+          <Button onClick={onSelectAll} variant="outline" size="default" type="button">
+            <CheckSquare className="w-4 h-4 mr-2" />
+            Select All
           </Button>
         )}
-        <Button onClick={onCreateClick} type="button">
-          Create Flashcard
-        </Button>
+        {allSelected && onUnselectAll && (
+          <Button onClick={onUnselectAll} variant="outline" size="default" type="button">
+            <Square className="w-4 h-4 mr-2" />
+            Unselect All
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -354,6 +354,26 @@ export const useProjectDetail = (projectId: string) => {
     });
   }, []);
 
+  const selectAllFlashcards = useCallback(() => {
+    setViewModel((prev) => ({
+      ...prev,
+      selection: {
+        ...prev.selection,
+        selectedIds: new Set(prev.flashcards.map((f) => f.id)),
+      },
+    }));
+  }, []);
+
+  const unselectAllFlashcards = useCallback(() => {
+    setViewModel((prev) => ({
+      ...prev,
+      selection: {
+        ...prev.selection,
+        selectedIds: new Set(),
+      },
+    }));
+  }, []);
+
   const openBatchDeleteDialog = useCallback(() => {
     setViewModel((prev) => ({
       ...prev,
@@ -437,5 +457,7 @@ export const useProjectDetail = (projectId: string) => {
     closeDialogs,
     toggleSelectMode,
     toggleSelectFlashcard,
+    selectAllFlashcards,
+    unselectAllFlashcards,
   };
 };

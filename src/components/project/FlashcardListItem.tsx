@@ -1,7 +1,15 @@
 import type { FlashcardListItemDto } from "@/types";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash } from "lucide-react";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface FlashcardListItemProps {
   flashcard: FlashcardListItemDto;
@@ -22,38 +30,117 @@ export default function FlashcardListItem({
   isSelected = false,
   onToggleSelect,
 }: FlashcardListItemProps) {
-  const handleCardClick = () => {
-    // If we have selection enabled, clicking should select, not edit
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't select if clicking on actions button or checkbox
+    if (
+      (e.target as HTMLElement).closest("[data-dropdown-trigger]") ||
+      (e.target as HTMLElement).closest("[data-checkbox]")
+    ) {
+      e.preventDefault();
+      return;
+    }
+
+    // If we have selection enabled, clicking should select
     if (onToggleSelect) {
       onToggleSelect();
-    } else {
-      onEdit();
     }
   };
 
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onToggleSelect) {
+      onToggleSelect();
+    }
+  };
+
+  const handleAction = (e: React.MouseEvent, action: () => void) => {
+    e.preventDefault();
+    e.stopPropagation();
+    action();
+  };
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <Card
-      className={`min-h-[200px] hover:border-foreground cursor-pointer relative group ${
-        isSelected ? "border-foreground" : ""
+      className={`min-h-[200px] cursor-pointer relative transition-all group ${
+        isSelected ? "ring-2 ring-primary border-primary" : "hover:border-foreground"
       }`}
       onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (onToggleSelect) {
+            onToggleSelect();
+          }
+        }
+      }}
     >
       <CardContent className="flex flex-col gap-4">
-        {/* Checkbox in top-left corner */}
-        {onToggleSelect && (
-          <div className="absolute top-2 left-2 z-10">
-            <Checkbox
-              checked={isSelected}
-              onCheckedChange={() => {
-                onToggleSelect();
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              aria-label={`Select flashcard: ${flashcard.front}`}
-            />
+        {/* Checkbox in top-left corner - only visible when selected */}
+        {onToggleSelect && isSelected && (
+          <div
+            role="button"
+            tabIndex={0}
+            className="absolute -top-2 -left-2 h-6 w-6 z-10 bg-background rounded-full"
+            onClick={handleCheckboxClick}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleCheckboxClick(e as unknown as React.MouseEvent);
+              }
+            }}
+            data-checkbox
+            aria-label={isSelected ? "Deselect flashcard" : "Select flashcard"}
+          >
+            <Checkbox checked={isSelected} className="rounded-full border-2 border-primary/60" />
           </div>
         )}
+
+        {/* Three-dot menu in top-right corner */}
+        <div className="absolute top-2 right-2 z-10" data-dropdown-trigger>
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={`h-8 w-8 p-0 transition-opacity ${
+                  isMenuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <span className="sr-only">Open menu</span>
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={(e) => {
+                  handleAction(e, onEdit);
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  handleAction(e, onDelete);
+                  setIsMenuOpen(false);
+                }}
+                className="text-destructive"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         <div>
           <p className="font-semibold text-lg line-clamp-2 break-words">{flashcard.front}</p>
@@ -70,15 +157,6 @@ export default function FlashcardListItem({
           </div>
         )}
       </CardContent>
-
-      <Trash
-        className="absolute top-2 right-2 w-5 h-5 opacity-0 group-hover:opacity-100 text-destructive/30 hover:text-destructive/80 cursor-pointer transition-opacity"
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete();
-        }}
-        aria-label={`Delete flashcard: ${flashcard.front}`}
-      />
     </Card>
   );
 }

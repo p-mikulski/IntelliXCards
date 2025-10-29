@@ -90,31 +90,6 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="flex items-center gap-2 text-sm">
-          <li>
-            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Dashboard
-            </a>
-          </li>
-          <li className="text-gray-400" aria-hidden="true">
-            /
-          </li>
-          <li>
-            <a href={`/projects/${projectId}`} className="text-gray-600 hover:text-gray-900 transition-colors">
-              Project
-            </a>
-          </li>
-          <li className="text-gray-400" aria-hidden="true">
-            /
-          </li>
-          <li className="text-gray-900 font-medium" aria-current="page">
-            Generate with AI
-          </li>
-        </ol>
-      </nav>
-
       <Card>
         <CardHeader>
           <CardTitle>Generate Flashcards with AI</CardTitle>
