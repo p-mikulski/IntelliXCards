@@ -33,18 +33,7 @@ const DashboardView: React.FC = () => {
         {isLoading ? (
           <SkeletonLoader />
         ) : (
-          <ProjectList
-            projects={projects}
-            isLoading={isLoading}
-            onEdit={openEditDialog}
-            onDelete={openDeleteDialog}
-            onSortChange={() => {
-              /* Placeholder */
-            }}
-            onFilterChange={() => {
-              /* Placeholder */
-            }}
-          />
+          <ProjectList projects={projects} onEdit={openEditDialog} onDelete={openDeleteDialog} />
         )}
 
         <CreateProjectDialog isOpen={dialogState.create} onClose={closeDialogs} onCreate={handleCreateProject} />

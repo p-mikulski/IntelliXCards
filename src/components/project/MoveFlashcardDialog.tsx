@@ -19,7 +19,6 @@ interface MoveFlashcardDialogProps {
   onSubmit: (targetProjectId: string) => void;
   isSubmitting: boolean;
   currentProjectId: string;
-  flashcardFront?: string;
 }
 
 /**
@@ -32,7 +31,6 @@ export default function MoveFlashcardDialog({
   onSubmit,
   isSubmitting,
   currentProjectId,
-  flashcardFront = "this flashcard",
 }: MoveFlashcardDialogProps) {
   const [projects, setProjects] = useState<ProjectListItemDto[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");

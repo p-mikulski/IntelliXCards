@@ -164,11 +164,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           }}
           isSubmitting={viewModel.isSubmitting}
           currentProjectId={projectId}
-          flashcardFront={
-            viewModel.dialogs.move.flashcardId
-              ? viewModel.flashcards.find((f) => f.id === viewModel.dialogs.move.flashcardId)?.front
-              : undefined
-          }
         />
 
         <BulkMoveFlashcardDialog

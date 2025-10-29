@@ -4,21 +4,11 @@ import ProjectListItem from "./ProjectListItem";
 
 interface ProjectListProps {
   projects: ProjectViewModel[];
-  isLoading: boolean;
   onEdit: (project: ProjectViewModel) => void;
   onDelete: (project: ProjectViewModel) => void;
-  onSortChange: (sortKey: string) => void;
-  onFilterChange: (filterQuery: string) => void;
 }
 
-const ProjectList: React.FC<ProjectListProps> = ({
-  projects,
-  isLoading,
-  onEdit,
-  onDelete,
-  onSortChange,
-  onFilterChange,
-}) => {
+const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete }) => {
   // No longer handling loading state here - parent handles it with SkeletonLoader
 
   if (projects.length === 0) {
