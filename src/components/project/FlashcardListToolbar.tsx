@@ -41,8 +41,8 @@ export default function FlashcardListToolbar({
             Delete Selected ({selectedCount})
           </Button>
         )}
-        {!allSelected && onSelectAll && flashcardCount > 0 && (
-          <Button onClick={onSelectAll} variant="outline" size="default" type="button">
+        {!allSelected && onSelectAll && (
+          <Button onClick={onSelectAll} variant="outline" size="default" type="button" disabled={flashcardCount === 0}>
             <CheckSquare className="w-4 h-4 mr-2" />
             Select All
           </Button>

@@ -17,6 +17,7 @@ export interface ProjectDetailViewModel {
   project: ProjectDto | null;
   flashcards: FlashcardListItemDto[];
   isLoading: boolean;
+  isLoadingFlashcards: boolean;
   error: string | null;
   isSubmitting: boolean;
   dialogs: {
@@ -40,6 +41,7 @@ export const useProjectDetail = (projectId: string) => {
     project: null,
     flashcards: [],
     isLoading: true,
+    isLoadingFlashcards: true,
     error: null,
     isSubmitting: false,
     dialogs: {
@@ -67,10 +69,10 @@ export const useProjectDetail = (projectId: string) => {
         throw new Error("Failed to fetch project details");
       }
       const project: ProjectDto = await response.json();
-      setViewModel((prev) => ({ ...prev, project, error: null }));
+      setViewModel((prev) => ({ ...prev, project, error: null, isLoading: false }));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-      setViewModel((prev) => ({ ...prev, error: errorMessage }));
+      setViewModel((prev) => ({ ...prev, error: errorMessage, isLoading: false }));
     }
   }, [projectId]);
 
@@ -84,10 +86,10 @@ export const useProjectDetail = (projectId: string) => {
         throw new Error("Failed to fetch flashcards");
       }
       const data: FlashcardListDto = await response.json();
-      setViewModel((prev) => ({ ...prev, flashcards: data.flashcards, error: null }));
+      setViewModel((prev) => ({ ...prev, flashcards: data.flashcards, error: null, isLoadingFlashcards: false }));
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-      setViewModel((prev) => ({ ...prev, error: errorMessage }));
+      setViewModel((prev) => ({ ...prev, error: errorMessage, isLoadingFlashcards: false }));
     }
   }, [projectId]);
 
@@ -96,9 +98,7 @@ export const useProjectDetail = (projectId: string) => {
    */
   useEffect(() => {
     const loadInitialData = async () => {
-      setViewModel((prev) => ({ ...prev, isLoading: true }));
       await Promise.all([fetchProject(), fetchFlashcards()]);
-      setViewModel((prev) => ({ ...prev, isLoading: false }));
     };
 
     loadInitialData();

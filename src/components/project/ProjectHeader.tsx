@@ -1,44 +1,59 @@
 import type { Project } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import PageHeader from "@/components/common/PageHeader";
 
 interface ProjectHeaderProps {
-  project: Project;
+  project?: Project;
   onStudyClick: () => void;
   onGenerateAIClick: () => void;
+  isLoading?: boolean;
 }
 
 /**
- * Displays project title, description, tag, and primary action buttons
- * Includes breadcrumb navigation for better UX
+ * Project subheader component - displays directly under MainToolbar
+ * Shows project title with metadata on the left, action buttons on the right
+ * Supports loading state with skeleton placeholders for title/description
  */
-export default function ProjectHeader({ project, onStudyClick, onGenerateAIClick }: ProjectHeaderProps) {
-  return (
-    <div className="flex flex-col gap-4">
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold break-words">{project.title}</h1>
-              {project.description && <p className="mt-2 text-muted-foreground break-words">{project.description}</p>}
-              {project.tag && (
-                <span className="inline-block mt-3 px-3 py-1 text-sm font-medium bg-primary/10 text-primary rounded-full">
-                  {project.tag}
-                </span>
-              )}
-            </div>
+export default function ProjectHeader({
+  project,
+  onStudyClick,
+  onGenerateAIClick,
+  isLoading = false,
+}: ProjectHeaderProps) {
+  // Render with loading skeleton for title/subtitle, but always show buttons
+  if (isLoading || !project) {
+    return (
+      <PageHeader isLoading={true}>
+        <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
+          Study
+        </Button>
+        <Button onClick={onGenerateAIClick} type="button" size="sm">
+          ✨ Generate with AI
+        </Button>
+      </PageHeader>
+    );
+  }
 
-            <div className="flex gap-3 flex-shrink-0">
-              <Button variant="outline" onClick={onStudyClick} type="button">
-                Study
-              </Button>
-              <Button onClick={onGenerateAIClick} type="button">
-                ✨ Generate with AI
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+  return (
+    <PageHeader
+      title={
+        <div className="flex items-center gap-3 flex-wrap">
+          <span>{project.title}</span>
+          {project.tag && (
+            <span className="inline-flex px-2.5 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+              {project.tag}
+            </span>
+          )}
+        </div>
+      }
+      subtitle={project.description || undefined}
+    >
+      <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
+        Study
+      </Button>
+      <Button onClick={onGenerateAIClick} type="button" size="sm">
+        ✨ Generate with AI
+      </Button>
+    </PageHeader>
   );
 }

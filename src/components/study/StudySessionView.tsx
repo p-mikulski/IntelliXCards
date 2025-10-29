@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Progress } from "../ui/progress";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +15,7 @@ import EmptyState from "../common/EmptyState";
 import { useStudySession } from "../hooks/useStudySession";
 import { FlashcardDisplay } from "./FlashcardDisplay";
 import { RecallFeedbackButtons } from "./RecallFeedbackButtons";
+import StudySessionHeader from "./StudySessionHeader";
 
 type RecallDifficulty = "easy" | "good" | "hard";
 
@@ -101,57 +101,45 @@ export default function StudySessionView({ projectId }: StudySessionViewProps) {
   const progressPercentage = studyProgress.total > 0 ? (studyProgress.completed / studyProgress.total) * 100 : 0;
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
-      {/* Header with progress */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Study Session</h1>
-          <Button variant="outline" onClick={() => setShowExitDialog(true)} aria-label="Exit study session">
-            Exit Study
-          </Button>
+    <>
+      <StudySessionHeader
+        currentCard={studyProgress.completed + 1}
+        totalCards={studyProgress.total}
+        progressPercentage={progressPercentage}
+        onExitClick={() => setShowExitDialog(true)}
+      />
+
+      <div className="container mx-auto py-8 px-4 max-w-4xl">
+        {/* Flashcard display */}
+        <FlashcardDisplay front={currentFlashcard.front} back={currentFlashcard.back} isFlipped={isFlipped} />
+
+        {/* Action buttons */}
+        <div className="mt-8 flex flex-col items-center gap-4">
+          {!isFlipped ? (
+            <Button size="lg" onClick={handleReveal} className="w-full max-w-md" aria-label="Reveal answer">
+              Reveal Answer
+            </Button>
+          ) : (
+            <RecallFeedbackButtons onFeedback={handleFeedback} disabled={false} />
+          )}
         </div>
 
-        {/* Progress indicator */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm text-muted-foreground">
-            <span>
-              Card {studyProgress.completed + 1} of {studyProgress.total}
-            </span>
-            <span>{Math.round(progressPercentage)}% Complete</span>
-          </div>
-          <Progress value={progressPercentage} aria-label="Study progress" />
-        </div>
+        {/* Exit confirmation dialog */}
+        <AlertDialog open={showExitDialog} onOpenChange={setShowExitDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Exit Study Session?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Your progress will be saved. You can continue studying later.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleExitCancel}>Continue Studying</AlertDialogCancel>
+              <AlertDialogAction onClick={handleExitConfirm}>Exit</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
-
-      {/* Flashcard display */}
-      <FlashcardDisplay front={currentFlashcard.front} back={currentFlashcard.back} isFlipped={isFlipped} />
-
-      {/* Action buttons */}
-      <div className="mt-8 flex flex-col items-center gap-4">
-        {!isFlipped ? (
-          <Button size="lg" onClick={handleReveal} className="w-full max-w-md" aria-label="Reveal answer">
-            Reveal Answer
-          </Button>
-        ) : (
-          <RecallFeedbackButtons onFeedback={handleFeedback} disabled={false} />
-        )}
-      </div>
-
-      {/* Exit confirmation dialog */}
-      <AlertDialog open={showExitDialog} onOpenChange={setShowExitDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Exit Study Session?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Your progress will be saved. You can continue studying later.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleExitCancel}>Continue Studying</AlertDialogCancel>
-            <AlertDialogAction onClick={handleExitConfirm}>Exit</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    </>
   );
 }

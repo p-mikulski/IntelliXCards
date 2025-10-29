@@ -41,17 +41,8 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     unselectAllFlashcards,
   } = useProjectDetail(projectId);
 
-  // Loading state
-  if (viewModel.isLoading) {
-    return (
-      <div className="container mx-auto p-6 space-y-6 max-w-7xl">
-        <SkeletonLoader />
-      </div>
-    );
-  }
-
-  // Error state
-  if (viewModel.error) {
+  // Error state - show error if critical data failed to load
+  if (viewModel.error && !viewModel.project) {
     return (
       <div className="container mx-auto p-6 max-w-7xl">
         <div
@@ -65,8 +56,8 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     );
   }
 
-  // Project not found
-  if (!viewModel.project) {
+  // Project not found - only show after loading is complete
+  if (!viewModel.isLoading && !viewModel.project) {
     return (
       <div className="container mx-auto p-6 max-w-7xl">
         <div
@@ -81,107 +72,117 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
+    <>
+      {/* Always render ProjectHeader - show loading state if project not yet loaded */}
       <ProjectHeader
-        project={viewModel.project}
+        project={viewModel.project || undefined}
         onStudyClick={() => {
           window.location.href = `/projects/${projectId}/study`;
         }}
         onGenerateAIClick={() => {
           window.location.href = `/projects/${projectId}/generate`;
         }}
+        isLoading={!viewModel.project}
       />
 
-      <FlashcardListToolbar
-        flashcardCount={viewModel.flashcards.length}
-        onCreateClick={openCreateDialog}
-        selectedCount={viewModel.selection.selectedIds.size}
-        onDeleteSelected={openBatchDeleteDialog}
-        onSelectAll={selectAllFlashcards}
-        onUnselectAll={unselectAllFlashcards}
-      />
+      <div className="container mx-auto p-6 space-y-6 max-w-7xl">
+        {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
+        <FlashcardListToolbar
+          flashcardCount={viewModel.flashcards.length}
+          onCreateClick={openCreateDialog}
+          selectedCount={viewModel.selection.selectedIds.size}
+          onDeleteSelected={openBatchDeleteDialog}
+          onSelectAll={selectAllFlashcards}
+          onUnselectAll={unselectAllFlashcards}
+        />
 
-      <FlashcardList
-        flashcards={viewModel.flashcards}
-        onEdit={openEditDialog}
-        onDelete={openDeleteDialog}
-        selectedIds={viewModel.selection.selectedIds}
-        onToggleSelect={toggleSelectFlashcard}
-      />
+        {/* Show skeleton only while loading flashcards */}
+        {viewModel.isLoadingFlashcards ? (
+          <SkeletonLoader />
+        ) : (
+          <FlashcardList
+            flashcards={viewModel.flashcards}
+            onEdit={openEditDialog}
+            onDelete={openDeleteDialog}
+            selectedIds={viewModel.selection.selectedIds}
+            onToggleSelect={toggleSelectFlashcard}
+          />
+        )}
 
-      {/* Create Flashcard Dialog */}
-      <CreateFlashcardDialog
-        isOpen={viewModel.dialogs.create.isOpen}
-        onClose={closeDialogs}
-        onSubmit={handleCreateFlashcard}
-        isSubmitting={viewModel.isSubmitting}
-      />
+        {/* Create Flashcard Dialog */}
+        <CreateFlashcardDialog
+          isOpen={viewModel.dialogs.create.isOpen}
+          onClose={closeDialogs}
+          onSubmit={handleCreateFlashcard}
+          isSubmitting={viewModel.isSubmitting}
+        />
 
-      {/* Edit Flashcard Dialog */}
-      <EditFlashcardDialog
-        isOpen={viewModel.dialogs.edit.isOpen}
-        onClose={closeDialogs}
-        onSubmit={(data) => {
-          if (viewModel.dialogs.edit.flashcardId) {
-            handleUpdateFlashcard(viewModel.dialogs.edit.flashcardId, data);
+        {/* Edit Flashcard Dialog */}
+        <EditFlashcardDialog
+          isOpen={viewModel.dialogs.edit.isOpen}
+          onClose={closeDialogs}
+          onSubmit={(data) => {
+            if (viewModel.dialogs.edit.flashcardId) {
+              handleUpdateFlashcard(viewModel.dialogs.edit.flashcardId, data);
+            }
+          }}
+          flashcard={
+            viewModel.dialogs.edit.flashcardId
+              ? viewModel.flashcards.find((f) => f.id === viewModel.dialogs.edit.flashcardId) || null
+              : null
           }
-        }}
-        flashcard={
-          viewModel.dialogs.edit.flashcardId
-            ? viewModel.flashcards.find((f) => f.id === viewModel.dialogs.edit.flashcardId) || null
-            : null
-        }
-        isSubmitting={viewModel.isSubmitting}
-      />
+          isSubmitting={viewModel.isSubmitting}
+        />
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={viewModel.dialogs.delete.isOpen} onOpenChange={(open) => !open && closeDialogs()}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Flashcard</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this flashcard? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={closeDialogs}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (viewModel.dialogs.delete.flashcardId) {
-                  handleDeleteFlashcard(viewModel.dialogs.delete.flashcardId);
-                }
-              }}
-              className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={viewModel.dialogs.delete.isOpen} onOpenChange={(open) => !open && closeDialogs()}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Flashcard</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this flashcard? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={closeDialogs}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  if (viewModel.dialogs.delete.flashcardId) {
+                    handleDeleteFlashcard(viewModel.dialogs.delete.flashcardId);
+                  }
+                }}
+                className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-      {/* Batch Delete Confirmation Dialog */}
-      <AlertDialog open={viewModel.dialogs.batchDelete.isOpen} onOpenChange={(open) => !open && closeDialogs()}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Selected Flashcards</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete {viewModel.selection.selectedIds.size} flashcard(s)? This action cannot be
-              undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={closeDialogs}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                handleBatchDeleteFlashcards();
-              }}
-              className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
-            >
-              Delete {viewModel.selection.selectedIds.size} Flashcard(s)
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+        {/* Batch Delete Confirmation Dialog */}
+        <AlertDialog open={viewModel.dialogs.batchDelete.isOpen} onOpenChange={(open) => !open && closeDialogs()}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Selected Flashcards</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete {viewModel.selection.selectedIds.size} flashcard(s)? This action cannot
+                be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={closeDialogs}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  handleBatchDeleteFlashcards();
+                }}
+                className="bg-red-600 hover:bg-red-700 focus-visible:outline-red-600"
+              >
+                Delete {viewModel.selection.selectedIds.size} Flashcard(s)
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </>
   );
 }

@@ -19,9 +19,7 @@ const ProjectList: React.FC<ProjectListProps> = ({
   onSortChange,
   onFilterChange,
 }) => {
-  if (isLoading) {
-    return <div>Loading...</div>; // Placeholder for SkeletonLoader
-  }
+  // No longer handling loading state here - parent handles it with SkeletonLoader
 
   if (projects.length === 0) {
     return <div>No projects found.</div>; // Placeholder for EmptyState
