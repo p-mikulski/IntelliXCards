@@ -7,6 +7,9 @@ interface FlashcardListToolbarProps {
   onDeleteSelected?: () => void;
   onSelectAll?: () => void;
   onUnselectAll?: () => void;
+  totalCount?: number;
+  currentPage?: number;
+  pageSize?: number;
 }
 
 /**
@@ -18,14 +21,33 @@ export default function FlashcardListToolbar({
   onDeleteSelected,
   onSelectAll,
   onUnselectAll,
+  totalCount,
+  currentPage,
+  pageSize,
 }: FlashcardListToolbarProps) {
   const allSelected = selectedCount === flashcardCount && flashcardCount > 0;
+
+  // Calculate the range of items being displayed
+  const getItemRange = () => {
+    if (!totalCount || !currentPage || !pageSize) {
+      return `Flashcards (${flashcardCount})`;
+    }
+
+    if (totalCount === 0) {
+      return "Flashcards (0)";
+    }
+
+    const startItem = (currentPage - 1) * pageSize + 1;
+    const endItem = Math.min(currentPage * pageSize, totalCount);
+
+    return `Flashcards (${startItem}-${endItem} of ${totalCount})`;
+  };
 
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-semibold">
-          Flashcards ({flashcardCount})
+          {getItemRange()}
           {selectedCount > 0 && <span className="text-primary ml-2">• {selectedCount} selected</span>}
         </h2>
       </div>

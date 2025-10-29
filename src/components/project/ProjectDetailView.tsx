@@ -74,7 +74,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
   }
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-65px)]">
       {/* Always render ProjectHeader - show loading state if project not yet loaded */}
       <ProjectHeader
         project={viewModel.project || undefined}
@@ -88,14 +88,17 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         isLoading={!viewModel.project}
       />
 
-      <div className="w-full py-4 px-90 space-y-4 bg-muted">
+      <div className="flex-1 w-full py-4 px-90 space-y-4 bg-muted overflow-auto">
         {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
         <FlashcardListToolbar
-          flashcardCount={viewModel.pagination.totalCount}
+          flashcardCount={viewModel.flashcards.length}
           selectedCount={viewModel.selection.selectedIds.size}
           onDeleteSelected={openBatchDeleteDialog}
           onSelectAll={selectAllFlashcards}
           onUnselectAll={unselectAllFlashcards}
+          totalCount={viewModel.pagination.totalCount}
+          currentPage={viewModel.pagination.currentPage}
+          pageSize={viewModel.pagination.pageSize}
         />
 
         {/* Show skeleton only while loading flashcards */}
@@ -192,6 +195,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </>
+    </div>
   );
 }
