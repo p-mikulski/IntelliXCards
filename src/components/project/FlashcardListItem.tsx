@@ -2,7 +2,7 @@ import type { FlashcardListItemDto } from "@/types";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Trash2, FolderInput } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +15,7 @@ interface FlashcardListItemProps {
   flashcard: FlashcardListItemDto;
   onEdit: () => void;
   onDelete: () => void;
+  onMove: () => void;
   isSelected?: boolean;
   onToggleSelect?: () => void;
 }
@@ -27,6 +28,7 @@ export default function FlashcardListItem({
   flashcard,
   onEdit,
   onDelete,
+  onMove,
   isSelected = false,
   onToggleSelect,
 }: FlashcardListItemProps) {
@@ -127,6 +129,15 @@ export default function FlashcardListItem({
               >
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  handleAction(e, onMove);
+                  setIsMenuOpen(false);
+                }}
+              >
+                <FolderInput className="mr-2 h-4 w-4" />
+                Move
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={(e) => {

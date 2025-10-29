@@ -6,6 +6,7 @@ interface FlashcardListProps {
   flashcards: FlashcardListItemDto[];
   onEdit: (flashcardId: string) => void;
   onDelete: (flashcardId: string) => void;
+  onMove: (flashcardId: string) => void;
   selectedIds?: Set<string>;
   onToggleSelect?: (flashcardId: string) => void;
 }
@@ -18,6 +19,7 @@ export default function FlashcardList({
   flashcards,
   onEdit,
   onDelete,
+  onMove,
   selectedIds,
   onToggleSelect,
 }: FlashcardListProps) {
@@ -41,6 +43,7 @@ export default function FlashcardList({
           flashcard={flashcard}
           onEdit={() => onEdit(flashcard.id)}
           onDelete={() => onDelete(flashcard.id)}
+          onMove={() => onMove(flashcard.id)}
           isSelected={selectedIds?.has(flashcard.id)}
           onToggleSelect={onToggleSelect ? () => onToggleSelect(flashcard.id) : undefined}
         />

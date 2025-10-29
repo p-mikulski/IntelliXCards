@@ -100,6 +100,20 @@ export class FlashcardService {
     // First verify the flashcard exists and user has access
     await this.getFlashcardById(flashcardId, userId);
 
+    // If project_id is being changed, verify the target project exists and user has access
+    if (command.project_id !== undefined) {
+      const { data: targetProject, error: projectError } = await this.supabase
+        .from("projects")
+        .select("id")
+        .eq("id", command.project_id)
+        .eq("user_id", userId)
+        .single();
+
+      if (projectError || !targetProject) {
+        throw new Error("Target project not found or access denied");
+      }
+    }
+
     // Build update object with only provided fields
     const updateData: Record<string, unknown> = {};
     if (command.front !== undefined) updateData.front = command.front;
@@ -107,6 +121,7 @@ export class FlashcardService {
     if (command.feedback !== undefined) updateData.feedback = command.feedback;
     if (command.next_review_date !== undefined) updateData.next_review_date = command.next_review_date;
     if (command.ease_factor !== undefined) updateData.ease_factor = command.ease_factor;
+    if (command.project_id !== undefined) updateData.project_id = command.project_id;
 
     // Update the flashcard
     const { data: flashcard, error: updateError } = await this.supabase

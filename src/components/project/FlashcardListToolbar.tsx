@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Trash2, CheckSquare, Square } from "lucide-react";
+import { Trash2, CheckSquare, Square, FolderInput } from "lucide-react";
 
 interface FlashcardListToolbarProps {
   flashcardCount: number;
   selectedCount?: number;
   onDeleteSelected?: () => void;
+  onMoveSelected?: () => void;
   onSelectAll?: () => void;
   onUnselectAll?: () => void;
   totalCount?: number;
@@ -19,6 +20,7 @@ export default function FlashcardListToolbar({
   flashcardCount,
   selectedCount = 0,
   onDeleteSelected,
+  onMoveSelected,
   onSelectAll,
   onUnselectAll,
   totalCount,
@@ -52,6 +54,12 @@ export default function FlashcardListToolbar({
         </h2>
       </div>
       <div className="flex gap-2">
+        {selectedCount > 0 && onMoveSelected && (
+          <Button onClick={onMoveSelected} variant="outline" size="sm" type="button">
+            <FolderInput className="w-4 h-4 mr-2" />
+            Move Selected ({selectedCount})
+          </Button>
+        )}
         {selectedCount > 0 && onDeleteSelected && (
           <Button onClick={onDeleteSelected} variant="destructive" size="sm" type="button">
             <Trash2 className="w-4 h-4 mr-2" />

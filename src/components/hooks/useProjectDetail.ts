@@ -30,6 +30,8 @@ export interface ProjectDetailViewModel {
     edit: { isOpen: boolean; flashcardId: string | null };
     delete: { isOpen: boolean; flashcardId: string | null };
     batchDelete: { isOpen: boolean };
+    move: { isOpen: boolean; flashcardId: string | null };
+    bulkMove: { isOpen: boolean };
   };
   selection: {
     isSelectMode: boolean;
@@ -60,6 +62,8 @@ export const useProjectDetail = (projectId: string) => {
       edit: { isOpen: false, flashcardId: null },
       delete: { isOpen: false, flashcardId: null },
       batchDelete: { isOpen: false },
+      move: { isOpen: false, flashcardId: null },
+      bulkMove: { isOpen: false },
     },
     selection: {
       isSelectMode: false,
@@ -229,6 +233,120 @@ export const useProjectDetail = (projectId: string) => {
   );
 
   /**
+   * Moves a flashcard to a different project
+   */
+  const handleMoveFlashcard = useCallback(
+    async (flashcardId: string, targetProjectId: string) => {
+      setViewModel((prev) => ({ ...prev, isSubmitting: true }));
+
+      try {
+        const response = await fetch(`/api/projects/${projectId}/flashcards/${flashcardId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ project_id: targetProjectId }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to move flashcard");
+        }
+
+        // Close dialog
+        setViewModel((prev) => ({
+          ...prev,
+          isSubmitting: false,
+          dialogs: {
+            ...prev.dialogs,
+            move: { isOpen: false, flashcardId: null },
+          },
+        }));
+
+        // Refetch flashcards to reflect the removal
+        await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
+
+        toast.success("Flashcard moved successfully!");
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+        toast.error("Failed to move flashcard", {
+          description: errorMessage,
+        });
+        setViewModel((prev) => ({
+          ...prev,
+          error: errorMessage,
+          isSubmitting: false,
+        }));
+      }
+    },
+    [projectId, fetchFlashcards, viewModel.pagination.currentPage, viewModel.pagination.pageSize]
+  );
+
+  /**
+   * Moves multiple flashcards to a different project
+   */
+  const handleBulkMoveFlashcards = useCallback(
+    async (targetProjectId: string) => {
+      setViewModel((prev) => ({ ...prev, isSubmitting: true }));
+
+      const flashcardIds = Array.from(viewModel.selection.selectedIds);
+
+      try {
+        // Move each flashcard individually
+        const movePromises = flashcardIds.map((flashcardId) =>
+          fetch(`/api/projects/${projectId}/flashcards/${flashcardId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ project_id: targetProjectId }),
+          })
+        );
+
+        const responses = await Promise.all(movePromises);
+
+        // Check if all requests were successful
+        const failedRequests = responses.filter((response) => !response.ok);
+        if (failedRequests.length > 0) {
+          throw new Error(`Failed to move ${failedRequests.length} flashcard(s)`);
+        }
+
+        // Close dialog and clear selection
+        setViewModel((prev) => ({
+          ...prev,
+          isSubmitting: false,
+          dialogs: {
+            ...prev.dialogs,
+            bulkMove: { isOpen: false },
+          },
+          selection: {
+            isSelectMode: false,
+            selectedIds: new Set(),
+          },
+        }));
+
+        // Refetch flashcards to reflect the changes
+        await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
+
+        toast.success(`Successfully moved ${flashcardIds.length} flashcard(s)!`);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+        toast.error("Failed to move flashcards", {
+          description: errorMessage,
+        });
+        setViewModel((prev) => ({
+          ...prev,
+          error: errorMessage,
+          isSubmitting: false,
+        }));
+      }
+    },
+    [
+      projectId,
+      fetchFlashcards,
+      viewModel.selection.selectedIds,
+      viewModel.pagination.currentPage,
+      viewModel.pagination.pageSize,
+    ]
+  );
+
+  /**
    * Deletes a flashcard
    */
   const handleDeleteFlashcard = useCallback(
@@ -297,6 +415,20 @@ export const useProjectDetail = (projectId: string) => {
     }));
   }, []);
 
+  const openMoveDialog = useCallback((flashcardId: string) => {
+    setViewModel((prev) => ({
+      ...prev,
+      dialogs: { ...prev.dialogs, move: { isOpen: true, flashcardId } },
+    }));
+  }, []);
+
+  const openBulkMoveDialog = useCallback(() => {
+    setViewModel((prev) => ({
+      ...prev,
+      dialogs: { ...prev.dialogs, bulkMove: { isOpen: true } },
+    }));
+  }, []);
+
   const closeDialogs = useCallback(() => {
     setViewModel((prev) => ({
       ...prev,
@@ -305,6 +437,8 @@ export const useProjectDetail = (projectId: string) => {
         edit: { isOpen: false, flashcardId: null },
         delete: { isOpen: false, flashcardId: null },
         batchDelete: { isOpen: false },
+        move: { isOpen: false, flashcardId: null },
+        bulkMove: { isOpen: false },
       },
     }));
   }, []);
@@ -451,11 +585,15 @@ export const useProjectDetail = (projectId: string) => {
     handleCreateFlashcard,
     handleUpdateFlashcard,
     handleDeleteFlashcard,
+    handleMoveFlashcard,
+    handleBulkMoveFlashcards,
     handleBatchDeleteFlashcards,
     handlePageChange,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
+    openMoveDialog,
+    openBulkMoveDialog,
     openBatchDeleteDialog,
     closeDialogs,
     toggleSelectMode,

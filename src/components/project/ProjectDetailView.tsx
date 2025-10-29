@@ -5,6 +5,8 @@ import FlashcardListToolbar from "./FlashcardListToolbar";
 import FlashcardList from "./FlashcardList";
 import CreateFlashcardDialog from "./CreateFlashcardDialog";
 import EditFlashcardDialog from "./EditFlashcardDialog";
+import MoveFlashcardDialog from "./MoveFlashcardDialog";
+import BulkMoveFlashcardDialog from "./BulkMoveFlashcardDialog";
 import { Pagination } from "@/components/ui/pagination";
 import {
   AlertDialog,
@@ -31,11 +33,15 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     handleCreateFlashcard,
     handleUpdateFlashcard,
     handleDeleteFlashcard,
+    handleMoveFlashcard,
+    handleBulkMoveFlashcards,
     handleBatchDeleteFlashcards,
     handlePageChange,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
+    openMoveDialog,
+    openBulkMoveDialog,
     openBatchDeleteDialog,
     closeDialogs,
     toggleSelectFlashcard,
@@ -94,6 +100,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           flashcardCount={viewModel.flashcards.length}
           selectedCount={viewModel.selection.selectedIds.size}
           onDeleteSelected={openBatchDeleteDialog}
+          onMoveSelected={openBulkMoveDialog}
           onSelectAll={selectAllFlashcards}
           onUnselectAll={unselectAllFlashcards}
           totalCount={viewModel.pagination.totalCount}
@@ -110,6 +117,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
               flashcards={viewModel.flashcards}
               onEdit={openEditDialog}
               onDelete={openDeleteDialog}
+              onMove={openMoveDialog}
               selectedIds={viewModel.selection.selectedIds}
               onToggleSelect={toggleSelectFlashcard}
             />
@@ -144,6 +152,32 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
               : null
           }
           isSubmitting={viewModel.isSubmitting}
+        />
+
+        <MoveFlashcardDialog
+          isOpen={viewModel.dialogs.move.isOpen}
+          onClose={closeDialogs}
+          onSubmit={(targetProjectId) => {
+            if (viewModel.dialogs.move.flashcardId) {
+              handleMoveFlashcard(viewModel.dialogs.move.flashcardId, targetProjectId);
+            }
+          }}
+          isSubmitting={viewModel.isSubmitting}
+          currentProjectId={projectId}
+          flashcardFront={
+            viewModel.dialogs.move.flashcardId
+              ? viewModel.flashcards.find((f) => f.id === viewModel.dialogs.move.flashcardId)?.front
+              : undefined
+          }
+        />
+
+        <BulkMoveFlashcardDialog
+          isOpen={viewModel.dialogs.bulkMove.isOpen}
+          onClose={closeDialogs}
+          onSubmit={handleBulkMoveFlashcards}
+          isSubmitting={viewModel.isSubmitting}
+          currentProjectId={projectId}
+          selectedCount={viewModel.selection.selectedIds.size}
         />
 
         {/* Delete Confirmation Dialog */}

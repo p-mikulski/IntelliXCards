@@ -61,15 +61,28 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "Flashcard not found or access denied") {
-      return new Response(
-        JSON.stringify({
-          error: "Not Found",
-          message: error.message,
-          statusCode: 404,
-        } satisfies ErrorResponseDto),
-        { status: 404, headers: { "Content-Type": "application/json" } }
-      );
+    if (error instanceof Error) {
+      if (error.message === "Flashcard not found or access denied") {
+        return new Response(
+          JSON.stringify({
+            error: "Not Found",
+            message: error.message,
+            statusCode: 404,
+          } satisfies ErrorResponseDto),
+          { status: 404, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (error.message === "Target project not found or access denied") {
+        return new Response(
+          JSON.stringify({
+            error: "Not Found",
+            message: error.message,
+            statusCode: 404,
+          } satisfies ErrorResponseDto),
+          { status: 404, headers: { "Content-Type": "application/json" } }
+        );
+      }
     }
 
     return new Response(

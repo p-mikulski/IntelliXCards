@@ -20,7 +20,7 @@ export const createFlashcardSchema = z.object({
 
 /**
  * Schema for validating flashcard update requests
- * All fields are optional, including spaced repetition fields
+ * All fields are optional, including spaced repetition fields and project_id for moving flashcards
  */
 export const updateFlashcardSchema = z.object({
   front: z
@@ -42,4 +42,5 @@ export const updateFlashcardSchema = z.object({
     .min(1.3, { message: "ease_factor must be at least 1.3" })
     .max(3.0, { message: "ease_factor must not exceed 3.0" })
     .optional(),
+  project_id: z.string().uuid({ message: "project_id must be a valid UUID" }).optional(),
 }) satisfies z.ZodType<UpdateFlashcardCommand>;
