@@ -3,7 +3,6 @@ import { Trash2, CheckSquare, Square } from "lucide-react";
 
 interface FlashcardListToolbarProps {
   flashcardCount: number;
-  onCreateClick: () => void;
   selectedCount?: number;
   onDeleteSelected?: () => void;
   onSelectAll?: () => void;
@@ -15,7 +14,6 @@ interface FlashcardListToolbarProps {
  */
 export default function FlashcardListToolbar({
   flashcardCount,
-  onCreateClick,
   selectedCount = 0,
   onDeleteSelected,
   onSelectAll,
@@ -32,23 +30,20 @@ export default function FlashcardListToolbar({
         </h2>
       </div>
       <div className="flex gap-2">
-        <Button onClick={onCreateClick} type="button">
-          Create Flashcard
-        </Button>
         {selectedCount > 0 && onDeleteSelected && (
-          <Button onClick={onDeleteSelected} variant="destructive" size="default" type="button">
+          <Button onClick={onDeleteSelected} variant="destructive" size="sm" type="button">
             <Trash2 className="w-4 h-4 mr-2" />
             Delete Selected ({selectedCount})
           </Button>
         )}
         {!allSelected && onSelectAll && (
-          <Button onClick={onSelectAll} variant="outline" size="default" type="button" disabled={flashcardCount === 0}>
+          <Button onClick={onSelectAll} variant="outline" size="sm" type="button" disabled={flashcardCount === 0}>
             <CheckSquare className="w-4 h-4 mr-2" />
             Select All
           </Button>
         )}
         {allSelected && onUnselectAll && (
-          <Button onClick={onUnselectAll} variant="outline" size="default" type="button">
+          <Button onClick={onUnselectAll} variant="outline" size="sm" type="button">
             <Square className="w-4 h-4 mr-2" />
             Unselect All
           </Button>

@@ -5,6 +5,7 @@ import PageHeader from "@/components/common/PageHeader";
 interface ProjectHeaderProps {
   project?: Project;
   onStudyClick: () => void;
+  onCreateClick: () => void;
   onGenerateAIClick: () => void;
   isLoading?: boolean;
 }
@@ -17,6 +18,7 @@ interface ProjectHeaderProps {
 export default function ProjectHeader({
   project,
   onStudyClick,
+  onCreateClick,
   onGenerateAIClick,
   isLoading = false,
 }: ProjectHeaderProps) {
@@ -26,6 +28,9 @@ export default function ProjectHeader({
       <PageHeader isLoading={true}>
         <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
           Study
+        </Button>
+        <Button onClick={onCreateClick} type="button" size="sm">
+          Create Flashcard
         </Button>
         <Button onClick={onGenerateAIClick} type="button" size="sm">
           ✨ Generate with AI
@@ -50,6 +55,9 @@ export default function ProjectHeader({
     >
       <Button variant="outline" onClick={onStudyClick} type="button" size="sm">
         Study
+      </Button>
+      <Button onClick={onCreateClick} type="button" size="sm">
+        Create Flashcard
       </Button>
       <Button onClick={onGenerateAIClick} type="button" size="sm">
         ✨ Generate with AI

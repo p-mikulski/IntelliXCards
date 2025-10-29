@@ -79,17 +79,17 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         onStudyClick={() => {
           window.location.href = `/projects/${projectId}/study`;
         }}
+        onCreateClick={openCreateDialog}
         onGenerateAIClick={() => {
           window.location.href = `/projects/${projectId}/generate`;
         }}
         isLoading={!viewModel.project}
       />
 
-      <div className="container mx-auto p-6 space-y-6 max-w-7xl">
+      <div className="w-full py-4 px-90 space-y-4 bg-muted">
         {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
         <FlashcardListToolbar
           flashcardCount={viewModel.flashcards.length}
-          onCreateClick={openCreateDialog}
           selectedCount={viewModel.selection.selectedIds.size}
           onDeleteSelected={openBatchDeleteDialog}
           onSelectAll={selectAllFlashcards}
@@ -109,7 +109,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           />
         )}
 
-        {/* Create Flashcard Dialog */}
         <CreateFlashcardDialog
           isOpen={viewModel.dialogs.create.isOpen}
           onClose={closeDialogs}
@@ -117,7 +116,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           isSubmitting={viewModel.isSubmitting}
         />
 
-        {/* Edit Flashcard Dialog */}
         <EditFlashcardDialog
           isOpen={viewModel.dialogs.edit.isOpen}
           onClose={closeDialogs}
