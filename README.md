@@ -12,6 +12,7 @@
 - [Tech Stack](#tech-stack)
 - [Getting Started Locally](#getting-started-locally)
 - [Available Scripts](#available-scripts)
+- [Testing](#testing)
 - [Project Scope](#project-scope)
 - [Project Status](#project-status)
 - [License](#license)
@@ -36,6 +37,8 @@ Many learners understand the value of spaced repetition for long-term knowledge 
 - **Icons**: Lucide React - Beautiful icon library
 - **Database/Auth**: Supabase - Backend-as-a-Service
 - **Build Tool**: Vite - Fast build tool and dev server
+- **Testing**: Vitest with React Testing Library - Unit and integration tests
+- **E2E Testing**: Playwright - End-to-end browser automation
 
 ## Getting Started Locally
 
@@ -65,6 +68,41 @@ Many learners understand the value of spaced repetition for long-term knowledge 
 | `npm run lint`     | Run ESLint to check code quality             |
 | `npm run lint:fix` | Automatically fix ESLint issues              |
 | `npm run format`   | Format code using Prettier                   |
+| `npm test`         | Run unit and integration tests with Vitest   |
+| `npm run test:e2e` | Run end-to-end tests with Playwright         |
+
+## Testing
+
+IntelliXCards employs a comprehensive multi-layered testing strategy to ensure functionality, reliability, and security:
+
+### Testing Framework
+
+- **Unit & Integration Tests**: Vitest with React Testing Library
+  - Tests individual functions, React components, and custom hooks
+  - Validates business logic within services and UI components
+  - Target: 80% code coverage on critical business logic
+  
+- **End-to-End Tests**: Playwright
+  - Simulates real user scenarios from start to finish
+  - Tests critical flows: registration, project creation, AI flashcard generation, study sessions
+  - Runs on staging environment before production deployment
+
+### Test Coverage
+
+The application tests all key functionalities:
+- User authentication (registration, login, password recovery)
+- Project management (CRUD operations)
+- AI flashcard generation workflow (input validation, error handling)
+- Flashcard management (CRUD operations)
+- Study session functionality
+- API endpoints and security (RLS policies)
+
+### Quality Standards
+
+- **Continuous Testing**: Automated tests run on every pull request via GitHub Actions
+- **Acceptance Criteria**: 100% of automated tests must pass before deployment
+- **Security**: Authentication middleware and Supabase RLS policies are thoroughly tested
+- **No Critical Bugs**: Zero critical or high-severity bugs in production releases
 
 ## Project Scope
 
