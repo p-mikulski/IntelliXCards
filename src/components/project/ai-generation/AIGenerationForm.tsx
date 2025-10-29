@@ -7,11 +7,13 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { AIGenerationFormProps } from "./types";
 import type { GenerateFlashcardsCommand } from "@/types";
 
 const MAX_TEXT_LENGTH = 10000;
+const MAX_TEXT_LENGTH_FORMATTED = MAX_TEXT_LENGTH.toLocaleString("en-US").replace(/,/g, " ");
 const MIN_FLASHCARD_COUNT = 1;
 const MAX_FLASHCARD_COUNT = 50;
 
@@ -27,7 +29,7 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
 
     // Validate text length
     if (value.length > MAX_TEXT_LENGTH) {
-      setTextError(`Text must not exceed ${MAX_TEXT_LENGTH} characters`);
+      setTextError(`Text must not exceed ${MAX_TEXT_LENGTH_FORMATTED} characters`);
     } else if (value.length === 0) {
       setTextError("Text cannot be empty");
     } else {
@@ -59,7 +61,7 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
     }
 
     if (text.length > MAX_TEXT_LENGTH) {
-      setTextError(`Text must not exceed ${MAX_TEXT_LENGTH} characters`);
+      setTextError(`Text must not exceed ${MAX_TEXT_LENGTH_FORMATTED} characters`);
       return;
     }
 
@@ -106,14 +108,14 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
                 Source Text
                 <span className="text-destructive ml-1">*</span>
               </Label>
-              <textarea
+              <Textarea
                 id="text"
+                className="min-h-60"
                 value={text}
                 onChange={handleTextChange}
                 placeholder="Paste your study material here..."
                 rows={12}
                 disabled={isGenerating}
-                className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
                 aria-describedby="text-error text-counter"
               />
               <div className="flex justify-between items-start">
@@ -128,7 +130,7 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
                   id="text-counter"
                   className={`text-sm ${text.length > MAX_TEXT_LENGTH ? "text-destructive" : "text-muted-foreground"}`}
                 >
-                  {text.length} / {MAX_TEXT_LENGTH}
+                  {text.length} / {MAX_TEXT_LENGTH_FORMATTED}
                 </p>
               </div>
             </div>
