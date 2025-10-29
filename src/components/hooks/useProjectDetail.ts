@@ -4,7 +4,6 @@ import type {
   ProjectDto,
   FlashcardListDto,
   FlashcardListItemDto,
-  FlashcardDto,
   CreateFlashcardCommand,
   UpdateFlashcardCommand,
 } from "@/types";
@@ -16,6 +15,12 @@ import type {
 export interface ProjectDetailViewModel {
   project: ProjectDto | null;
   flashcards: FlashcardListItemDto[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    pageSize: number;
+  };
   isLoading: boolean;
   isLoadingFlashcards: boolean;
   error: string | null;
@@ -40,6 +45,12 @@ export const useProjectDetail = (projectId: string) => {
   const [viewModel, setViewModel] = useState<ProjectDetailViewModel>({
     project: null,
     flashcards: [],
+    pagination: {
+      currentPage: 1,
+      totalPages: 1,
+      totalCount: 0,
+      pageSize: 9,
+    },
     isLoading: true,
     isLoadingFlashcards: true,
     error: null,
@@ -77,21 +88,40 @@ export const useProjectDetail = (projectId: string) => {
   }, [projectId]);
 
   /**
-   * Fetches the list of flashcards for the project
+   * Fetches the list of flashcards for the project with pagination
    */
-  const fetchFlashcards = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/projects/${projectId}/flashcards`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch flashcards");
+  const fetchFlashcards = useCallback(
+    async (page = 1, limit = 9) => {
+      try {
+        setViewModel((prev) => ({ ...prev, isLoadingFlashcards: true }));
+
+        const response = await fetch(`/api/projects/${projectId}/flashcards?page=${page}&limit=${limit}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch flashcards");
+        }
+        const data: FlashcardListDto = await response.json();
+
+        const totalPages = Math.ceil(data.total / data.limit);
+
+        setViewModel((prev) => ({
+          ...prev,
+          flashcards: data.flashcards,
+          pagination: {
+            currentPage: data.page,
+            totalPages,
+            totalCount: data.total,
+            pageSize: data.limit,
+          },
+          error: null,
+          isLoadingFlashcards: false,
+        }));
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+        setViewModel((prev) => ({ ...prev, error: errorMessage, isLoadingFlashcards: false }));
       }
-      const data: FlashcardListDto = await response.json();
-      setViewModel((prev) => ({ ...prev, flashcards: data.flashcards, error: null, isLoadingFlashcards: false }));
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-      setViewModel((prev) => ({ ...prev, error: errorMessage, isLoadingFlashcards: false }));
-    }
-  }, [projectId]);
+    },
+    [projectId]
+  );
 
   /**
    * Loads initial data (project and flashcards) on mount
@@ -122,29 +152,18 @@ export const useProjectDetail = (projectId: string) => {
           throw new Error("Failed to create flashcard");
         }
 
-        const newFlashcard: FlashcardDto = await response.json();
-
-        // Update the flashcard list with the new item
+        // Close dialog and refresh the current page
         setViewModel((prev) => ({
           ...prev,
-          flashcards: [
-            {
-              id: newFlashcard.id,
-              front: newFlashcard.front,
-              back: newFlashcard.back,
-              next_review_date: newFlashcard.next_review_date,
-              ease_factor: newFlashcard.ease_factor,
-              feedback: newFlashcard.feedback,
-              feedback_timestamp: newFlashcard.feedback_timestamp,
-            },
-            ...prev.flashcards,
-          ],
           isSubmitting: false,
           dialogs: {
             ...prev.dialogs,
             create: { isOpen: false },
           },
         }));
+
+        // Refetch flashcards to reflect the new item
+        await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
 
         toast.success("Flashcard created successfully!");
       } catch (err) {
@@ -159,7 +178,7 @@ export const useProjectDetail = (projectId: string) => {
         }));
       }
     },
-    [projectId]
+    [projectId, fetchFlashcards, viewModel.pagination.currentPage, viewModel.pagination.pageSize]
   );
 
   /**
@@ -168,17 +187,6 @@ export const useProjectDetail = (projectId: string) => {
   const handleUpdateFlashcard = useCallback(
     async (flashcardId: string, data: UpdateFlashcardCommand) => {
       setViewModel((prev) => ({ ...prev, isSubmitting: true }));
-
-      // Store original flashcards for rollback on error
-      const originalFlashcards = viewModel.flashcards;
-
-      // Optimistically update the UI
-      setViewModel((prev) => ({
-        ...prev,
-        flashcards: prev.flashcards.map((f) =>
-          f.id === flashcardId ? { ...f, front: data.front ?? f.front, back: data.back ?? f.back } : f
-        ),
-      }));
 
       try {
         const response = await fetch(`/api/projects/${projectId}/flashcards/${flashcardId}`, {
@@ -191,24 +199,9 @@ export const useProjectDetail = (projectId: string) => {
           throw new Error("Failed to update flashcard");
         }
 
-        const updatedFlashcard: FlashcardDto = await response.json();
-
-        // Update with server response
+        // Close dialog
         setViewModel((prev) => ({
           ...prev,
-          flashcards: prev.flashcards.map((f) =>
-            f.id === flashcardId
-              ? {
-                  id: updatedFlashcard.id,
-                  front: updatedFlashcard.front,
-                  back: updatedFlashcard.back,
-                  next_review_date: updatedFlashcard.next_review_date,
-                  ease_factor: updatedFlashcard.ease_factor,
-                  feedback: updatedFlashcard.feedback,
-                  feedback_timestamp: updatedFlashcard.feedback_timestamp,
-                }
-              : f
-          ),
           isSubmitting: false,
           dialogs: {
             ...prev.dialogs,
@@ -216,22 +209,23 @@ export const useProjectDetail = (projectId: string) => {
           },
         }));
 
+        // Refetch flashcards to reflect the update
+        await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
+
         toast.success("Flashcard updated successfully!");
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
         toast.error("Failed to update flashcard", {
           description: errorMessage,
         });
-        // Rollback on error
         setViewModel((prev) => ({
           ...prev,
-          flashcards: originalFlashcards,
           error: errorMessage,
           isSubmitting: false,
         }));
       }
     },
-    [projectId, viewModel.flashcards]
+    [projectId, fetchFlashcards, viewModel.pagination.currentPage, viewModel.pagination.pageSize]
   );
 
   /**
@@ -240,15 +234,6 @@ export const useProjectDetail = (projectId: string) => {
   const handleDeleteFlashcard = useCallback(
     async (flashcardId: string) => {
       setViewModel((prev) => ({ ...prev, isSubmitting: true }));
-
-      // Store original flashcards for rollback on error
-      const originalFlashcards = viewModel.flashcards;
-
-      // Optimistically remove from UI
-      setViewModel((prev) => ({
-        ...prev,
-        flashcards: prev.flashcards.filter((f) => f.id !== flashcardId),
-      }));
 
       try {
         const response = await fetch(`/api/projects/${projectId}/flashcards/${flashcardId}`, {
@@ -259,7 +244,7 @@ export const useProjectDetail = (projectId: string) => {
           throw new Error("Failed to delete flashcard");
         }
 
-        // Success - close the delete dialog
+        // Close the delete dialog
         setViewModel((prev) => ({
           ...prev,
           isSubmitting: false,
@@ -269,22 +254,23 @@ export const useProjectDetail = (projectId: string) => {
           },
         }));
 
+        // Refetch flashcards to reflect the deletion
+        await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
+
         toast.success("Flashcard deleted successfully!");
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
         toast.error("Failed to delete flashcard", {
           description: errorMessage,
         });
-        // Rollback on error
         setViewModel((prev) => ({
           ...prev,
-          flashcards: originalFlashcards,
           error: errorMessage,
           isSubmitting: false,
         }));
       }
     },
-    [projectId, viewModel.flashcards]
+    [projectId, fetchFlashcards, viewModel.pagination.currentPage, viewModel.pagination.pageSize]
   );
 
   /**
@@ -390,15 +376,6 @@ export const useProjectDetail = (projectId: string) => {
 
     setViewModel((prev) => ({ ...prev, isSubmitting: true }));
 
-    // Store original flashcards for rollback on error
-    const originalFlashcards = viewModel.flashcards;
-
-    // Optimistically remove from UI
-    setViewModel((prev) => ({
-      ...prev,
-      flashcards: prev.flashcards.filter((f) => !flashcardIds.includes(f.id)),
-    }));
-
     try {
       // Delete all flashcards in parallel
       const deletePromises = flashcardIds.map((flashcardId) =>
@@ -428,21 +405,46 @@ export const useProjectDetail = (projectId: string) => {
         },
       }));
 
+      // Refetch flashcards to reflect deletions
+      await fetchFlashcards(viewModel.pagination.currentPage, viewModel.pagination.pageSize);
+
       toast.success(`Successfully deleted ${flashcardIds.length} flashcard(s)!`);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
       toast.error("Failed to delete flashcards", {
         description: errorMessage,
       });
-      // Rollback on error
       setViewModel((prev) => ({
         ...prev,
-        flashcards: originalFlashcards,
         error: errorMessage,
         isSubmitting: false,
       }));
     }
-  }, [projectId, viewModel.flashcards, viewModel.selection.selectedIds]);
+  }, [
+    projectId,
+    fetchFlashcards,
+    viewModel.selection.selectedIds,
+    viewModel.pagination.currentPage,
+    viewModel.pagination.pageSize,
+  ]);
+
+  /**
+   * Handles page change for pagination
+   */
+  const handlePageChange = useCallback(
+    (page: number) => {
+      fetchFlashcards(page, viewModel.pagination.pageSize);
+      // Clear selection when changing pages
+      setViewModel((prev) => ({
+        ...prev,
+        selection: {
+          isSelectMode: false,
+          selectedIds: new Set(),
+        },
+      }));
+    },
+    [fetchFlashcards, viewModel.pagination.pageSize]
+  );
 
   return {
     viewModel,
@@ -450,6 +452,7 @@ export const useProjectDetail = (projectId: string) => {
     handleUpdateFlashcard,
     handleDeleteFlashcard,
     handleBatchDeleteFlashcards,
+    handlePageChange,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,

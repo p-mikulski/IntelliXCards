@@ -7,9 +7,12 @@ export const prerender = false;
 
 /**
  * GET /api/projects/[projectId]/flashcards
- * Get all flashcards for a project
+ * Get all flashcards for a project with pagination
+ * Query parameters:
+ * - page: Page number (default: 1)
+ * - limit: Items per page (default: 9)
  */
-export const GET: APIRoute = async ({ locals, params }) => {
+export const GET: APIRoute = async ({ locals, params, url }) => {
   try {
     const projectId = params.projectId;
     if (!projectId) {
@@ -34,15 +37,31 @@ export const GET: APIRoute = async ({ locals, params }) => {
       );
     }
 
+    // Extract pagination parameters from query string
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const limit = parseInt(url.searchParams.get("limit") || "9", 10);
+
+    // Validate pagination parameters
+    if (page < 1 || limit < 1 || limit > 100) {
+      return new Response(
+        JSON.stringify({
+          error: "Bad Request",
+          message: "Invalid pagination parameters. Page must be >= 1 and limit must be between 1 and 100.",
+          statusCode: 400,
+        } satisfies ErrorResponseDto),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const flashcardService = new FlashcardService(locals.supabase);
-    const flashcards = await flashcardService.getFlashcardsByProject(projectId, locals.user.id);
+    const { flashcards, total } = await flashcardService.getFlashcardsByProject(projectId, locals.user.id, page, limit);
 
     return new Response(
       JSON.stringify({
         flashcards,
-        page: 1,
-        limit: flashcards.length,
-        total: flashcards.length,
+        page,
+        limit,
+        total,
       }),
       {
         status: 200,

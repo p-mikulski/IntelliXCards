@@ -6,13 +6,20 @@ export class FlashcardService {
   constructor(private readonly supabase: typeof supabaseClient) {}
 
   /**
-   * Gets all flashcards for a specific project
+   * Gets all flashcards for a specific project with pagination
    * @param projectId - UUID of the project
    * @param userId - UUID of the user requesting flashcards
-   * @returns Array of flashcards
+   * @param page - Page number (1-based)
+   * @param limit - Number of items per page
+   * @returns Paginated flashcard list with total count
    * @throws Error if project doesn't exist or user lacks permission
    */
-  async getFlashcardsByProject(projectId: string, userId: string): Promise<FlashcardListItemDto[]> {
+  async getFlashcardsByProject(
+    projectId: string,
+    userId: string,
+    page = 1,
+    limit = 9
+  ): Promise<{ flashcards: FlashcardListItemDto[]; total: number }> {
     // First verify project exists and user has access
     const { data: project, error: projectError } = await this.supabase
       .from("projects")
@@ -25,18 +32,35 @@ export class FlashcardService {
       throw new Error("Project not found or access denied");
     }
 
-    // Fetch all flashcards for this project
+    // Get total count of flashcards for this project
+    const { count, error: countError } = await this.supabase
+      .from("flashcards")
+      .select("*", { count: "exact", head: true })
+      .eq("project_id", projectId);
+
+    if (countError) {
+      throw new Error("Failed to count flashcards");
+    }
+
+    const total = count || 0;
+
+    // Calculate offset for pagination
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    // Fetch paginated flashcards for this project
     const { data: flashcards, error: fetchError } = await this.supabase
       .from("flashcards")
       .select("id, front, back, next_review_date, ease_factor, feedback, feedback_timestamp")
       .eq("project_id", projectId)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
     if (fetchError) {
       throw new Error("Failed to fetch flashcards");
     }
 
-    return flashcards || [];
+    return { flashcards: flashcards || [], total };
   }
 
   /**

@@ -5,6 +5,7 @@ import FlashcardListToolbar from "./FlashcardListToolbar";
 import FlashcardList from "./FlashcardList";
 import CreateFlashcardDialog from "./CreateFlashcardDialog";
 import EditFlashcardDialog from "./EditFlashcardDialog";
+import { Pagination } from "@/components/ui/pagination";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +32,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
     handleUpdateFlashcard,
     handleDeleteFlashcard,
     handleBatchDeleteFlashcards,
+    handlePageChange,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
@@ -89,7 +91,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
       <div className="w-full py-4 px-90 space-y-4 bg-muted">
         {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
         <FlashcardListToolbar
-          flashcardCount={viewModel.flashcards.length}
+          flashcardCount={viewModel.pagination.totalCount}
           selectedCount={viewModel.selection.selectedIds.size}
           onDeleteSelected={openBatchDeleteDialog}
           onSelectAll={selectAllFlashcards}
@@ -100,13 +102,22 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         {viewModel.isLoadingFlashcards ? (
           <SkeletonLoader />
         ) : (
-          <FlashcardList
-            flashcards={viewModel.flashcards}
-            onEdit={openEditDialog}
-            onDelete={openDeleteDialog}
-            selectedIds={viewModel.selection.selectedIds}
-            onToggleSelect={toggleSelectFlashcard}
-          />
+          <>
+            <FlashcardList
+              flashcards={viewModel.flashcards}
+              onEdit={openEditDialog}
+              onDelete={openDeleteDialog}
+              selectedIds={viewModel.selection.selectedIds}
+              onToggleSelect={toggleSelectFlashcard}
+            />
+
+            {/* Pagination Controls */}
+            <Pagination
+              currentPage={viewModel.pagination.currentPage}
+              totalPages={viewModel.pagination.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
 
         <CreateFlashcardDialog
