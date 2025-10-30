@@ -6,9 +6,9 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
 import type { AIGenerationFormProps } from "./types";
 import type { GenerateFlashcardsCommand } from "@/types";
 
@@ -34,20 +34,6 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
       setTextError("Text cannot be empty");
     } else {
       setTextError(null);
-    }
-  };
-
-  const handleCountChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    setDesiredCount(value);
-
-    // Validate count
-    if (isNaN(value) || value < MIN_FLASHCARD_COUNT) {
-      setCountError(`Count must be at least ${MIN_FLASHCARD_COUNT}`);
-    } else if (value > MAX_FLASHCARD_COUNT) {
-      setCountError(`Count must not exceed ${MAX_FLASHCARD_COUNT}`);
-    } else {
-      setCountError(null);
     }
   };
 
@@ -141,16 +127,29 @@ export default function AIGenerationForm({ projectId, onGenerate, isGenerating }
                 Number of Flashcards
                 <span className="text-destructive ml-1">*</span>
               </Label>
-              <Input
-                id="desiredCount"
-                type="number"
-                value={desiredCount}
-                onChange={handleCountChange}
-                min={MIN_FLASHCARD_COUNT}
-                max={MAX_FLASHCARD_COUNT}
-                disabled={isGenerating}
-                aria-describedby="count-error"
-              />
+              <div className="flex items-center gap-4">
+                <Slider
+                  id="desiredCount"
+                  value={[desiredCount]}
+                  onValueChange={(value) => {
+                    const val = value[0];
+                    setDesiredCount(val);
+                    if (val < MIN_FLASHCARD_COUNT) {
+                      setCountError(`Count must be at least ${MIN_FLASHCARD_COUNT}`);
+                    } else if (val > MAX_FLASHCARD_COUNT) {
+                      setCountError(`Count must not exceed ${MAX_FLASHCARD_COUNT}`);
+                    } else {
+                      setCountError(null);
+                    }
+                  }}
+                  min={MIN_FLASHCARD_COUNT}
+                  max={MAX_FLASHCARD_COUNT}
+                  step={1}
+                  disabled={isGenerating}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium min-w-[1rem]">{desiredCount}</span>
+              </div>
               {countError && (
                 <p id="count-error" className="text-sm text-destructive">
                   {countError}
