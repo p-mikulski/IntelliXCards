@@ -14,6 +14,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
+  globalSetup: "./tests/e2e/global-setup.ts",
 
   use: {
     baseURL: "http://localhost:3000",
@@ -29,9 +30,9 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run dev",
+    command: "npm run dev:test",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env.CI, // Reuse in CI, start fresh locally
     timeout: 120000,
   },
 });

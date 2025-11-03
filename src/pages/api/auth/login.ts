@@ -3,7 +3,7 @@ import { loginSchema } from "@/lib/validation/auth";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
   try {
     // Parse request body
     const body = await request.json();
@@ -65,6 +65,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }
       );
     }
+
+    // Supabase SSR automatically handles session cookies through the client configuration
+    // The createSupabaseServerInstance sets cookies via setAll() when auth state changes
 
     // Return success with minimal user data
     return new Response(

@@ -1,6 +1,11 @@
 import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
+import { config } from "dotenv";
+import { resolve } from "path";
+
+// Load .env.test for unit tests
+config({ path: resolve(process.cwd(), ".env.test") });
 
 // Cleanup after each test
 afterEach(() => {

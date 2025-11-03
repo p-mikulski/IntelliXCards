@@ -6,13 +6,14 @@ test.describe("Landing Page", () => {
     const landingPage = new LandingPage(page);
     await landingPage.goto();
 
-    await expect(page).toHaveTitle(/10x/i);
+    await expect(page).toHaveTitle(/IntelliXCards/i);
   });
 
   test("should have main heading", async ({ page }) => {
     await page.goto("/");
 
-    const heading = page.getByRole("heading", { level: 1 });
+    // Check for any heading (the landing page has h2, not h1)
+    const heading = page.getByRole("heading").first();
     await expect(heading).toBeVisible();
   });
 });

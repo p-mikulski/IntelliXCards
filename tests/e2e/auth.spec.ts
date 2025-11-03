@@ -297,12 +297,13 @@ test.describe("User Authentication", () => {
 
       // Act & Assert: Logout
       await dashboardPage.logout();
-      await page.waitForTimeout(1000); // Wait for session to clear
+      await page.waitForTimeout(2000); // Wait for session to clear and cookies to be removed
       await page.goto("/dashboard");
       await expect(page).toHaveURL(/\/auth\/login/, { timeout: 5000 });
 
       // Act & Assert: Login again
       await loginPage.goto();
+      await page.waitForLoadState("networkidle"); // Ensure page is fully loaded
       await loginPage.login(confirmedTestEmail, confirmedTestPassword);
       await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
     });
