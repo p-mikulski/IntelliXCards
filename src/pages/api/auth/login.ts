@@ -3,7 +3,7 @@ import { loginSchema } from "@/lib/validation/auth";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals, cookies }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse request body
     const body = await request.json();
