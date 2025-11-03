@@ -46,7 +46,9 @@ export default function RegisterView() {
         }),
       });
 
-      const responseData = (await response.json()) as AuthErrorResponse | { user: { id: string; email: string } };
+      const responseData = (await response.json()) as
+        | AuthErrorResponse
+        | { user: { id: string; email: string }; emailConfirmationRequired?: boolean; message?: string };
 
       if (!response.ok) {
         const errorData = responseData as AuthErrorResponse;
@@ -77,6 +79,19 @@ export default function RegisterView() {
 
         // Fallback for unexpected errors
         toast.error("Wystapil nieoczekiwany blad. Sprobuj ponownie.");
+        return;
+      }
+
+      // Check if email confirmation is required
+      const successData = responseData as {
+        user: { id: string; email: string };
+        emailConfirmationRequired?: boolean;
+        message?: string;
+      };
+
+      if (successData.emailConfirmationRequired) {
+        toast.info(successData.message || "Please check your email to confirm your account.");
+        // Don't redirect - user needs to confirm email first
         return;
       }
 

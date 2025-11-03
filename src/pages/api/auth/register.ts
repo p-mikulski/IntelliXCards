@@ -35,6 +35,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${new URL(request.url).origin}/dashboard`,
+        data: {
+          email_confirmed: true, // For E2E testing
+        },
+      },
     });
 
     if (error) {
@@ -61,6 +67,25 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }),
         {
           status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Check if email confirmation is required
+    if (data.user && !data.session) {
+      // User created but email confirmation required
+      return new Response(
+        JSON.stringify({
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+          },
+          emailConfirmationRequired: true,
+          message: "Please check your email to confirm your account.",
+        }),
+        {
+          status: 200,
           headers: { "Content-Type": "application/json" },
         }
       );
