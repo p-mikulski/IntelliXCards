@@ -27,8 +27,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({ isOpen, onClose, onConfir
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the project "{project.title}" and all its
-            associated flashcards.
+            This action cannot be undone. This will permanently delete the project &ldquo;{project.title}&rdquo; and all
+            its associated flashcards.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

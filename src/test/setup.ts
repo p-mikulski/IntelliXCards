@@ -49,3 +49,16 @@ global.IntersectionObserver = class IntersectionObserver {
     return [];
   }
 };
+
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+  observe() {
+    // no-op
+  }
+  disconnect() {
+    // no-op
+  }
+  unobserve() {
+    // no-op
+  }
+};
