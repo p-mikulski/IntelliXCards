@@ -50,7 +50,7 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-secondary">
+    <header className="sticky top-0 z-50 w-full border-b">
       <div className="container flex h-16 items-center justify-between px-6 w-full max-w-full">
         {/* Left section: Logo and Breadcrumb */}
         <div className="flex items-center gap-6">
@@ -63,7 +63,7 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
           {/* Breadcrumb Navigation */}
           {breadcrumbs.length > 0 && (
             <nav aria-label="Breadcrumb" className="hidden md:block">
-              <ol className="flex items-center gap-2 text-sm text-primary-foreground">
+              <ol className="flex items-center gap-2 text-sm text-muted-foreground">
                 {breadcrumbs.map((item, index) => (
                   <React.Fragment key={index}>
                     {index > 0 && (
@@ -73,11 +73,11 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
                     )}
                     <li>
                       {item.href ? (
-                        <a href={item.href} className="hover:text-foreground transition-colors">
+                        <a href={item.href} className="hover:text-primary transition-colors">
                           {item.label}
                         </a>
                       ) : (
-                        <span className="text-primary-foreground font-medium" aria-current="page">
+                        <span className="font-medium" aria-current="page">
                           {item.label}
                         </span>
                       )}

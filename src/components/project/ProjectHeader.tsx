@@ -36,7 +36,12 @@ export default function ProjectHeader({
             <Button onClick={onCreateClick} type="button" size="sm">
               Create Flashcard
             </Button>
-            <Button onClick={onGenerateAIClick} type="button" size="sm">
+            <Button
+              onClick={onGenerateAIClick}
+              type="button"
+              size="sm"
+              className="group animate-rainbow text-primary-foreground focus-visible:ring-ring/50 relative inline-flex cursor-pointer items-center justify-center rounded-md border-2 border-transparent bg-[length:200%] [background-clip:padding-box,border-box,border-box] [background-origin:border-box] font-bold transition-colors focus-visible:ring-[1px] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 before:animate-rainbow before:absolute before:bottom-[-5%] before:left-0 before:z-0 before:h-1/9 before:w-full before:bg-[linear-gradient(90deg,#ff4242,#a1ff42,#42a1ff,#42d0ff,#a142ff)] before:[filter:blur(calc(0.625*1rem))] bg-[linear-gradient(var(--primary),var(--primary)),linear-gradient(var(--primary)_30%,rgba(0,0,0,0)),linear-gradient(90deg,#ff4242,#a1ff42,#42a1ff,#42d0ff,#a142ff)] w-auto"
+            >
               ✨ Generate with AI
             </Button>
           </>
@@ -67,7 +72,12 @@ export default function ProjectHeader({
           <Button onClick={onCreateClick} type="button" size="sm">
             Create Flashcard
           </Button>
-          <Button onClick={onGenerateAIClick} type="button" size="sm">
+          <Button
+            onClick={onGenerateAIClick}
+            type="button"
+            size="sm"
+            className="group animate-rainbow text-primary-foreground focus-visible:ring-ring/50 relative inline-flex cursor-pointer items-center justify-center rounded-md border-2 border-transparent bg-[length:200%] [background-clip:padding-box,border-box,border-box] [background-origin:border-box] font-bold transition-colors focus-visible:ring-[1px] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 before:animate-rainbow before:absolute before:bottom-[-5%] before:left-0 before:z-0 before:h-1/9 before:w-full before:bg-[linear-gradient(90deg,#ff4242,#a1ff42,#42a1ff,#42d0ff,#a142ff)] before:[filter:blur(calc(0.625*1rem))] bg-[linear-gradient(var(--primary),var(--primary)),linear-gradient(var(--primary)_30%,rgba(0,0,0,0)),linear-gradient(90deg,#ff4242,#a1ff42,#42a1ff,#42d0ff,#a142ff)] w-auto"
+          >
             ✨ Generate with AI
           </Button>
         </>

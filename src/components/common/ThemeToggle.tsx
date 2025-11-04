@@ -57,9 +57,9 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       style={{
-        backgroundColor: isDark ? "oklch(0.488 0.243 264.376)" : "oklch(0.8634 0.0263 295.4938)",
+        backgroundColor: isDark ? "var(--primary)" : "oklch(0.8634 0.0263 295.4938)",
       }}
       role="switch"
       aria-checked={isDark}
