@@ -67,7 +67,7 @@ export default function FlashcardListItem({
   return (
     <Card
       className={`min-h-[200px] cursor-pointer relative transition-all group ${
-        isSelected ? "ring-2 ring-primary border-primary" : "hover:border-foreground"
+        isSelected ? "ring-2 ring-primary border-primary" : "hover:border-ring"
       }`}
       onClick={handleCardClick}
       role="button"
