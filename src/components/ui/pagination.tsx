@@ -5,14 +5,40 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  showRange?: boolean;
+  currentPageSize?: number;
+  totalCount?: number;
 }
 
 /**
  * Pagination component for navigating through paginated content
  */
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+  showRange = false,
+  currentPageSize,
+  totalCount,
+}: PaginationProps) {
   const canGoPrevious = currentPage > 1;
   const canGoNext = currentPage < totalPages;
+
+  // Calculate the range of items being displayed
+  const getItemRange = () => {
+    if (!showRange || !currentPageSize || !totalCount) {
+      return null;
+    }
+
+    if (totalCount === 0) {
+      return "Showing 0 results";
+    }
+
+    const startItem = (currentPage - 1) * currentPageSize + 1;
+    const endItem = Math.min(currentPage * currentPageSize, totalCount);
+
+    return `Showing ${startItem}-${endItem} of ${totalCount} results`;
+  };
 
   // Generate page numbers to display
   const getPageNumbers = () => {
@@ -55,56 +81,59 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
     return pages;
   };
 
-  if (totalPages <= 1) {
-    return null;
-  }
-
   return (
-    <div className="flex items-center justify-center gap-2">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={!canGoPrevious}
-        aria-label="Previous page"
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
+    <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center gap-2 relative">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={!canGoPrevious}
+          aria-label="Previous page"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
 
-      <div className="flex items-center gap-1">
-        {getPageNumbers().map((page, index) => {
-          if (page === "...") {
+        <div className="flex items-center gap-1">
+          {getPageNumbers().map((page, index) => {
+            if (page === "...") {
+              return (
+                <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
+                  ...
+                </span>
+              );
+            }
+
             return (
-              <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
-                ...
-              </span>
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="icon"
+                onClick={() => onPageChange(page as number)}
+                aria-label={`Page ${page}`}
+                aria-current={currentPage === page ? "page" : undefined}
+              >
+                {page}
+              </Button>
             );
-          }
+          })}
+        </div>
 
-          return (
-            <Button
-              key={page}
-              variant={currentPage === page ? "default" : "outline"}
-              size="icon"
-              onClick={() => onPageChange(page as number)}
-              aria-label={`Page ${page}`}
-              aria-current={currentPage === page ? "page" : undefined}
-            >
-              {page}
-            </Button>
-          );
-        })}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={!canGoNext}
+          aria-label="Next page"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+        {getItemRange() && (
+          <span className="absolute left-full ml-4 text-xs text-sidebar-foreground whitespace-nowrap">
+            {getItemRange()}
+          </span>
+        )}
       </div>
-
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={!canGoNext}
-        aria-label="Next page"
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
     </div>
   );
 }
