@@ -18,9 +18,15 @@ function parseCookieHeader(cookieHeader: string): { name: string; value: string 
   });
 }
 
-export const createSupabaseServerInstance = (context: { headers: Headers; cookies: AstroCookies }) => {
-  const supabaseUrl = import.meta.env.SUPABASE_URL;
-  const supabaseKey = import.meta.env.SUPABASE_KEY;
+export const createSupabaseServerInstance = (context: {
+  headers: Headers;
+  cookies: AstroCookies;
+  env?: Record<string, string>;
+}) => {
+  // In Cloudflare Pages, environment variables come from context.env
+  // In Node.js (dev/local), they come from import.meta.env
+  const supabaseUrl = context.env?.SUPABASE_URL || import.meta.env.SUPABASE_URL;
+  const supabaseKey = context.env?.SUPABASE_KEY || import.meta.env.SUPABASE_KEY;
 
   // Validate environment variables
   if (!supabaseUrl || !supabaseKey) {

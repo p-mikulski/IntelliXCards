@@ -16,10 +16,14 @@ const PUBLIC_PATHS = [
 ];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
+  // Get environment variables from Cloudflare runtime (if available)
+  const env = locals.runtime?.env;
+
   // Create Supabase server instance
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,
+    env,
   });
 
   // Store supabase instance in locals for use in API routes
