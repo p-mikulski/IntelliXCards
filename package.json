@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "dev:test": "dotenv -e .env.test -- astro dev",
     "build": "astro build",
+    "build:cloudflare": "CF_PAGES=1 astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
@@ -52,6 +53,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@astrojs/cloudflare": "^12.6.10",
     "@eslint/compat": "1.2.7",
     "@eslint/js": "9.23.0",
     "@playwright/test": "^1.56.1",
