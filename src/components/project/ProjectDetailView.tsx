@@ -103,9 +103,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
           onMoveSelected={openBulkMoveDialog}
           onSelectAll={selectAllFlashcards}
           onUnselectAll={unselectAllFlashcards}
-          totalCount={viewModel.pagination.totalCount}
-          currentPage={viewModel.pagination.currentPage}
-          pageSize={viewModel.pagination.pageSize}
         />
 
         {/* Show skeleton only while loading flashcards */}
@@ -127,6 +124,9 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
               currentPage={viewModel.pagination.currentPage}
               totalPages={viewModel.pagination.totalPages}
               onPageChange={handlePageChange}
+              showRange={true}
+              currentPageSize={viewModel.pagination.pageSize}
+              totalCount={viewModel.pagination.totalCount}
             />
           </>
         )}
