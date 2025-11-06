@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { UpdateProjectCommand } from "@/types";
 import type { ProjectViewModel } from "./types";
 import { updateProjectSchema } from "@/lib/validation/project.schema";
@@ -63,7 +64,7 @@ const EditProjectDialog: React.FC<EditProjectDialogProps> = ({ isOpen, onClose, 
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project title" {...field} />
+                    <Input placeholder="Project title" className="placeholder:text-sidebar-foreground" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -76,7 +77,11 @@ const EditProjectDialog: React.FC<EditProjectDialogProps> = ({ isOpen, onClose, 
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project description" {...field} />
+                    <Textarea
+                      placeholder="Project description"
+                      className="min-h-[100px] placeholder:text-sidebar-foreground"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +94,7 @@ const EditProjectDialog: React.FC<EditProjectDialogProps> = ({ isOpen, onClose, 
                 <FormItem>
                   <FormLabel>Tag</FormLabel>
                   <FormControl>
-                    <Input placeholder="Project tag" {...field} />
+                    <Input placeholder="Project tag" className="placeholder:text-sidebar-foreground" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
