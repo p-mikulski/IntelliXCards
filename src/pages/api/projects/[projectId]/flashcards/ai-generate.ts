@@ -73,7 +73,22 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     const validatedCommand = generateFlashcardsSchema.parse(body) as GenerateFlashcardsCommand;
 
     // Get API key from Cloudflare environment or fallback to import.meta.env
-    const apiKey = locals.runtime?.env?.OPENROUTER_API_KEY ?? import.meta.env.OPENROUTER_API_KEY;
+    // Try multiple ways to access the environment variable in Cloudflare
+    const apiKey =
+      locals.runtime?.env?.OPENROUTER_API_KEY ??
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (locals as any).env?.OPENROUTER_API_KEY ??
+      import.meta.env.OPENROUTER_API_KEY;
+
+    // Debug logging (remove after testing)
+    // eslint-disable-next-line no-console
+    console.log("API Key check:", {
+      hasRuntimeEnv: !!locals.runtime?.env,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      hasDirectEnv: !!(locals as any).env,
+      hasApiKey: !!apiKey,
+      apiKeyLength: apiKey?.length,
+    });
 
     // Initialize the flashcard generation service
     const flashcardService = new FlashcardGenerationService({
