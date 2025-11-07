@@ -94,7 +94,7 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
         isLoading={!viewModel.project}
       />
 
-      <div className="flex-1 w-full py-4 px-90 space-y-4 bg-muted overflow-auto">
+      <div className="flex-1 w-full py-4 px-20 space-y-4 bg-muted overflow-auto">
         {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
         <FlashcardListToolbar
           flashcardCount={viewModel.flashcards.length}
