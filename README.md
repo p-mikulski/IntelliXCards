@@ -13,6 +13,7 @@
 - [Getting Started Locally](#getting-started-locally)
 - [Available Scripts](#available-scripts)
 - [Testing](#testing)
+- [Deployment](#deployment)
 - [Project Scope](#project-scope)
 - [Project Status](#project-status)
 - [License](#license)
@@ -103,6 +104,65 @@ The application tests all key functionalities:
 - **Acceptance Criteria**: 100% of automated tests must pass before deployment
 - **Security**: Authentication middleware and Supabase RLS policies are thoroughly tested
 - **No Critical Bugs**: Zero critical or high-severity bugs in production releases
+
+## Deployment
+
+IntelliXCards is deployed using a modern CI/CD pipeline with Cloudflare Pages for hosting and edge computing.
+
+### Hosting Platform
+- **Cloudflare Pages** - Global CDN with edge computing capabilities
+- **GitHub Actions** - Automated CI/CD pipeline
+- **Supabase** - Backend services (database and authentication)
+
+### Deployment Process
+
+The application uses automated deployment via GitHub Actions. Every push to the `master` branch triggers:
+
+1. **Linting** - Code quality checks with ESLint
+2. **Unit Testing** - Vitest tests with coverage reporting
+3. **Build** - Optimized production build for Cloudflare Pages
+4. **Deploy** - Automatic deployment to Cloudflare Pages
+5. **Status Notification** - Deployment status reporting
+
+### Prerequisites for Deployment
+
+- GitHub repository with Actions enabled
+- Cloudflare account with Pages access
+- Supabase project configured
+
+### Environment Configuration
+
+#### Required GitHub Secrets (Production Environment)
+- `SUPABASE_URL` - Your Supabase project URL
+- `SUPABASE_KEY` - Your Supabase anon/public key
+- `CLOUDFLARE_API_TOKEN` - API token with Pages:Edit permissions
+- `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
+- `CLOUDFLARE_PROJECT_NAME` - Name of your Pages project
+
+#### Cloudflare Pages Environment Variables
+- `SUPABASE_URL` - Supabase project URL
+- `SUPABASE_KEY` - Supabase anon key
+
+### Build Commands
+
+```bash
+# Local development
+npm run dev
+
+# Production build for Cloudflare
+npm run build:cloudflare
+
+# Preview production build
+npm run preview
+```
+
+### Deployment Scripts
+
+| Script                  | Description                          |
+| ----------------------- | ------------------------------------ |
+| `npm run build:cloudflare` | Build optimized for Cloudflare Pages |
+
+For detailed deployment instructions, see the [Complete Deployment Guide](.ai/hosting/deployment.md).
 
 ## Project Scope
 
