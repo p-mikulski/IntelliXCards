@@ -88,6 +88,8 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
       hasDirectEnv: !!(locals as any).env,
       hasApiKey: !!apiKey,
       apiKeyLength: apiKey?.length,
+      envKeys: locals.runtime?.env ? Object.keys(locals.runtime.env) : [],
+      hasImportMetaEnv: !!import.meta.env.OPENROUTER_API_KEY,
     });
 
     // Initialize the flashcard generation service
