@@ -5,6 +5,7 @@ import { createSupabaseServerInstance } from "../db/supabase.client.ts";
 const PUBLIC_PATHS = [
   // Server-Rendered Astro Pages
   "/",
+  "/welcome",
   "/auth/login",
   "/auth/register",
   "/auth/recovery",
@@ -29,11 +30,6 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   // Store supabase instance in locals for use in API routes
   locals.supabase = supabase;
 
-  // Skip auth check for public paths
-  if (PUBLIC_PATHS.includes(url.pathname)) {
-    return next();
-  }
-
   // IMPORTANT: Always get user session first before any other operations
   const {
     data: { user },
@@ -44,8 +40,15 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
       email: user.email ?? "",
       id: user.id,
     };
-  } else if (!PUBLIC_PATHS.includes(url.pathname)) {
-    // Redirect to login for protected routes
+  }
+
+  // Skip auth check for public paths (they will handle their own redirects)
+  if (PUBLIC_PATHS.includes(url.pathname)) {
+    return next();
+  }
+
+  // Redirect to login for protected routes if not authenticated
+  if (!user) {
     return redirect("/auth/login");
   }
 

@@ -10,7 +10,7 @@ test.describe("Landing Page", () => {
   });
 
   test("should have main heading", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/welcome");
 
     // Check for any heading (the landing page has h2, not h1)
     const heading = page.getByRole("heading").first();

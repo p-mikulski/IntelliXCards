@@ -7,7 +7,7 @@ export class LandingPage {
   constructor(public readonly page: Page) {}
 
   async goto() {
-    await this.page.goto("/");
+    await this.page.goto("/welcome");
   }
 
   async getTitle() {

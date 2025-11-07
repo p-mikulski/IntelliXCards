@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HeroSection from "../components/landing/HeroSection.astro";
+import StatsSection from "../components/landing/StatsSection.astro";
+import FeatureShowcase from "../components/landing/FeatureShowcase.astro";
+import BenefitsSection from "../components/landing/BenefitsSection.astro";
+import CallToAction from "../components/landing/CallToAction.astro";
+import Footer from "../components/landing/Footer.astro";
+
+export const prerender = false;
+
+---
+
+<Layout
+  title="IntelliXCards - AI-Powered Flashcard Generation"
+  description="Transform your study materials into smart flashcards instantly with AI. Learn faster, remember more, and study smarter with IntelliXCards."
+>
+  <main class="min-h-screen">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md">
+      Skip to main content
+    </a>
+
+    <HeroSection />
+    <StatsSection />
+    <div id="main-content">
+      <FeatureShowcase />
+      <BenefitsSection />
+      <CallToAction />
+    </div>
+  </main>
+  <Footer />
+</Layout>

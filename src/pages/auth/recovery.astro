@@ -2,8 +2,16 @@
 import Layout from "@/layouts/Layout.astro";
 import RecoveryView from "@/components/auth/RecoveryView";
 
+export const prerender = false;
+
 const pageTitle = "Resetuj haslo | IntelliXCards";
 const pageDescription = "Odzyskaj dostep do konta IntelliXCards w kilku prostych krokach.";
+
+// Redirect authenticated users to dashboard
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect("/dashboard");
+}
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
