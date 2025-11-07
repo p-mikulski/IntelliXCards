@@ -63,7 +63,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response(
         JSON.stringify({
           code: "AUTH_ERROR",
-          message: "Wystapil blad podczas rejestracji. Sprobuj ponownie.",
+          message: "An error occurred during registration. Please try again.",
         }),
         {
           status: 500,
@@ -109,7 +109,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response(
       JSON.stringify({
         code: "SERVER_ERROR",
-        message: "Wystapil nieoczekiwany blad. Sprobuj ponownie.",
+        message: "An unexpected error occurred. Please try again.",
       }),
       {
         status: 500,

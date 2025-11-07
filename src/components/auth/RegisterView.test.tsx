@@ -337,7 +337,7 @@ describe("RegisterView Component", () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(expect.stringMatching(/nie mozna polaczyc sie z serwerem/i));
+        expect(toast.error).toHaveBeenCalledWith(expect.stringMatching(/unable to connect to the server/i));
       });
     });
 
@@ -350,7 +350,7 @@ describe("RegisterView Component", () => {
         status: 500,
         json: async () => ({
           code: "SERVER_ERROR",
-          message: "Wystapil nieoczekiwany blad.",
+          message: "An unexpected error occurred.",
         }),
       });
 

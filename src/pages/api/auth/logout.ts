@@ -15,7 +15,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
       return new Response(
         JSON.stringify({
           code: "LOGOUT_ERROR",
-          message: "Wystapil blad podczas wylogowywania.",
+          message: "An error occurred during logout.",
         }),
         {
           status: 500,
@@ -39,7 +39,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     return new Response(
       JSON.stringify({
         code: "SERVER_ERROR",
-        message: "Wystapil nieoczekiwany blad.",
+        message: "An unexpected error occurred.",
       }),
       {
         status: 500,

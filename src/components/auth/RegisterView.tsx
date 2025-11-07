@@ -61,7 +61,7 @@ export default function RegisterView() {
               message: messages[0],
             });
           });
-          toast.error("Sprawdz poprawnosc wprowadzonych danych.");
+          toast.error("Please check the validity of the entered data.");
           return;
         }
 
@@ -78,7 +78,7 @@ export default function RegisterView() {
         }
 
         // Fallback for unexpected errors
-        toast.error("Wystapil nieoczekiwany blad. Sprobuj ponownie.");
+        toast.error("An unexpected error occurred. Please try again.");
         return;
       }
 
@@ -96,12 +96,12 @@ export default function RegisterView() {
       }
 
       // Success - redirect to dashboard
-      toast.success("Konto utworzone pomyslnie!");
+      toast.success("Account created successfully!");
       window.location.href = "/dashboard";
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Registration error:", error);
-      toast.error("Nie mozna polaczyc sie z serwerem. Sprawdz polaczenie internetowe.");
+      toast.error("Unable to connect to the server. Please check your internet connection.");
     } finally {
       setIsLoading(false);
     }
