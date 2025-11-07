@@ -72,7 +72,8 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     // Validate request body against schema
     const validatedCommand = generateFlashcardsSchema.parse(body) as GenerateFlashcardsCommand;
 
-    // Get API key from Cloudflare environment or fallback to import.meta.env
+    // Get API key from Cloudflare environment (works with both secrets and env vars)
+    // In Cloudflare Pages, both secrets and environment variables are available through runtime.env
     const apiKey = locals.runtime?.env?.OPENROUTER_API_KEY ?? import.meta.env.OPENROUTER_API_KEY;
 
     // Initialize the flashcard generation service

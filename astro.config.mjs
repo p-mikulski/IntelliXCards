@@ -10,7 +10,12 @@ import cloudflare from "@astrojs/cloudflare";
 // Choose adapter based on environment
 const adapter =
   process.env.CF_PAGES === "1"
-    ? cloudflare({ imageService: "cloudflare" })
+    ? cloudflare({ 
+        imageService: "cloudflare",
+        platformProxy: {
+          enabled: true,
+        },
+      })
     : node({ mode: "standalone" });
 
 // https://astro.build/config
