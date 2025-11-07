@@ -17,8 +17,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete })
 
   return (
     <div>
-      {/* Placeholder for ProjectListToolbar */}
-      <div className="mb-4">Toolbar will be here</div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <ProjectListItem key={project.id} project={project} onEdit={onEdit} onDelete={onDelete} />

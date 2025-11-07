@@ -9,6 +9,13 @@ declare global {
     interface Locals extends Runtime {
       user: { id: string; email: string } | null;
       supabase: SupabaseClient<Database>;
+      runtime?: {
+        env?: {
+          SUPABASE_URL?: string;
+          SUPABASE_KEY?: string;
+          OPENROUTER_API_KEY?: string;
+        };
+      };
     }
   }
 }

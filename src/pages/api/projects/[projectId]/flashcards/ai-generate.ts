@@ -72,8 +72,13 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     // Validate request body against schema
     const validatedCommand = generateFlashcardsSchema.parse(body) as GenerateFlashcardsCommand;
 
+    // Get API key from Cloudflare environment or fallback to import.meta.env
+    const apiKey = locals.runtime?.env?.OPENROUTER_API_KEY ?? import.meta.env.OPENROUTER_API_KEY;
+
     // Initialize the flashcard generation service
-    const flashcardService = new FlashcardGenerationService();
+    const flashcardService = new FlashcardGenerationService({
+      apiKey,
+    });
 
     // Generate flashcard drafts
     const flashcardDrafts = await flashcardService.generateFlashcards(validatedCommand);
