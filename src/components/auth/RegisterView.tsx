@@ -99,6 +99,7 @@ export default function RegisterView() {
       toast.success("Konto utworzone pomyslnie!");
       window.location.href = "/dashboard";
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Registration error:", error);
       toast.error("Nie mozna polaczyc sie z serwerem. Sprawdz polaczenie internetowe.");
     } finally {

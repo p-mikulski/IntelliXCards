@@ -62,7 +62,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
       );
     }
 
-    console.error("Error getting project:", error); // eslint-disable-line no-console
+    console.error("Error getting project:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",
@@ -157,7 +157,7 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
       );
     }
 
-    console.error("Error updating project:", error); // eslint-disable-line no-console
+    console.error("Error updating project:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",
@@ -211,7 +211,7 @@ export const DELETE: APIRoute = async ({ locals, params }) => {
 
     return new Response(null, { status: 204 });
   } catch (error) {
-    console.error("Error deleting project:", error); // eslint-disable-line no-console
+    console.error("Error deleting project:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",

@@ -72,7 +72,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
     }
 
     // Handle unexpected errors
-    console.error("Unexpected error in GET /api/study-sessions/[sessionId]:", error); // eslint-disable-line no-console
+    console.error("Unexpected error in GET /api/study-sessions/[sessionId]:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",

@@ -81,6 +81,7 @@ export default function LoginView() {
       toast.success("Logged in successfully!");
       window.location.href = "/dashboard";
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Login error:", error);
       toast.error("Unable to connect to the server. Please check your internet connection.");
     } finally {

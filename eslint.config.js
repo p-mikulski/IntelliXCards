@@ -25,6 +25,20 @@ const baseConfig = tseslint.config({
   },
 });
 
+const apiConfig = tseslint.config({
+  files: ["src/pages/api/**/*.ts"],
+  rules: {
+    "no-console": "off", // Allow console statements in API routes for logging
+  },
+});
+
+const testConfig = tseslint.config({
+  files: ["**/*.{test,spec}.{js,jsx,ts,tsx}", "tests/**/*.{js,jsx,ts,tsx}"],
+  rules: {
+    "no-console": "off", // Allow console statements in test files
+  },
+});
+
 const jsxA11yConfig = tseslint.config({
   files: ["**/*.{js,jsx,ts,tsx}"],
   extends: [jsxA11y.flatConfigs.recommended],
@@ -77,6 +91,8 @@ const astroConfig = tseslint.config({
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
+  apiConfig,
+  testConfig,
   jsxA11yConfig,
   reactConfig,
   //eslintPluginAstro.configs["flat/recommended"],

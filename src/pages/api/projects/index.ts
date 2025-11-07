@@ -63,7 +63,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    console.error("Error creating project:", error); // eslint-disable-line no-console
+    console.error("Error creating project:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",
@@ -120,7 +120,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error listing projects:", error); // eslint-disable-line no-console
+    console.error("Error listing projects:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",

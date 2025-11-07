@@ -80,7 +80,6 @@ export const GET: APIRoute = async ({ locals, params, url }) => {
       );
     }
 
-    // eslint-disable-next-line no-console
     console.error("Error fetching flashcards:", error);
     return new Response(
       JSON.stringify({
@@ -166,7 +165,7 @@ export const POST: APIRoute = async ({ request, locals, params }) => {
     }
 
     // Log unexpected errors but don't expose details to client
-    // eslint-disable-next-line no-console
+
     console.error("Error creating flashcard:", error);
     return new Response(
       JSON.stringify({

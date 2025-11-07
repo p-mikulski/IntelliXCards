@@ -77,7 +77,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     const apiKey = locals.runtime?.env?.OPENROUTER_API_KEY ?? import.meta.env.OPENROUTER_API_KEY;
 
     // Temporary debug logging to diagnose secret access
-    // eslint-disable-next-line no-console
+
     console.log("Secret/Env access check:", {
       hasRuntimeEnv: !!locals.runtime?.env,
       hasApiKey: !!apiKey,
