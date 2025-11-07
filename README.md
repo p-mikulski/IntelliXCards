@@ -10,6 +10,7 @@
 
 - [Project Description](#project-description)
 - [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
 - [Getting Started Locally](#getting-started-locally)
 - [Available Scripts](#available-scripts)
 - [Testing](#testing)
@@ -41,6 +42,23 @@ Many learners understand the value of spaced repetition for long-term knowledge 
 - **Testing**: Vitest with React Testing Library - Unit and integration tests
 - **E2E Testing**: Playwright - End-to-end browser automation
 
+## Project Structure
+
+When introducing changes to the project, always follow the directory structure below:
+
+- `./src` - source code
+- `./src/layouts` - Astro layouts
+- `./src/pages` - Astro pages
+- `./src/pages/api` - API endpoints
+- `./src/middleware/index.ts` - Astro middleware
+- `./src/db` - Supabase clients and types
+- `./src/types.ts` - Shared types for backend and frontend (Entities, DTOs)
+- `./src/components` - Client-side components written in Astro (static) and React (dynamic)
+- `./src/components/ui` - Client-side components from Shadcn/ui
+- `./src/lib` - Services and helpers
+- `./src/assets` - static internal assets
+- `./public` - public assets
+
 ## Getting Started Locally
 
 ### Prerequisites
@@ -54,9 +72,11 @@ Many learners understand the value of spaced repetition for long-term knowledge 
 2. Install dependencies
 3. Set up environment variables
 4. Create a `.env` file in the root directory and configure the following:
+   - `SUPABASE_URL` - Your Supabase project URL
+   - `SUPABASE_KEY` - Your Supabase anon/public key
 5. Start the development server
 6. Open your browser
-7. Navigate to `http://localhost:4321` to see the application.
+7. Navigate to `http://localhost:3000` to see the application.
 
 ## Available Scripts
 
