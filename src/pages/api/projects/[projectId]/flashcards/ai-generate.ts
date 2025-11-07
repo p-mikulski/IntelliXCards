@@ -76,6 +76,15 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     // In Cloudflare Pages, both secrets and environment variables are available through runtime.env
     const apiKey = locals.runtime?.env?.OPENROUTER_API_KEY ?? import.meta.env.OPENROUTER_API_KEY;
 
+    // Temporary debug logging to diagnose secret access
+    // eslint-disable-next-line no-console
+    console.log("Secret/Env access check:", {
+      hasRuntimeEnv: !!locals.runtime?.env,
+      hasApiKey: !!apiKey,
+      apiKeyLength: apiKey?.length,
+      runtimeEnvKeys: locals.runtime?.env ? Object.keys(locals.runtime.env) : [],
+    });
+
     // Initialize the flashcard generation service
     const flashcardService = new FlashcardGenerationService({
       apiKey,
