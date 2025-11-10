@@ -29,7 +29,7 @@ export const createSupabaseServerInstance = (context: {
   // Cookie options - secure only in production (https), not in dev (http://localhost)
   // Check if we're running on localhost for development
   const isLocalhost = supabaseUrl.includes("localhost") || import.meta.env.DEV;
-  
+
   const cookieOptions = {
     path: "/",
     secure: !isLocalhost,
