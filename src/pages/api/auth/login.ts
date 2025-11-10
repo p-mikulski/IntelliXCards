@@ -49,7 +49,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
         return new Response(
           JSON.stringify({
             code: "INVALID_CREDENTIALS",
-            message: "Nieprawidlowy email lub haslo.",
+            message: "Invalid email or password.",
           }),
           {
             status: 401,
