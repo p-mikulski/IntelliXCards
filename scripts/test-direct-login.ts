@@ -2,13 +2,22 @@ import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import path from "node:path";
 
+/* eslint-disable no-console */
+
 dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 async function testDirectLogin() {
-  const supabaseUrl = process.env.SUPABASE_URL!;
-  const supabaseKey = process.env.SUPABASE_KEY!;
-  const testEmail = process.env.E2E_USERNAME!;
-  const testPassword = process.env.E2E_PASSWORD!;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  if (!supabaseUrl) throw new Error("Missing SUPABASE_URL");
+
+  const supabaseKey = process.env.SUPABASE_KEY;
+  if (!supabaseKey) throw new Error("Missing SUPABASE_KEY");
+
+  const testEmail = process.env.E2E_USERNAME;
+  if (!testEmail) throw new Error("Missing E2E_USERNAME");
+
+  const testPassword = process.env.E2E_PASSWORD;
+  if (!testPassword) throw new Error("Missing E2E_PASSWORD");
 
   console.log("🔧 Testing direct Supabase login...");
   console.log(`📧 Email: ${testEmail}`);
