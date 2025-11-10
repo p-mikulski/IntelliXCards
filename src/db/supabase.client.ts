@@ -1,15 +1,8 @@
 import type { AstroCookies } from "astro";
-import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import type { Database } from "./database.types.ts";
 
 export type SupabaseClient = ReturnType<typeof createSupabaseServerInstance>;
-
-export const cookieOptions: CookieOptionsWithName = {
-  path: "/",
-  secure: true,
-  httpOnly: true,
-  sameSite: "lax",
-};
 
 function parseCookieHeader(cookieHeader: string): { name: string; value: string }[] {
   return cookieHeader.split(";").map((cookie) => {
@@ -32,6 +25,17 @@ export const createSupabaseServerInstance = (context: {
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Missing Supabase credentials. Please set SUPABASE_URL and SUPABASE_KEY environment variables.");
   }
+
+  // Cookie options - secure only in production (https), not in dev (http://localhost)
+  // Check if we're running on localhost for development
+  const isLocalhost = supabaseUrl.includes("localhost") || import.meta.env.DEV;
+  
+  const cookieOptions = {
+    path: "/",
+    secure: !isLocalhost,
+    httpOnly: true,
+    sameSite: "lax" as const,
+  };
 
   const supabase = createServerClient<Database>(supabaseUrl, supabaseKey, {
     cookieOptions,

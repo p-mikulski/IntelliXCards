@@ -1,9 +1,10 @@
 import type { APIRoute } from "astro";
 import { loginSchema } from "@/lib/validation/auth";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
   try {
     // Parse request body
     const body = await request.json();
@@ -28,8 +29,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { email, password } = validation.data;
 
-    // Get Supabase instance from locals
-    const supabase = locals.supabase;
+    // IMPORTANT: Create a fresh Supabase client with THIS request's cookies context
+    // The middleware's supabase instance has stale cookies from the middleware execution
+    const supabase = createSupabaseServerInstance({
+      cookies,
+      headers: request.headers,
+      env: locals.runtime?.env,
+    });
 
     // Attempt to sign in
     const { data, error } = await supabase.auth.signInWithPassword({

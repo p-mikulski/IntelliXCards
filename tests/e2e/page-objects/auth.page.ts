@@ -58,7 +58,8 @@ export class LoginPage extends AuthBasePage {
   async login(email: string, password: string) {
     await this.fillEmail(email);
     await this.fillPassword(password);
-    await this.clickSubmit();
+    // Wait for navigation after clicking submit - the JS redirects to dashboard on success
+    await Promise.all([this.page.waitForURL(/\/(dashboard|auth\/login)/, { timeout: 10000 }), this.clickSubmit()]);
   }
 
   async getEmailError(): Promise<string | null> {

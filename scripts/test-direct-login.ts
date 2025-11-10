@@ -1,0 +1,38 @@
+import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+import path from "node:path";
+
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+
+async function testDirectLogin() {
+  const supabaseUrl = process.env.SUPABASE_URL!;
+  const supabaseKey = process.env.SUPABASE_KEY!;
+  const testEmail = process.env.E2E_USERNAME!;
+  const testPassword = process.env.E2E_PASSWORD!;
+
+  console.log("🔧 Testing direct Supabase login...");
+  console.log(`📧 Email: ${testEmail}`);
+  console.log(`🔑 Password: ${testPassword}`);
+  console.log(`🌐 URL: ${supabaseUrl}`);
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: testEmail,
+    password: testPassword,
+  });
+
+  if (error) {
+    console.error("❌ Login failed:", error.message);
+    process.exit(1);
+  }
+
+  console.log("✅ Login successful!");
+  console.log(`👤 User ID: ${data.user.id}`);
+  console.log(`📧 User email: ${data.user.email}`);
+  console.log(`✉️ Email confirmed: ${data.user.email_confirmed_at !== null}`);
+
+  await supabase.auth.signOut();
+}
+
+testDirectLogin();
