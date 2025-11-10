@@ -2,23 +2,27 @@ import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import path from "node:path";
 
+/* eslint-disable no-console */
+
 dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 async function resetTestUser() {
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_KEY;
+  const testEmail = process.env.E2E_USERNAME;
+  const testPassword = process.env.E2E_PASSWORD;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Missing SUPABASE_URL or SUPABASE_KEY in .env.test");
   }
-  const testEmail = "test-playwright@example.com";
-  const testPassword = "TestPassword123!";
+
+  if (!testEmail || !testPassword) {
+    throw new Error("Missing E2E_USERNAME or E2E_PASSWORD in .env.test");
+  }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   console.log("🔄 Creating/updating test user...");
-  console.log(`📧 Email: ${testEmail}`);
-  console.log(`🔑 Password: ${testPassword}`);
 
   // Try to sign up
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -52,9 +56,7 @@ async function resetTestUser() {
     await supabase.auth.signOut();
   }
 
-  console.log("\n📝 Update your .env.test with:");
-  console.log(`E2E_USERNAME=${testEmail}`);
-  console.log(`E2E_PASSWORD=${testPassword}`);
+  console.log("\n📝 Test user credentials are stored in .env.test");
 }
 
 resetTestUser();

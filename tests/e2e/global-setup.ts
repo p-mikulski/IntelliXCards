@@ -18,22 +18,16 @@ async function globalSetup() {
     throw new Error("Missing required environment variables for E2E tests");
   }
 
-  console.log("\n🔧 Setting up E2E test environment...");
-  console.log(`📧 Test user email: ${testEmail}`);
-
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Try to sign in with the test user
-  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+  const { error: signInError } = await supabase.auth.signInWithPassword({
     email: testEmail,
     password: testPassword,
   });
 
   if (signInError) {
     if (signInError.message.includes("Invalid login credentials")) {
-      console.log("⚠️  Test user doesn't exist or password is incorrect");
-      console.log("🔄 Attempting to create test user...");
-
       // Try to sign up the test user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: testEmail,
@@ -43,34 +37,32 @@ async function globalSetup() {
         },
       });
 
+      // Handle "User already registered" error - this means the user exists but password is wrong
+      if (signUpError && signUpError.message.includes("already registered")) {
+        throw new Error(
+          "Test user exists but password is incorrect. Please verify E2E_PASSWORD in .env.test or reset the test user password in Supabase Dashboard."
+        );
+      }
+
       if (signUpError) {
-        console.error("❌ Failed to create test user:", signUpError.message);
         throw new Error(`Failed to create test user: ${signUpError.message}`);
       }
 
       if (signUpData.user) {
-        console.log(`✅ Test user created successfully: ${signUpData.user.id}`);
-
         // Check if email confirmation is required
         if (signUpData.user.email_confirmed_at === null) {
-          console.log("⚠️  Email confirmation is required for this Supabase project");
-          console.log("📝 Please either:");
-          console.log("   1. Disable email confirmation in Supabase Dashboard > Authentication > Settings");
-          console.log("   2. Or manually confirm the test user email in Supabase Dashboard");
-          console.log(`   3. Or set E2E_USERNAME_ID=${signUpData.user.id} in .env.test and manually confirm`);
+          throw new Error(
+            "Email confirmation is required. Please either:\n" +
+              "  1. Disable email confirmation in Supabase Dashboard > Authentication > Settings\n" +
+              "  2. Manually confirm the test user email in Supabase Dashboard"
+          );
         }
-      } else {
-        console.log("⚠️  User may already exist but email needs confirmation");
       }
     } else {
-      console.error("❌ Authentication error:", signInError.message);
-      throw signInError;
+      throw new Error(`Authentication error: ${signInError.message}`);
     }
   } else {
-    console.log(`✅ Test user authenticated successfully: ${signInData.user.id}`);
-    console.log("🎯 E2E tests are ready to run");
-
-    // Sign out to clean up
+    // Successfully authenticated - sign out to clean up
     await supabase.auth.signOut();
   }
 }

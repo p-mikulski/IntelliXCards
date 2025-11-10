@@ -20,9 +20,6 @@ async function testDirectLogin() {
   if (!testPassword) throw new Error("Missing E2E_PASSWORD");
 
   console.log("🔧 Testing direct Supabase login...");
-  console.log(`📧 Email: ${testEmail}`);
-  console.log(`🔑 Password: ${testPassword}`);
-  console.log(`🌐 URL: ${supabaseUrl}`);
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
