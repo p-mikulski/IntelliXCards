@@ -5,8 +5,12 @@ import path from "node:path";
 dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 async function resetTestUser() {
-  const supabaseUrl = process.env.SUPABASE_URL!;
-  const supabaseKey = process.env.SUPABASE_KEY!;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing SUPABASE_URL or SUPABASE_KEY in .env.test");
+  }
   const testEmail = "test-playwright@example.com";
   const testPassword = "TestPassword123!";
 
@@ -36,7 +40,7 @@ async function resetTestUser() {
   }
 
   // Try to sign in
-  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+  const { error: signInError } = await supabase.auth.signInWithPassword({
     email: testEmail,
     password: testPassword,
   });
