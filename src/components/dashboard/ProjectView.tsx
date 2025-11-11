@@ -29,7 +29,7 @@ const ProjectView: React.FC = () => {
     <div className="flex flex-col h-[calc(100vh-65px)]">
       <ProjectHeader projectCount={pagination.totalCount} onOpenCreateDialog={openCreateDialog} />
 
-      <div className="flex-1 w-full py-4 px-20 space-y-4 bg-muted overflow-auto">
+      <div className="flex-1 w-full py-4 px-2.5 sm:px-2.5 md:px-25 lg:px-45 space-y-4 bg-muted overflow-auto">
         {error && (
           <div
             className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg"
