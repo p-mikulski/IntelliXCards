@@ -1,12 +1,12 @@
 import { useProjectDetail } from "@/components/hooks/useProjectDetail";
 import SkeletonLoader from "@/components/common/SkeletonLoader";
 import ProjectHeader from "./ProjectHeader";
-import FlashcardListToolbar from "./FlashcardListToolbar";
-import FlashcardList from "./FlashcardList";
-import CreateFlashcardDialog from "./CreateFlashcardDialog";
-import EditFlashcardDialog from "./EditFlashcardDialog";
-import MoveFlashcardDialog from "./MoveFlashcardDialog";
-import BulkMoveFlashcardDialog from "./BulkMoveFlashcardDialog";
+import FlashcardListToolbar from "../flashcard/FlashcardListToolbar";
+import FlashcardList from "../flashcard/FlashcardList";
+import CreateFlashcardDialog from "../flashcard/CreateFlashcardDialog";
+import EditFlashcardDialog from "../flashcard/EditFlashcardDialog";
+import MoveFlashcardDialog from "../flashcard/MoveFlashcardDialog";
+import BulkMoveFlashcardDialog from "../flashcard/BulkMoveFlashcardDialog";
 import { Pagination } from "@/components/ui/pagination";
 import {
   AlertDialog,
@@ -81,7 +81,6 @@ export default function ProjectDetailView({ projectId }: ProjectDetailViewProps)
 
   return (
     <div className="flex flex-col h-[calc(100vh-65px)]">
-      {/* Always render ProjectHeader - show loading state if project not yet loaded */}
       <ProjectHeader
         project={viewModel.project || undefined}
         onStudyClick={() => {
