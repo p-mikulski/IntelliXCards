@@ -7,7 +7,7 @@ interface DashboardHeaderProps {
   onOpenCreateDialog: () => void;
 }
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ projectCount, onOpenCreateDialog }) => {
+const ProjectHeader: React.FC<DashboardHeaderProps> = ({ projectCount, onOpenCreateDialog }) => {
   return (
     <PageHeader title="Projects" subtitle={`You have ${projectCount} project${projectCount !== 1 ? "s" : ""}`}>
       <Button onClick={onOpenCreateDialog} size="sm">
@@ -16,4 +16,4 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ projectCount, onOpenC
     </PageHeader>
   );
 };
-export default DashboardHeader;
+export default ProjectHeader;

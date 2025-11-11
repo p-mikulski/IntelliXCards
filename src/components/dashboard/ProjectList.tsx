@@ -17,7 +17,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete })
 
   return (
     <div>
-      <div className="grid gap-4 px-4 sm:px-0 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 px-4 sm:px-0 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 z-0">
         {projects.map((project) => (
           <ProjectListItem key={project.id} project={project} onEdit={onEdit} onDelete={onDelete} />
         ))}

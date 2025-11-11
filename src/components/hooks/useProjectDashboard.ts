@@ -6,9 +6,10 @@ import type { CreateProjectCommand, UpdateProjectCommand, ProjectListDto, Projec
 export const useProjectDashboard = () => {
   const [projects, setProjects] = useState<ProjectViewModel[]>([]);
   const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    pageSize: 10,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -38,7 +39,12 @@ export const useProjectDashboard = () => {
       }));
 
       setProjects(viewModels);
-      setPagination({ page: data.page, limit: data.limit, total: data.total });
+      setPagination({
+        currentPage: data.page,
+        totalPages: Math.ceil(data.total / data.limit),
+        totalCount: data.total,
+        pageSize: data.limit,
+      });
     } catch (e) {
       setError(e as Error);
     } finally {
@@ -172,6 +178,13 @@ export const useProjectDashboard = () => {
   const openDeleteDialog = (project: ProjectViewModel) => setDialogState((prev) => ({ ...prev, delete: project }));
   const closeDialogs = () => setDialogState({ create: false, edit: null, delete: null });
 
+  const handlePageChange = useCallback(
+    (page: number) => {
+      fetchProjects(page, pagination.pageSize);
+    },
+    [fetchProjects, pagination.pageSize]
+  );
+
   return {
     projects,
     pagination,
@@ -182,6 +195,7 @@ export const useProjectDashboard = () => {
     handleCreateProject,
     handleUpdateProject,
     handleDeleteProject,
+    handlePageChange,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,

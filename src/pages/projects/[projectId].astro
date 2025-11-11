@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import ProjectDetailView from "@/components/project/ProjectDetailView";
+import FlashcardView from "@/components/flashcard/FlashcardView";
 import MainToolbar from "@/components/common/MainToolbar";
 
 export const prerender = false;
@@ -28,5 +28,5 @@ const breadcrumbs = [
 
 <Layout title="Project Detail">
   <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
-  <ProjectDetailView client:load projectId={projectId} />
+  <FlashcardView client:load projectId={projectId} />
 </Layout>

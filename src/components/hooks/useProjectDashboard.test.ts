@@ -65,7 +65,7 @@ describe("useProjectDashboard", () => {
       expect(result.current.projects).toHaveLength(1);
       expect(result.current.projects[0].title).toBe("Test Project");
       expect(result.current.projects[0].formattedCreatedAt).toBeDefined();
-      expect(result.current.pagination.total).toBe(1);
+      expect(result.current.pagination.totalCount).toBe(1);
       expect(result.current.error).toBeNull();
     });
 
@@ -93,7 +93,7 @@ describe("useProjectDashboard", () => {
 
       // Assert
       expect(result.current.projects).toEqual([]);
-      expect(result.current.pagination.total).toBe(0);
+      expect(result.current.pagination.totalCount).toBe(0);
     });
 
     it("should handle fetch error", async () => {

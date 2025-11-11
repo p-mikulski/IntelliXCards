@@ -1,12 +1,12 @@
 import { useProjectDetail } from "@/components/hooks/useProjectDetail";
 import SkeletonLoader from "@/components/common/SkeletonLoader";
-import ProjectHeader from "./ProjectHeader";
-import FlashcardListToolbar from "../flashcard/FlashcardListToolbar";
-import FlashcardList from "../flashcard/FlashcardList";
-import CreateFlashcardDialog from "../flashcard/CreateFlashcardDialog";
-import EditFlashcardDialog from "../flashcard/EditFlashcardDialog";
-import MoveFlashcardDialog from "../flashcard/MoveFlashcardDialog";
-import BulkMoveFlashcardDialog from "../flashcard/BulkMoveFlashcardDialog";
+import ProjectHeader from "./FlashcardHeader";
+import FlashcardListToolbar from "./FlashcardListToolbar";
+import FlashcardList from "./FlashcardList";
+import CreateFlashcardDialog from "./CreateFlashcardDialog";
+import EditFlashcardDialog from "./EditFlashcardDialog";
+import MoveFlashcardDialog from "./MoveFlashcardDialog";
+import BulkMoveFlashcardDialog from "./BulkMoveFlashcardDialog";
 import { Pagination } from "@/components/ui/pagination";
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface ProjectDetailViewProps {
+interface FlashcardViewProps {
   projectId: string;
 }
 
@@ -27,7 +27,7 @@ interface ProjectDetailViewProps {
  * Main container component for the Project Detail view
  * Orchestrates the entire view, fetches data, and manages state
  */
-export default function ProjectDetailView({ projectId }: ProjectDetailViewProps) {
+export default function FlashcardView({ projectId }: FlashcardViewProps) {
   const {
     viewModel,
     handleCreateFlashcard,

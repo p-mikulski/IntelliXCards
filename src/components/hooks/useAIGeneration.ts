@@ -10,7 +10,7 @@ import type {
   FlashcardDraft,
   CreateFlashcardCommand,
 } from "@/types";
-import type { FlashcardDraftViewModel } from "@/components/project/ai-generation/types";
+import type { FlashcardDraftViewModel } from "@/components/flashcard/ai-generation/types";
 
 interface UseAIGenerationReturn {
   viewMode: "form" | "review";

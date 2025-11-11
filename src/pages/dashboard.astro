@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import DashboardView from "@/components/dashboard/DashboardView.tsx";
+import ProjectView from "@/components/dashboard/ProjectView";
 import MainToolbar from "@/components/common/MainToolbar";
 
 export const prerender = false;
@@ -18,5 +18,5 @@ const breadcrumbs = [{ label: "Dashboard", href: undefined }];
 
 <Layout title="Dashboard">
   <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
-  <DashboardView client:load />
+  <ProjectView client:load />
 </Layout>

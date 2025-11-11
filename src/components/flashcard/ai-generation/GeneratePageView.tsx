@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Project } from "@/types";
-import ProjectHeader from "../project/ProjectHeader";
-import AIGenerationView from "../project/ai-generation/AIGenerationView";
+import ProjectHeader from "../FlashcardHeader";
+import AIGenerationView from "./AIGenerationView";
 
 interface GeneratePageViewProps {
   projectId: string;

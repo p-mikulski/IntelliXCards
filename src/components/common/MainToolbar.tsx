@@ -50,7 +50,7 @@ export default function MainToolbar({ user, breadcrumbs = [] }: MainToolbarProps
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b">
+    <header className="sticky top-0 z50 w-full border-b">
       <div className="container flex h-16 items-center justify-between px-6 w-full max-w-full">
         {/* Left section: Logo and Breadcrumb */}
         <div className="flex items-center gap-6">
