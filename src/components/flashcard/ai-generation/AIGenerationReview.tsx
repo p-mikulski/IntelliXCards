@@ -29,7 +29,6 @@ export default function AIGenerationReview({
   onUpdateDraft,
   onDeleteDraft,
   onDiscardAll,
-  onFeedback,
 }: AIGenerationReviewProps) {
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
@@ -153,13 +152,7 @@ export default function AIGenerationReview({
       ) : (
         <div className="space-y-4">
           {drafts.map((draft) => (
-            <DraftFlashcardItem
-              key={draft.id}
-              draft={draft}
-              onUpdate={onUpdateDraft}
-              onDelete={onDeleteDraft}
-              onFeedback={onFeedback}
-            />
+            <DraftFlashcardItem key={draft.id} draft={draft} onUpdate={onUpdateDraft} onDelete={onDeleteDraft} />
           ))}
         </div>
       )}

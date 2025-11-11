@@ -19,7 +19,6 @@ export default function AIGenerationView({ projectId }: AIGenerationViewProps) {
     generateFlashcards,
     updateDraft,
     deleteDraft,
-    updateFeedback,
     saveAllDrafts,
     discardAllDrafts,
   } = useAIGeneration(projectId);
@@ -38,7 +37,6 @@ export default function AIGenerationView({ projectId }: AIGenerationViewProps) {
           onUpdateDraft={updateDraft}
           onDeleteDraft={deleteDraft}
           onDiscardAll={discardAllDrafts}
-          onFeedback={updateFeedback}
         />
       )}
       <Toaster />

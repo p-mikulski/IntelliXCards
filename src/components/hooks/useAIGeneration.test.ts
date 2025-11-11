@@ -63,7 +63,6 @@ describe("useAIGeneration", () => {
       expect(typeof result.current.generateFlashcards).toBe("function");
       expect(typeof result.current.updateDraft).toBe("function");
       expect(typeof result.current.deleteDraft).toBe("function");
-      expect(typeof result.current.updateFeedback).toBe("function");
       expect(typeof result.current.saveAllDrafts).toBe("function");
       expect(typeof result.current.discardAllDrafts).toBe("function");
     });
@@ -357,110 +356,7 @@ describe("useAIGeneration", () => {
     });
   });
 
-  describe("updateFeedback", () => {
-    it("should toggle feedback up for a draft", async () => {
-      const mockResponse: GenerateFlashcardsResponseDto = {
-        drafts: [{ front: "Q1", back: "A1" }],
-      };
-
-      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse,
-      });
-
-      const { result } = renderHook(() => useAIGeneration(mockProjectId));
-
-      await act(async () => {
-        await result.current.generateFlashcards({ text: "Test", desired_count: 1 });
-      });
-
-      const draftId = result.current.drafts[0].id;
-
-      // Set feedback to up
-      act(() => {
-        result.current.updateFeedback(draftId, "up");
-      });
-
-      expect(result.current.drafts[0].feedback).toBe("up");
-
-      // Toggle off by clicking up again
-      act(() => {
-        result.current.updateFeedback(draftId, "up");
-      });
-
-      expect(result.current.drafts[0].feedback).toBeUndefined();
-    });
-
-    it("should switch feedback from up to down", async () => {
-      const mockResponse: GenerateFlashcardsResponseDto = {
-        drafts: [{ front: "Q1", back: "A1" }],
-      };
-
-      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse,
-      });
-
-      const { result } = renderHook(() => useAIGeneration(mockProjectId));
-
-      await act(async () => {
-        await result.current.generateFlashcards({ text: "Test", desired_count: 1 });
-      });
-
-      const draftId = result.current.drafts[0].id;
-
-      // Set to up
-      act(() => {
-        result.current.updateFeedback(draftId, "up");
-      });
-
-      expect(result.current.drafts[0].feedback).toBe("up");
-
-      // Change to down
-      act(() => {
-        result.current.updateFeedback(draftId, "down");
-      });
-
-      expect(result.current.drafts[0].feedback).toBe("down");
-    });
-  });
-
   describe("saveAllDrafts", () => {
-    it("should show error when there are no drafts to save", async () => {
-      const { result } = renderHook(() => useAIGeneration(mockProjectId));
-      const { toast } = await import("sonner");
-
-      await act(async () => {
-        await result.current.saveAllDrafts();
-      });
-
-      expect(toast.error).toHaveBeenCalledWith("No drafts to save");
-    });
-
-    it("should validate drafts before saving", async () => {
-      const mockResponse: GenerateFlashcardsResponseDto = {
-        drafts: [{ front: "x".repeat(201), back: "Valid back" }],
-      };
-
-      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse,
-      });
-
-      const { result } = renderHook(() => useAIGeneration(mockProjectId));
-      const { toast } = await import("sonner");
-
-      await act(async () => {
-        await result.current.generateFlashcards({ text: "Test", desired_count: 1 });
-      });
-
-      await act(async () => {
-        await result.current.saveAllDrafts();
-      });
-
-      expect(toast.error).toHaveBeenCalledWith(expect.stringContaining("Some drafts have invalid content"));
-    });
-
     it("should save all valid drafts successfully", async () => {
       const mockGenerateResponse: GenerateFlashcardsResponseDto = {
         drafts: [

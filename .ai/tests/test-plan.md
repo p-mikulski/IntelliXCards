@@ -7,6 +7,7 @@
 This document outlines the comprehensive testing strategy for the "10x Anki" project, a web-based application for creating and studying flashcards, with a key feature of AI-powered flashcard generation.
 
 The primary objectives of this test plan are:
+
 - **Ensure Functionality:** Verify that all features, from user authentication to AI-based flashcard generation, work as specified.
 - **Guarantee Reliability:** Confirm the application is stable, handles errors gracefully, and performs consistently under expected user loads.
 - **Validate Security:** Ensure that user data is secure, and users can only access their own information, leveraging Supabase's Row Level Security (RLS).
@@ -18,6 +19,7 @@ The primary objectives of this test plan are:
 ### 2. Scope of Testing
 
 #### In Scope:
+
 - **User Authentication:** Registration, login, password recovery, and session management.
 - **Dashboard & Project Management:** Creating, viewing, editing, and deleting projects.
 - **Flashcard Management (CRUD):** All create, read, update, and delete operations for flashcards within a project.
@@ -28,6 +30,7 @@ The primary objectives of this test plan are:
 - **UI/UX:** Responsiveness, cross-browser compatibility, and overall user experience.
 
 #### Out of Scope:
+
 - Third-party integrations beyond the direct scope of the application (e.g., the internal workings of the AI model provider).
 - Performance stress testing beyond expected normal usage patterns.
 - Usability testing with a broad external user group (this plan focuses on QA-led testing).
@@ -50,24 +53,28 @@ A multi-layered testing approach will be adopted to ensure comprehensive coverag
 ### 4. Test Scenarios for Key Functionalities
 
 #### 4.1 User Authentication
+
 - **Scenario:** A new user registers, logs in, and logs out.
 - **Scenario:** An existing user logs in successfully.
 - **Scenario:** A user attempts to log in with incorrect credentials.
 - **Scenario:** A user who is not logged in attempts to access the dashboard and is redirected to the login page.
 
 #### 4.2 Project Management
+
 - **Scenario:** A logged-in user creates a new project from the dashboard.
 - **Scenario:** A user edits the name and description of an existing project.
 - **Scenario:** A user deletes a project and confirms all associated flashcards are also deleted.
 - **Scenario:** The dashboard correctly displays a list of projects belonging only to the logged-in user.
 
 #### 4.3 AI Flashcard Generation
+
 - **Scenario:** A user navigates to the AI generation page, inputs a block of text, specifies the number of flashcards, and successfully generates them.
 - **Scenario:** The system displays a validation error if the input text is too long or empty.
 - **Scenario:** The system displays a validation error if the requested number of flashcards is outside the allowed range (e.g., 1-50).
 - **Scenario:** The UI correctly shows a loading/generating state while the AI is processing and disables the form.
 
 #### 4.4 Study Session
+
 - **Scenario:** A user starts a study session for a project with existing flashcards.
 - **Scenario:** The user cycles through flashcards, reveals the answer, and provides feedback on their recall ability.
 - **Scenario:** The session progress bar updates correctly as the user reviews cards.
@@ -122,11 +129,11 @@ Testing will be an integral part of the development lifecycle, not a separate ph
 
 - **Bug Tracking System:** All bugs will be tracked as issues in the project's GitHub repository.
 - **Bug Report Template:** A standardized template will be used for all bug reports, including:
-    - **Title:** A clear, concise summary of the bug.
-    - **Environment:** (e.g., Browser, OS, Staging/Production).
-    - **Steps to Reproduce:** Detailed, numbered steps that consistently reproduce the bug.
-    - **Expected Result:** What should have happened.
-    - **Actual Result:** What actually happened.
-    - **Severity:** (Critical, High, Medium, Low).
-    - **Screenshots/Videos:** Attached to provide visual context.
+  - **Title:** A clear, concise summary of the bug.
+  - **Environment:** (e.g., Browser, OS, Staging/Production).
+  - **Steps to Reproduce:** Detailed, numbered steps that consistently reproduce the bug.
+  - **Expected Result:** What should have happened.
+  - **Actual Result:** What actually happened.
+  - **Severity:** (Critical, High, Medium, Low).
+  - **Screenshots/Videos:** Attached to provide visual context.
 - **Triage:** New bugs will be triaged daily to assess their priority and assign them to the appropriate developer.

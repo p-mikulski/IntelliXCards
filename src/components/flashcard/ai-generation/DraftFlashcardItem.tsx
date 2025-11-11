@@ -4,7 +4,7 @@
  */
 
 import { useState, type ChangeEvent } from "react";
-import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ import type { FlashcardDraft } from "@/types";
 const MAX_FRONT_LENGTH = 200;
 const MAX_BACK_LENGTH = 500;
 
-export default function DraftFlashcardItem({ draft, onUpdate, onDelete, onFeedback }: DraftFlashcardItemProps) {
+export default function DraftFlashcardItem({ draft, onUpdate, onDelete }: DraftFlashcardItemProps) {
   const [localFront, setLocalFront] = useState(draft.front);
   const [localBack, setLocalBack] = useState(draft.back);
 
@@ -34,14 +34,6 @@ export default function DraftFlashcardItem({ draft, onUpdate, onDelete, onFeedba
 
   const handleDelete = () => {
     onDelete(draft.id);
-  };
-
-  const handleFeedbackUp = () => {
-    onFeedback(draft.id, "up");
-  };
-
-  const handleFeedbackDown = () => {
-    onFeedback(draft.id, "down");
   };
 
   const isFrontValid = localFront.length > 0 && localFront.length <= MAX_FRONT_LENGTH;
@@ -119,27 +111,7 @@ export default function DraftFlashcardItem({ draft, onUpdate, onDelete, onFeedba
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between items-center pt-2">
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={draft.feedback === "up" ? "default" : "outline"}
-              size="sm"
-              onClick={handleFeedbackUp}
-              aria-label="Thumbs up"
-            >
-              <ThumbsUp className="h-4 w-4" />
-            </Button>
-            <Button
-              type="button"
-              variant={draft.feedback === "down" ? "default" : "outline"}
-              size="sm"
-              onClick={handleFeedbackDown}
-              aria-label="Thumbs down"
-            >
-              <ThumbsDown className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="flex justify-end items-center pt-2">
           <Button type="button" variant="destructive" size="sm" onClick={handleDelete} aria-label="Delete draft">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete

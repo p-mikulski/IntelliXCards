@@ -9,31 +9,37 @@
 ## Running the Tests
 
 ### Run all project management tests
+
 ```powershell
 npx vitest run src/lib/services/project.service.test.ts src/components/hooks/useProjectDashboard.test.ts
 ```
 
 ### Run service tests only
+
 ```powershell
 npx vitest run src/lib/services/project.service.test.ts
 ```
 
 ### Run hook tests only
+
 ```powershell
 npx vitest run src/components/hooks/useProjectDashboard.test.ts
 ```
 
 ### Watch mode (for development)
+
 ```powershell
 npx vitest watch src/lib/services/project.service.test.ts
 ```
 
 ### Run with UI
+
 ```powershell
 npx vitest --ui
 ```
 
 ### Run with coverage
+
 ```powershell
 npx vitest --coverage
 ```
@@ -41,6 +47,7 @@ npx vitest --coverage
 ## Test Structure
 
 ### ProjectService Tests
+
 ```
 ProjectService
 ├── createProject (5 tests)
@@ -65,6 +72,7 @@ ProjectService
 ```
 
 ### useProjectDashboard Tests
+
 ```
 useProjectDashboard
 ├── fetchProjects (4 tests)
@@ -89,6 +97,7 @@ useProjectDashboard
 ## Key Testing Patterns Used
 
 ### 1. Mocking Supabase Client
+
 ```typescript
 const createMockSupabaseClient = () => {
   return {
@@ -98,6 +107,7 @@ const createMockSupabaseClient = () => {
 ```
 
 ### 2. Mocking Fetch API
+
 ```typescript
 global.fetch = vi.fn();
 
@@ -108,6 +118,7 @@ global.fetch = vi.fn();
 ```
 
 ### 3. Testing Optimistic UI
+
 ```typescript
 // Act - Start operation
 act(() => {
@@ -121,6 +132,7 @@ await waitFor(() => {
 ```
 
 ### 4. Testing Rollback on Error
+
 ```typescript
 // Mock failure
 (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
@@ -139,15 +151,15 @@ expect(toast.error).toHaveBeenCalled();
 
 ## Coverage Map
 
-| Feature | Service Tests | Hook Tests | Total |
-|---------|--------------|------------|-------|
-| Create Project | 5 | 3 | 8 |
-| List Projects | 3 | 4 | 7 |
-| Get Project | 4 | 0 | 4 |
-| Update Project | 5 | 2 | 7 |
-| Delete Project | 4 | 3 | 7 |
-| Dialog Management | 0 | 3 | 3 |
-| **Total** | **21** | **15** | **36** |
+| Feature           | Service Tests | Hook Tests | Total  |
+| ----------------- | ------------- | ---------- | ------ |
+| Create Project    | 5             | 3          | 8      |
+| List Projects     | 3             | 4          | 7      |
+| Get Project       | 4             | 0          | 4      |
+| Update Project    | 5             | 2          | 7      |
+| Delete Project    | 4             | 3          | 7      |
+| Dialog Management | 0             | 3          | 3      |
+| **Total**         | **21**        | **15**     | **36** |
 
 ## Vitest Best Practices Applied
 
@@ -160,26 +172,30 @@ expect(toast.error).toHaveBeenCalled();
 ✅ Mocked external dependencies  
 ✅ Used `waitFor` for async operations  
 ✅ Tested optimistic UI updates  
-✅ Verified rollback scenarios  
+✅ Verified rollback scenarios
 
 ## Quick Troubleshooting
 
 ### Tests not running?
+
 - Check that vitest is installed: `npm install`
 - Verify test files match pattern: `*.test.ts` or `*.test.tsx`
 
 ### Mock not working?
+
 - Ensure mocks are at top level (not inside describe/it blocks)
 - Clear mocks in `beforeEach`: `vi.clearAllMocks()`
 
 ### Async test timeout?
+
 - Increase timeout: `{ timeout: 10000 }` in test config
 - Use `waitFor` for async state changes
 
 ### Type errors in mocks?
+
 - Cast mocks: `as unknown as TypeName`
 - Use proper return types in mock implementations
 
 ---
 
-*Quick Reference - October 29, 2025*
+_Quick Reference - October 29, 2025_

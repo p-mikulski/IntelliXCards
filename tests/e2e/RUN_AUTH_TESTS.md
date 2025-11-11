@@ -6,12 +6,14 @@ Before running the E2E authentication tests, ensure you have:
 
 1. **Environment Variables**
    Create a `.env.test` file with your test Supabase credentials:
+
    ```env
    PUBLIC_SUPABASE_URL=your_test_supabase_url
    PUBLIC_SUPABASE_ANON_KEY=your_test_supabase_anon_key
    ```
 
 2. **Dependencies Installed**
+
    ```bash
    npm install
    npx playwright install chromium
@@ -23,21 +25,25 @@ Before running the E2E authentication tests, ensure you have:
 ## Running the Tests
 
 ### Run all authentication tests
+
 ```bash
 npx playwright test tests/e2e/auth.spec.ts
 ```
 
 ### Run with HTML reporter
+
 ```bash
 npx playwright test tests/e2e/auth.spec.ts --reporter=html
 ```
 
 ### Run in UI mode (recommended for development)
+
 ```bash
 npx playwright test tests/e2e/auth.spec.ts --ui
 ```
 
 ### Run specific test suite
+
 ```bash
 # Registration tests only
 npx playwright test tests/e2e/auth.spec.ts -g "Registration Flow"
@@ -50,11 +56,13 @@ npx playwright test tests/e2e/auth.spec.ts -g "Edge Cases and Security"
 ```
 
 ### Run in debug mode
+
 ```bash
 npx playwright test tests/e2e/auth.spec.ts --debug
 ```
 
 ### Run in headed mode (see the browser)
+
 ```bash
 npx playwright test tests/e2e/auth.spec.ts --headed
 ```
@@ -78,20 +86,24 @@ The authentication test suite covers 27 test cases across 6 categories:
 ## Troubleshooting
 
 ### Server won't start
+
 - Check if port 4321 is already in use
 - Verify your `.env.test` file exists and is properly configured
 
 ### Tests timeout
+
 - Increase timeout in `playwright.config.ts`:
   ```typescript
   timeout: 30000, // 30 seconds per test
   ```
 
 ### Database issues
+
 - Ensure test Supabase project has RLS policies configured
 - Verify auth is enabled in Supabase
 
 ### Flaky tests
+
 - Run with `--retries=2` flag:
   ```bash
   npx playwright test tests/e2e/auth.spec.ts --retries=2
@@ -100,6 +112,7 @@ The authentication test suite covers 27 test cases across 6 categories:
 ## CI/CD Integration
 
 The tests are configured to run in CI with:
+
 - 2 retries for flaky test tolerance
 - Single worker for consistency
 - HTML report generation

@@ -1,4 +1,3 @@
-
 Plan to Implement a Separate Tags Table in Supabase
 Based on your current database schema where projects.tag is a simple VARCHAR(100) field, here's a comprehensive plan to migrate to a dedicated tags table with proper relationships:
 

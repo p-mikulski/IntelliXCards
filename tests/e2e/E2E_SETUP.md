@@ -62,6 +62,7 @@ npx tsx scripts/test-direct-login.ts
 ```
 
 You should see:
+
 ```
 ✅ Login successful!
 ```
@@ -122,12 +123,14 @@ The tests use the remote Supabase instance by default (same as production). If y
 ### "User already registered" error
 
 This means the user exists but the password in `.env.test` is incorrect. Either:
+
 - Update the password in `.env.test` to match the existing user
 - Or reset the user's password in Supabase Dashboard
 
 ### "Invalid login credentials" error
 
 This means the user doesn't exist or the credentials are wrong:
+
 - Verify the credentials in `.env.test`
 - Check that the user exists in Supabase Dashboard
 - Ensure the user's email is confirmed

@@ -1,6 +1,7 @@
 import { useProjectDetail } from "@/components/hooks/useProjectDetail";
+import { useIsMobile } from "@/components/hooks/useIsMobile";
 import SkeletonLoader from "@/components/common/SkeletonLoader";
-import ProjectHeader from "./FlashcardHeader";
+import FlashcardHeader from "../project/FlashcardHeader";
 import FlashcardListToolbar from "./FlashcardListToolbar";
 import FlashcardList from "./FlashcardList";
 import CreateFlashcardDialog from "./CreateFlashcardDialog";
@@ -18,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useEffect, useRef } from "react";
 
 interface FlashcardViewProps {
   projectId: string;
@@ -28,6 +30,8 @@ interface FlashcardViewProps {
  * Orchestrates the entire view, fetches data, and manages state
  */
 export default function FlashcardView({ projectId }: FlashcardViewProps) {
+  const isMobile = useIsMobile();
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const {
     viewModel,
     handleCreateFlashcard,
@@ -37,6 +41,7 @@ export default function FlashcardView({ projectId }: FlashcardViewProps) {
     handleBulkMoveFlashcards,
     handleBatchDeleteFlashcards,
     handlePageChange,
+    loadMoreFlashcards,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,
@@ -47,7 +52,25 @@ export default function FlashcardView({ projectId }: FlashcardViewProps) {
     toggleSelectFlashcard,
     selectAllFlashcards,
     unselectAllFlashcards,
-  } = useProjectDetail(projectId);
+  } = useProjectDetail(projectId, isMobile);
+
+  // Set up intersection observer for mobile infinite scroll
+  useEffect(() => {
+    if (!isMobile || !sentinelRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && viewModel.mobile.hasMore && !viewModel.mobile.isLoadingMore) {
+          loadMoreFlashcards();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(sentinelRef.current);
+
+    return () => observer.disconnect();
+  }, [isMobile, viewModel.mobile.hasMore, viewModel.mobile.isLoadingMore, loadMoreFlashcards]);
 
   // Error state - show error if critical data failed to load
   if (viewModel.error && !viewModel.project) {
@@ -81,7 +104,7 @@ export default function FlashcardView({ projectId }: FlashcardViewProps) {
 
   return (
     <div className="flex flex-col h-[calc(100vh-65px)]">
-      <ProjectHeader
+      <FlashcardHeader
         project={viewModel.project || undefined}
         onStudyClick={() => {
           window.location.href = `/projects/${projectId}/study`;
@@ -93,7 +116,7 @@ export default function FlashcardView({ projectId }: FlashcardViewProps) {
         isLoading={!viewModel.project}
       />
 
-      <div className="flex-1 w-full py-4 px-20 space-y-4 bg-muted overflow-auto">
+      <div className="flex-1 w-full py-4 px-2.5 sm:px-2.5 md:px-25 lg:px-45 space-y-4 bg-muted overflow-auto">
         {/* Always render FlashcardListToolbar - show with 0 count if not loaded yet */}
         <FlashcardListToolbar
           flashcardCount={viewModel.flashcards.length}
@@ -118,15 +141,24 @@ export default function FlashcardView({ projectId }: FlashcardViewProps) {
               onToggleSelect={toggleSelectFlashcard}
             />
 
-            {/* Pagination Controls */}
-            <Pagination
-              currentPage={viewModel.pagination.currentPage}
-              totalPages={viewModel.pagination.totalPages}
-              onPageChange={handlePageChange}
-              showRange={true}
-              currentPageSize={viewModel.pagination.pageSize}
-              totalCount={viewModel.pagination.totalCount}
-            />
+            {/* Sentinel for mobile infinite scroll */}
+            {isMobile && viewModel.mobile.hasMore && (
+              <div ref={sentinelRef} className="h-4 flex items-center justify-center">
+                {viewModel.mobile.isLoadingMore && <SkeletonLoader />}
+              </div>
+            )}
+
+            {/* Pagination Controls - only show for desktop and when there are 10 or more flashcards */}
+            {!isMobile && viewModel.pagination.totalCount >= 10 && (
+              <Pagination
+                currentPage={viewModel.pagination.currentPage}
+                totalPages={viewModel.pagination.totalPages}
+                onPageChange={handlePageChange}
+                showRange={true}
+                currentPageSize={viewModel.pagination.pageSize}
+                totalCount={viewModel.pagination.totalCount}
+              />
+            )}
           </>
         )}
 

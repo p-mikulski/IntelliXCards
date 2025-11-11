@@ -1,14 +1,17 @@
 # AI Flashcard Generation - Unit Test Suite
 
 ## Overview
+
 This document describes the comprehensive unit test suite for the AI Flashcard Generation feature, covering all scenarios from the test plan.
 
 ## Test Files Created
 
 ### 1. `AIGenerationForm.test.tsx`
+
 **Component:** Form interface for AI flashcard generation
 
 **Test Coverage:**
+
 - ✅ Initial render with all form elements
 - ✅ Text input validation (empty, max 10,000 chars)
 - ✅ Character counter updates
@@ -21,14 +24,17 @@ This document describes the comprehensive unit test suite for the AI Flashcard G
 - ✅ Accessibility attributes
 
 **Test Scenarios from Test Plan:**
+
 - ✅ System displays validation error if input text is too long or empty
 - ✅ System displays validation error if requested number of flashcards is outside allowed range (1-50)
 - ✅ UI correctly shows loading/generating state while AI is processing and disables form
 
 ### 2. `useAIGeneration.test.ts`
+
 **Hook:** Business logic for AI flashcard generation workflow
 
 **Test Coverage:**
+
 - ✅ Initial state initialization
 - ✅ Successful flashcard generation
 - ✅ Loading state management
@@ -43,15 +49,18 @@ This document describes the comprehensive unit test suite for the AI Flashcard G
 - ✅ Discard all drafts
 
 **Test Scenarios from Test Plan:**
+
 - ✅ User navigates to AI generation page, inputs text, specifies number, successfully generates
 - ✅ System handles API errors gracefully
 - ✅ Draft flashcards can be modified before saving
 - ✅ Progress indication during save operation
 
 ### 3. `flashcard-generation.service.test.ts`
+
 **Service:** AI service layer and OpenRouter API integration
 
 **Test Coverage:**
+
 - ✅ Service initialization (default and custom config)
 - ✅ Input validation schema (text length, flashcard count)
 - ✅ Mock mode (no API key) behavior
@@ -66,6 +75,7 @@ This document describes the comprehensive unit test suite for the AI Flashcard G
 - ✅ OpenRouterAPIError class
 
 **Test Scenarios from Test Plan:**
+
 - ✅ Validation of input text length (max 10,000 characters)
 - ✅ Validation of flashcard count (1-50 for UI, 1-100 for API)
 - ✅ Error handling for AI service failures
@@ -112,11 +122,13 @@ This document describes the comprehensive unit test suite for the AI Flashcard G
 ## Running the Tests
 
 ### Run all AI generation tests:
+
 ```bash
 npm run test -- AIGeneration
 ```
 
 ### Run specific test file:
+
 ```bash
 npm run test src/components/project/ai-generation/AIGenerationForm.test.tsx
 npm run test src/components/hooks/useAIGeneration.test.ts
@@ -124,11 +136,13 @@ npm run test src/lib/services/flashcard-generation.service.test.ts
 ```
 
 ### Run in watch mode:
+
 ```bash
 npm run test -- --watch
 ```
 
 ### Run with coverage:
+
 ```bash
 npm run test -- --coverage
 ```
@@ -137,18 +151,19 @@ npm run test -- --coverage
 
 ### From Test Plan Section 4.3 (AI Flashcard Generation):
 
-| Scenario | Status | Test Location |
-|----------|--------|---------------|
-| User inputs text, specifies count, successfully generates | ✅ Covered | `useAIGeneration.test.ts` |
-| Validation error if input text is too long | ✅ Covered | `AIGenerationForm.test.tsx`, `flashcard-generation.service.test.ts` |
-| Validation error if input text is empty | ✅ Covered | `AIGenerationForm.test.tsx` |
-| Validation error if count outside 1-50 range | ✅ Covered | `AIGenerationForm.test.tsx` |
-| UI shows loading state during generation | ✅ Covered | `AIGenerationForm.test.tsx` |
-| Form is disabled during generation | ✅ Covered | `AIGenerationForm.test.tsx` |
+| Scenario                                                  | Status     | Test Location                                                       |
+| --------------------------------------------------------- | ---------- | ------------------------------------------------------------------- |
+| User inputs text, specifies count, successfully generates | ✅ Covered | `useAIGeneration.test.ts`                                           |
+| Validation error if input text is too long                | ✅ Covered | `AIGenerationForm.test.tsx`, `flashcard-generation.service.test.ts` |
+| Validation error if input text is empty                   | ✅ Covered | `AIGenerationForm.test.tsx`                                         |
+| Validation error if count outside 1-50 range              | ✅ Covered | `AIGenerationForm.test.tsx`                                         |
+| UI shows loading state during generation                  | ✅ Covered | `AIGenerationForm.test.tsx`                                         |
+| Form is disabled during generation                        | ✅ Covered | `AIGenerationForm.test.tsx`                                         |
 
 ## Additional Test Coverage
 
 Beyond the test plan requirements, these tests also cover:
+
 - Draft editing and deletion
 - User feedback (thumbs up/down)
 - Batch saving with progress tracking
@@ -161,6 +176,7 @@ Beyond the test plan requirements, these tests also cover:
 ## Dependencies
 
 The test suite requires:
+
 - `vitest` - Test runner
 - `@testing-library/react` - React component testing
 - `@testing-library/user-event` - User interaction simulation

@@ -33,7 +33,7 @@ export default function FlashcardListToolbar({
         </div>
         <div className="flex gap-2 items-center hidden sm:flex">
           {selectedCount > 0 && (
-            <div className="border-r border-gray-300 pr-4 mr-3">
+            <div className="border-r border-border pr-4 mr-3">
               <span className="text-primary text-sm">{selectedCount} selected</span>
             </div>
           )}
@@ -67,9 +67,9 @@ export default function FlashcardListToolbar({
             <MoreVertical className="w-4 h-4" />
           </Button>
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg p-2 z-10 flex flex-col gap-2">
+            <div className="absolute right-0 top-full mt-1 bg-popover border border-border rounded shadow-lg p-2 z-10 flex flex-col gap-2">
               {selectedCount > 0 && (
-                <div className="border-b border-gray-300 pb-2 mb-2">
+                <div className="border-b border-border pb-2 mb-2">
                   <span className="text-primary text-sm">{selectedCount} selected</span>
                 </div>
               )}

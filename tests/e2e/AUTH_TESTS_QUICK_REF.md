@@ -27,14 +27,14 @@ tests/e2e/
 
 ## 🎯 What's Tested (27 Tests)
 
-| Category | Tests | What's Covered |
-|----------|-------|----------------|
-| **Registration** | 7 | Valid signup, validation, duplicates |
-| **Login** | 8 | Valid login, errors, UX features |
-| **Logout** | 1 | Session termination |
-| **Protected Routes** | 2 | Access control |
-| **User Journey** | 1 | Full flow integration |
-| **Security** | 8 | SQL injection, XSS, edge cases |
+| Category             | Tests | What's Covered                       |
+| -------------------- | ----- | ------------------------------------ |
+| **Registration**     | 7     | Valid signup, validation, duplicates |
+| **Login**            | 8     | Valid login, errors, UX features     |
+| **Logout**           | 1     | Session termination                  |
+| **Protected Routes** | 2     | Access control                       |
+| **User Journey**     | 1     | Full flow integration                |
+| **Security**         | 8     | SQL injection, XSS, edge cases       |
 
 ## 💻 Common Commands
 
@@ -65,10 +65,10 @@ import { LoginPage, RegisterPage } from "./page-objects/auth.page";
 
 test("example", async ({ page }) => {
   const loginPage = new LoginPage(page);
-  
+
   await loginPage.goto();
   await loginPage.login("user@example.com", "password");
-  
+
   // Check for errors
   const error = await loginPage.getEmailError();
   expect(error).toBeNull();
@@ -78,6 +78,7 @@ test("example", async ({ page }) => {
 ## ⚙️ Configuration
 
 Edit `playwright.config.ts` to change:
+
 - `baseURL`: Default `http://localhost:4321`
 - `timeout`: Per-test timeout
 - `retries`: Retry count for flaky tests
@@ -85,12 +86,12 @@ Edit `playwright.config.ts` to change:
 
 ## 🐛 Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
+| Problem            | Solution                                   |
+| ------------------ | ------------------------------------------ |
 | Server won't start | Check port 4321, verify `.env.test` exists |
-| Tests timeout | Increase timeout in config, check network |
-| Flaky tests | Add `--retries=2` flag |
-| Database errors | Verify Supabase test project setup |
+| Tests timeout      | Increase timeout in config, check network  |
+| Flaky tests        | Add `--retries=2` flag                     |
+| Database errors    | Verify Supabase test project setup         |
 
 ## 📋 Test Data Pattern
 

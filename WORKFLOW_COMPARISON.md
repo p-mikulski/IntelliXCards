@@ -6,14 +6,15 @@ This document compares the two GitHub Actions workflows to highlight the differe
 
 ## Workflow Files
 
-| Workflow | File | Trigger | Purpose |
-|----------|------|---------|---------|
-| **PR Validation** | `pull-request.yml` | PR to master | Quality checks before merge |
-| **Master Deployment** | `master.yml` | Push to master | Deploy to production |
+| Workflow              | File               | Trigger        | Purpose                     |
+| --------------------- | ------------------ | -------------- | --------------------------- |
+| **PR Validation**     | `pull-request.yml` | PR to master   | Quality checks before merge |
+| **Master Deployment** | `master.yml`       | Push to master | Deploy to production        |
 
 ## Job Pipeline Comparison
 
 ### Pull Request Workflow
+
 ```
 Trigger: Pull Request to master
 ├── lint (Code quality)
@@ -29,6 +30,7 @@ Trigger: Pull Request to master
 ```
 
 ### Master Deployment Workflow
+
 ```
 Trigger: Push to master
 ├── lint (Code quality)
@@ -45,21 +47,22 @@ Trigger: Push to master
 
 ### 1. **E2E Tests**
 
-| Workflow | E2E Tests | Reason |
-|----------|-----------|--------|
-| **PR** | ✅ Included | Validate functionality before merge |
+| Workflow   | E2E Tests   | Reason                                          |
+| ---------- | ----------- | ----------------------------------------------- |
+| **PR**     | ✅ Included | Validate functionality before merge             |
 | **Master** | ❌ Excluded | Speed up deployment, tests already passed in PR |
 
 ### 2. **Deployment**
 
-| Workflow | Deployment | Target |
-|----------|------------|--------|
-| **PR** | ❌ No deployment | Validation only |
+| Workflow   | Deployment               | Target                 |
+| ---------- | ------------------------ | ---------------------- |
+| **PR**     | ❌ No deployment         | Validation only        |
 | **Master** | ✅ Deploys to Cloudflare | Production environment |
 
 ### 3. **Environment Variables**
 
 #### Pull Request (`pull-request.yml`)
+
 ```yaml
 # E2E test job requires additional secrets
 env:
@@ -71,6 +74,7 @@ env:
 ```
 
 #### Master Deployment (`master.yml`)
+
 ```yaml
 # Build step requires Supabase secrets
 env:
@@ -86,17 +90,17 @@ with:
 
 ### 4. **Execution Time**
 
-| Workflow | Estimated Time | Reason |
-|----------|---------------|--------|
-| **PR** | ~5-8 minutes | Includes E2E tests (Playwright) |
-| **Master** | ~3-5 minutes | No E2E tests, faster deployment |
+| Workflow   | Estimated Time | Reason                          |
+| ---------- | -------------- | ------------------------------- |
+| **PR**     | ~5-8 minutes   | Includes E2E tests (Playwright) |
+| **Master** | ~3-5 minutes   | No E2E tests, faster deployment |
 
 ### 5. **Notifications**
 
-| Workflow | Notification Type | Details |
-|----------|------------------|---------|
-| **PR** | GitHub comment | Posts detailed success message on PR |
-| **Master** | Console output | Logs deployment status (success/failure) |
+| Workflow   | Notification Type | Details                                  |
+| ---------- | ----------------- | ---------------------------------------- |
+| **PR**     | GitHub comment    | Posts detailed success message on PR     |
+| **Master** | Console output    | Logs deployment status (success/failure) |
 
 ## Shared Features
 
@@ -113,37 +117,42 @@ Both workflows share these common features:
 
 Both workflows use identical action versions:
 
-| Action | Version | Latest |
-|--------|---------|--------|
-| `actions/checkout` | v5 | ✅ |
-| `actions/setup-node` | v6 | ✅ |
-| `actions/upload-artifact` | v5 | ✅ |
-| `actions/github-script` | v8 | ✅ (PR only) |
-| `cloudflare/wrangler-action` | v3 | ✅ (Master only) |
+| Action                       | Version | Latest           |
+| ---------------------------- | ------- | ---------------- |
+| `actions/checkout`           | v5      | ✅               |
+| `actions/setup-node`         | v6      | ✅               |
+| `actions/upload-artifact`    | v5      | ✅               |
+| `actions/github-script`      | v8      | ✅ (PR only)     |
+| `cloudflare/wrangler-action` | v3      | ✅ (Master only) |
 
 ## Required Secrets by Workflow
 
 ### Pull Request Workflow
 
 **Supabase (for unit tests):**
+
 - `SUPABASE_URL`
 - `SUPABASE_KEY`
 
 **E2E Testing (for end-to-end tests):**
+
 - `E2E_USERNAME_ID`
 - `E2E_USERNAME`
 - `E2E_PASSWORD`
 
 **GitHub (automatic):**
+
 - `GITHUB_TOKEN` (auto-provided for posting comments)
 
 ### Master Deployment Workflow
 
 **Supabase (for build):**
+
 - `SUPABASE_URL`
 - `SUPABASE_KEY`
 
 **Cloudflare (for deployment):**
+
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_PROJECT_NAME`
@@ -163,11 +172,13 @@ Both workflows use identical action versions:
 ### 🎯 Workflow-Specific Optimizations:
 
 **Pull Request:**
+
 - Parallel execution of unit and E2E tests (both depend on lint)
 - Test environment isolation
 - Detailed PR comments for team visibility
 
 **Master:**
+
 - No E2E tests for faster deployment
 - Environment variables at step level for security
 - Simple status reporting
@@ -194,14 +205,14 @@ Is this a Pull Request to master?
 
 ## Summary
 
-| Aspect | PR Workflow | Master Workflow |
-|--------|-------------|-----------------|
-| **Purpose** | Validate changes | Deploy to production |
-| **E2E Tests** | ✅ Yes | ❌ No |
-| **Deployment** | ❌ No | ✅ Yes |
-| **Speed** | Slower (complete validation) | Faster (skip E2E) |
-| **Secrets** | 5 (Supabase + E2E) | 5 (Supabase + Cloudflare) |
-| **Notification** | PR comment | Console log |
+| Aspect           | PR Workflow                  | Master Workflow           |
+| ---------------- | ---------------------------- | ------------------------- |
+| **Purpose**      | Validate changes             | Deploy to production      |
+| **E2E Tests**    | ✅ Yes                       | ❌ No                     |
+| **Deployment**   | ❌ No                        | ✅ Yes                    |
+| **Speed**        | Slower (complete validation) | Faster (skip E2E)         |
+| **Secrets**      | 5 (Supabase + E2E)           | 5 (Supabase + Cloudflare) |
+| **Notification** | PR comment                   | Console log               |
 
 ---
 

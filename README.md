@@ -102,7 +102,6 @@ IntelliXCards employs a comprehensive multi-layered testing strategy to ensure f
   - Tests individual functions, React components, and custom hooks
   - Validates business logic within services and UI components
   - Target: 80% code coverage on critical business logic
-  
 - **End-to-End Tests**: Playwright
   - Simulates real user scenarios from start to finish
   - Tests critical flows: registration, project creation, AI flashcard generation, study sessions
@@ -111,6 +110,7 @@ IntelliXCards employs a comprehensive multi-layered testing strategy to ensure f
 ### Test Coverage
 
 The application tests all key functionalities:
+
 - User authentication (registration, login, password recovery)
 - Project management (CRUD operations)
 - AI flashcard generation workflow (input validation, error handling)
@@ -130,6 +130,7 @@ The application tests all key functionalities:
 IntelliXCards is deployed using a modern CI/CD pipeline with Cloudflare Pages for hosting and edge computing.
 
 ### Hosting Platform
+
 - **Cloudflare Pages** - Global CDN with edge computing capabilities
 - **GitHub Actions** - Automated CI/CD pipeline
 - **Supabase** - Backend services (database and authentication)
@@ -153,6 +154,7 @@ The application uses automated deployment via GitHub Actions. Every push to the 
 ### Environment Configuration
 
 #### Required GitHub Secrets (Production Environment)
+
 - `SUPABASE_URL` - Your Supabase project URL
 - `SUPABASE_KEY` - Your Supabase anon/public key
 - `CLOUDFLARE_API_TOKEN` - API token with Pages:Edit permissions
@@ -160,6 +162,7 @@ The application uses automated deployment via GitHub Actions. Every push to the 
 - `CLOUDFLARE_PROJECT_NAME` - Name of your Pages project
 
 #### Cloudflare Pages Environment Variables
+
 - `SUPABASE_URL` - Supabase project URL
 - `SUPABASE_KEY` - Supabase anon key
 
@@ -178,8 +181,8 @@ npm run preview
 
 ### Deployment Scripts
 
-| Script                  | Description                          |
-| ----------------------- | ------------------------------------ |
+| Script                     | Description                          |
+| -------------------------- | ------------------------------------ |
 | `npm run build:cloudflare` | Build optimized for Cloudflare Pages |
 
 For detailed deployment instructions, see the [Complete Deployment Guide](.ai/hosting/deployment.md).

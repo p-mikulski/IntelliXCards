@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Project } from "@/types";
-import ProjectHeader from "../FlashcardHeader";
+import ProjectHeader from "../../project/FlashcardHeader";
 import AIGenerationView from "./AIGenerationView";
 
 interface GeneratePageViewProps {
@@ -58,7 +58,7 @@ export default function GeneratePageView({ projectId }: GeneratePageViewProps) {
         showButtons={false}
       />
 
-      <div className="flex-1 w-full py-4 px-90 space-y-4 bg-muted overflow-auto">
+      <div className="flex-1 w-full py-4 px-2.5 sm:px-2.5 md:px-25 lg:px-45 space-y-4 bg-muted overflow-auto">
         {error ? (
           <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg">
             <p className="font-medium">Error</p>

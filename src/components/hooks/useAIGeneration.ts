@@ -22,7 +22,6 @@ interface UseAIGenerationReturn {
   generateFlashcards: (command: GenerateFlashcardsCommand) => Promise<void>;
   updateDraft: (id: string, updates: Partial<FlashcardDraft>) => void;
   deleteDraft: (id: string) => void;
-  updateFeedback: (id: string, feedback: "up" | "down") => void;
   saveAllDrafts: () => Promise<void>;
   discardAllDrafts: () => void;
 }
@@ -92,17 +91,6 @@ export function useAIGeneration(projectId: string): UseAIGenerationReturn {
   const deleteDraft = useCallback((id: string) => {
     setDrafts((prevDrafts) => prevDrafts.filter((draft) => draft.id !== id));
     toast.success("Draft deleted");
-  }, []);
-
-  /**
-   * Updates the feedback state for a specific draft
-   */
-  const updateFeedback = useCallback((id: string, feedback: "up" | "down") => {
-    setDrafts((prevDrafts) =>
-      prevDrafts.map((draft) =>
-        draft.id === id ? { ...draft, feedback: draft.feedback === feedback ? undefined : feedback } : draft
-      )
-    );
   }, []);
 
   /**
@@ -205,7 +193,6 @@ export function useAIGeneration(projectId: string): UseAIGenerationReturn {
     generateFlashcards,
     updateDraft,
     deleteDraft,
-    updateFeedback,
     saveAllDrafts,
     discardAllDrafts,
   };

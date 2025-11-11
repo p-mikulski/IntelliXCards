@@ -5,6 +5,7 @@ This diagram visualizes the complete authentication architecture for the Intelli
 ## Architecture Overview
 
 The authentication system follows a layered architecture:
+
 - **Middleware Layer**: Handles session checking and Supabase client initialization
 - **Public Pages**: Registration, login, and password recovery pages
 - **React Components**: Interactive forms with client-side validation
@@ -41,7 +42,7 @@ flowchart TD
         LP["login.astro<br/>NEW"]
         RCP["recovery.astro<br/>NEW"]
         RSP["reset.astro<br/>NEW"]
-        
+
         RP -->|Uses| AL
         LP -->|Uses| AL
         RCP -->|Uses| AL
@@ -52,13 +53,13 @@ flowchart TD
         RF["RegisterForm.tsx<br/>NEW"]
         LF["LoginForm.tsx<br/>NEW"]
         RCF["RecoveryForm.tsx<br/>NEW"]
-        
+
         subgraph "Shared Auth UI"
             AFH["AuthFormHeader.tsx<br/>NEW"]
             PSM["PasswordStrengthMeter.tsx<br/>NEW"]
             ASM["AuthStatusMessage.tsx<br/>NEW"]
         end
-        
+
         RF -->|Uses| AFH
         RF -->|Uses| PSM
         RF -->|Uses| ASM
@@ -78,14 +79,14 @@ flowchart TD
     subgraph "Services & Validation"
         AS["auth.service.ts<br/>NEW"]
         AV["auth.ts Zod Schemas<br/>NEW"]
-        
+
         AS -->|Uses| AV
     end
 
     subgraph "Protected Pages"
         DP["dashboard.astro<br/>EXISTING"]
         PP["project pages<br/>EXISTING"]
-        
+
         DP -->|Uses| ML
         PP -->|Uses| ML
     end
@@ -100,7 +101,7 @@ flowchart TD
         PC["Project Components"]
         SC2["Study Components"]
         UI["UI Components Shadcn"]
-        
+
         DP -->|Renders| DC
         PP -->|Renders| PC
         PP -->|Renders| SC2
@@ -170,7 +171,7 @@ flowchart TD
     classDef updatedComponent fill:#ffd3b6,stroke:#333,stroke-width:2px
     classDef existingComponent fill:#dcedc1,stroke:#333,stroke-width:2px
     classDef backend fill:#ffaaa5,stroke:#333,stroke-width:2px
-    
+
     class AL,RP,LP,RCP,RSP,RF,LF,RCF,AFH,PSM,ASM,ARE,ALE,ALO,ARC,AS,AV,AC,ASE,AER newComponent
     class ML,MW,AN,TD updatedComponent
     class DP,PP,DC,PC,SC2,UI existingComponent
@@ -180,6 +181,7 @@ flowchart TD
 ## Key Data Flows
 
 ### 1. Registration Flow
+
 ```
 User → RegisterForm.tsx → POST /api/auth/register → auth.service.ts → Supabase Auth → Database
                        ↓
@@ -188,6 +190,7 @@ User → RegisterForm.tsx → POST /api/auth/register → auth.service.ts → Su
 ```
 
 ### 2. Login Flow
+
 ```
 User → LoginForm.tsx → POST /api/auth/login → auth.service.ts → Supabase Auth
                    ↓
@@ -196,6 +199,7 @@ User → LoginForm.tsx → POST /api/auth/login → auth.service.ts → Supabase
 ```
 
 ### 3. Logout Flow
+
 ```
 User clicks Logout in AppNav → POST /api/auth/logout → auth.service.ts → Supabase signOut
                             ↓
@@ -203,6 +207,7 @@ User clicks Logout in AppNav → POST /api/auth/logout → auth.service.ts → S
 ```
 
 ### 4. Password Recovery Flow
+
 ```
 User → RecoveryForm.tsx → POST /api/auth/recovery → auth.service.ts → Supabase resetPassword
                        ↓
@@ -210,6 +215,7 @@ User → RecoveryForm.tsx → POST /api/auth/recovery → auth.service.ts → Su
 ```
 
 ### 5. Middleware Protection
+
 ```
 All requests → Middleware → Check session
                          ↓
@@ -224,12 +230,14 @@ All requests → Middleware → Check session
 ### New Components
 
 #### **AuthLayout.astro**
+
 - Minimal authentication page shell
 - Brand header and footer
 - Dark mode support
 - ViewTransitions integration
 
 #### **RegisterForm.tsx**
+
 - Email and password input fields
 - Client-side validation
 - Password strength meter integration
@@ -237,40 +245,48 @@ All requests → Middleware → Check session
 - Error/success message handling
 
 #### **LoginForm.tsx**
+
 - Email and password fields
 - Client-side validation
 - Form submission
 - Error handling
 
 #### **RecoveryForm.tsx**
+
 - Email input for password reset
 - Validation
 - Success feedback
 
 #### **AuthFormHeader.tsx**
+
 - Reusable header for auth forms
 - Title and description display
 
 #### **PasswordStrengthMeter.tsx**
+
 - Visual indicator of password strength
 - Real-time validation feedback
 
 #### **AuthStatusMessage.tsx**
+
 - Display success/error messages
 - Accessible ARIA live region
 
 #### **API Endpoints (register.ts, login.ts, logout.ts, recovery.ts)**
+
 - Server-side validation with Zod
 - Supabase auth integration
 - Session management
 - Error handling and translation
 
 #### **auth.service.ts**
+
 - Authentication business logic
 - Supabase method calls
 - Error translation
 
 #### **auth.ts (Validation)**
+
 - Zod schemas for all auth forms
 - Password complexity rules
 - Email validation
@@ -278,22 +294,26 @@ All requests → Middleware → Check session
 ### Updated Components
 
 #### **MainLayout.astro**
+
 - Expose navigation slot
 - Pass session data to navigation
 - Support auth-aware UI
 
 #### **Middleware**
+
 - Initialize Supabase client
 - Attach client and session to locals
 - Route protection logic
 - Redirect unauthorized users
 
 #### **AppNav.astro**
+
 - Display "Login/Register" when unauthenticated
 - Display user menu with "Logout" when authenticated
 - Handle logout action
 
 #### **types.ts**
+
 - Add AuthCredentials type
 - Add AuthSession type
 - Add AuthErrorResponse type
@@ -311,12 +331,14 @@ All requests → Middleware → Check session
 ## Integration Points
 
 ### With Existing Features
+
 - Dashboard requires authentication (protected by middleware)
 - Project pages require authentication
 - Study sessions require authentication
 - All API endpoints under `/api/projects/**` and `/api/study-sessions/**` use authenticated Supabase client from locals
 
 ### With Supabase
+
 - Registration: `supabase.auth.signUp()`
 - Login: `supabase.auth.signInWithPassword()`
 - Logout: `supabase.auth.signOut()`

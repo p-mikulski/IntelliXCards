@@ -21,6 +21,11 @@ export interface ProjectDetailViewModel {
     totalCount: number;
     pageSize: number;
   };
+  mobile: {
+    hasMore: boolean;
+    isLoadingMore: boolean;
+    nextPage: number;
+  };
   isLoading: boolean;
   isLoadingFlashcards: boolean;
   error: string | null;
@@ -43,7 +48,7 @@ export interface ProjectDetailViewModel {
  * Custom hook for managing the Project Detail view state and logic
  * Handles fetching project data, flashcards, and CRUD operations for flashcards
  */
-export const useProjectDetail = (projectId: string) => {
+export const useProjectDetail = (projectId: string, isMobile = false) => {
   const [viewModel, setViewModel] = useState<ProjectDetailViewModel>({
     project: null,
     flashcards: [],
@@ -52,6 +57,11 @@ export const useProjectDetail = (projectId: string) => {
       totalPages: 1,
       totalCount: 0,
       pageSize: 9,
+    },
+    mobile: {
+      hasMore: false,
+      isLoadingMore: false,
+      nextPage: 1,
     },
     isLoading: true,
     isLoadingFlashcards: true,
@@ -95,9 +105,13 @@ export const useProjectDetail = (projectId: string) => {
    * Fetches the list of flashcards for the project with pagination
    */
   const fetchFlashcards = useCallback(
-    async (page = 1, limit = 9) => {
+    async (page = 1, limit = 9, append = false) => {
       try {
-        setViewModel((prev) => ({ ...prev, isLoadingFlashcards: true }));
+        setViewModel((prev) => ({
+          ...prev,
+          isLoadingFlashcards: !append,
+          ...(append && { mobile: { ...prev.mobile, isLoadingMore: true } }),
+        }));
 
         const response = await fetch(`/api/projects/${projectId}/flashcards?page=${page}&limit=${limit}`);
         if (!response.ok) {
@@ -106,26 +120,53 @@ export const useProjectDetail = (projectId: string) => {
         const data: FlashcardListDto = await response.json();
 
         const totalPages = Math.ceil(data.total / data.limit);
+        const hasMore = isMobile && data.page < totalPages;
 
         setViewModel((prev) => ({
           ...prev,
-          flashcards: data.flashcards,
+          flashcards: append ? [...prev.flashcards, ...data.flashcards] : data.flashcards,
           pagination: {
             currentPage: data.page,
             totalPages,
             totalCount: data.total,
             pageSize: data.limit,
           },
+          mobile: {
+            hasMore,
+            isLoadingMore: false,
+            nextPage: data.page + 1,
+          },
           error: null,
           isLoadingFlashcards: false,
         }));
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-        setViewModel((prev) => ({ ...prev, error: errorMessage, isLoadingFlashcards: false }));
+        setViewModel((prev) => ({
+          ...prev,
+          error: errorMessage,
+          isLoadingFlashcards: false,
+          mobile: { ...prev.mobile, isLoadingMore: false },
+        }));
       }
     },
-    [projectId]
+    [projectId, isMobile]
   );
+
+  /**
+   * Loads more flashcards for mobile infinite scroll
+   */
+  const loadMoreFlashcards = useCallback(() => {
+    if (isMobile && viewModel.mobile.hasMore && !viewModel.mobile.isLoadingMore) {
+      fetchFlashcards(viewModel.mobile.nextPage, viewModel.pagination.pageSize, true);
+    }
+  }, [
+    isMobile,
+    viewModel.mobile.hasMore,
+    viewModel.mobile.isLoadingMore,
+    viewModel.mobile.nextPage,
+    viewModel.pagination.pageSize,
+    fetchFlashcards,
+  ]);
 
   /**
    * Loads initial data (project and flashcards) on mount
@@ -589,6 +630,7 @@ export const useProjectDetail = (projectId: string) => {
     handleBulkMoveFlashcards,
     handleBatchDeleteFlashcards,
     handlePageChange,
+    loadMoreFlashcards,
     openCreateDialog,
     openEditDialog,
     openDeleteDialog,

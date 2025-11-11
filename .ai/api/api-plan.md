@@ -5,13 +5,14 @@
 All authentication endpoints are automatically provided and managed by Supabase Auth service:
 
 ### POST /auth/v1/signup
+
 - **Description:** Create a new user account
 - **Authentication:** None
 - **Request Body:**
   ```typescript
   {
-    email: string;     // User's email address
-    password: string;  // User's password (min 6 characters)
+    email: string; // User's email address
+    password: string; // User's password (min 6 characters)
   }
   ```
 - **Response:**
@@ -22,25 +23,26 @@ All authentication endpoints are automatically provided and managed by Supabase 
         id: string;
         email: string;
         created_at: string;
-      };
+      }
       session: {
         access_token: string;
         refresh_token: string;
         expires_in: number;
-      };
+      }
     }
     ```
   - 400 Bad Request: Invalid input
   - 409 Conflict: Email already registered
 
 ### POST /auth/v1/token
+
 - **Description:** Sign in with email and password
 - **Authentication:** None
 - **Request Body:**
   ```typescript
   {
-    email: string;     // User's email
-    password: string;  // User's password
+    email: string; // User's email
+    password: string; // User's password
   }
   ```
 - **Response:**
@@ -53,13 +55,14 @@ All authentication endpoints are automatically provided and managed by Supabase 
       user: {
         id: string;
         email: string;
-      };
+      }
     }
     ```
   - 400 Bad Request: Invalid credentials
   - 401 Unauthorized: Wrong email/password
 
 ### POST /auth/v1/logout
+
 - **Description:** Sign out the current user
 - **Authentication:** Bearer token required
 - **Request Body:** None
@@ -68,12 +71,13 @@ All authentication endpoints are automatically provided and managed by Supabase 
   - 401 Unauthorized: Invalid token
 
 ### POST /auth/v1/token/refresh
+
 - **Description:** Refresh expired access token
 - **Authentication:** None
 - **Request Body:**
   ```typescript
   {
-    refresh_token: string;  // The refresh token from login
+    refresh_token: string; // The refresh token from login
   }
   ```
 - **Response:**
@@ -88,6 +92,7 @@ All authentication endpoints are automatically provided and managed by Supabase 
   - 401 Unauthorized: Invalid refresh token
 
 ### DELETE /auth/v1/user
+
 - **Description:** Delete current user's account
 - **Authentication:** Bearer token required
 - **Request Body:** None

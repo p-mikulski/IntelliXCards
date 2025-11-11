@@ -10,7 +10,7 @@ import cloudflare from "@astrojs/cloudflare";
 // Choose adapter based on environment
 const adapter =
   process.env.CF_PAGES === "1"
-    ? cloudflare({ 
+    ? cloudflare({
         imageService: "cloudflare",
         platformProxy: {
           enabled: true,

@@ -6,11 +6,10 @@ import type { FlashcardDraft, GenerateFlashcardsCommand } from "@/types";
 
 /**
  * ViewModel for a flashcard draft in the review UI.
- * Includes a client-side ID and feedback state for UI management.
+ * Includes a client-side ID for UI management.
  */
 export type FlashcardDraftViewModel = FlashcardDraft & {
   id: string; // A unique client-side identifier (e.g., generated with crypto.randomUUID())
-  feedback?: "up" | "down"; // UI state for the feedback buttons
 };
 
 /**
@@ -41,7 +40,6 @@ export interface AIGenerationReviewProps {
   onUpdateDraft: (id: string, updates: Partial<FlashcardDraft>) => void;
   onDeleteDraft: (id: string) => void;
   onDiscardAll: () => void;
-  onFeedback: (id: string, feedback: "up" | "down") => void;
 }
 
 /**
@@ -51,5 +49,4 @@ export interface DraftFlashcardItemProps {
   draft: FlashcardDraftViewModel;
   onUpdate: (id: string, updates: Partial<FlashcardDraft>) => void;
   onDelete: (id: string) => void;
-  onFeedback: (id: string, feedback: "up" | "down") => void;
 }

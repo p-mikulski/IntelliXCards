@@ -12,7 +12,7 @@
   --popover-foreground: oklch(0.4386 0 0);
   --primary: oklch(0.7251 0.18969 143.459);
   --primary-foreground: oklch(0.2626 0.0147 166.4589);
-  --secondary: oklch(0.9940 0 0);
+  --secondary: oklch(0.994 0 0);
   --secondary-foreground: oklch(0.2046 0 0);
   --muted: oklch(0.9461 0 0);
   --muted-foreground: oklch(0.2435 0 0);
@@ -24,7 +24,7 @@
   --input: oklch(0.9731 0 0);
   --ring: oklch(0.7251 0.18969 143.459);
   --chart-1: oklch(0.7251 0.18969 143.459);
-  --chart-2: oklch(0.6231 0.1880 259.8145);
+  --chart-2: oklch(0.6231 0.188 259.8145);
   --chart-3: oklch(0.6056 0.2189 292.7172);
   --chart-4: oklch(0.7686 0.1647 70.0804);
   --chart-5: oklch(0.6959 0.1491 162.4796);
@@ -77,12 +77,12 @@
   --destructive-foreground: oklch(0.9368 0.0045 34.3092);
   --border: oklch(0.2809 0 0);
   --input: oklch(0.2603 0 0);
-  --ring: oklch(0.8003 0.1821 151.7110);
-  --chart-1: oklch(0.8003 0.1821 151.7110);
-  --chart-2: oklch(0.7137 0.1434 254.6240);
-  --chart-3: oklch(0.7090 0.1592 293.5412);
+  --ring: oklch(0.8003 0.1821 151.711);
+  --chart-1: oklch(0.8003 0.1821 151.711);
+  --chart-2: oklch(0.7137 0.1434 254.624);
+  --chart-3: oklch(0.709 0.1592 293.5412);
   --chart-4: oklch(0.8369 0.1644 84.4286);
-  --chart-5: oklch(0.7845 0.1325 181.9120);
+  --chart-5: oklch(0.7845 0.1325 181.912);
   --sidebar: oklch(0.1822 0 0);
   --sidebar-foreground: oklch(0.6301 0 0);
   --sidebar-primary: oklch(0.4365 0.1044 156.7556);
@@ -90,7 +90,7 @@
   --sidebar-accent: oklch(0.3132 0 0);
   --sidebar-accent-foreground: oklch(0.9851 0 0);
   --sidebar-border: oklch(0.2809 0 0);
-  --sidebar-ring: oklch(0.8003 0.1821 151.7110);
+  --sidebar-ring: oklch(0.8003 0.1821 151.711);
   --font-sans: Outfit, sans-serif;
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: monospace;
@@ -182,17 +182,17 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Smooth scroll behavior for the entire page */
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* Focus visible styles for better keyboard navigation */
   *:focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
-  
+
   /* Reduced motion for users who prefer it */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -202,7 +202,7 @@ body {
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-    
+
     html {
       scroll-behavior: auto;
     }
@@ -229,7 +229,8 @@ body {
 
   /* Rainbow animation for magical effects */
   @keyframes rainbow {
-    0%, 100% {
+    0%,
+    100% {
       background-position: 0% 50%;
     }
     50% {

@@ -18,7 +18,7 @@ interface ProjectHeaderProps {
  * Shows project title with metadata on the left, action buttons on the right
  * Supports loading state with skeleton placeholders for title/description
  */
-export default function ProjectHeader({
+export default function FlashcardHeader({
   project,
   onStudyClick,
   onCreateClick,
@@ -51,7 +51,7 @@ export default function ProjectHeader({
           <Menu className="w-4 h-4" />
         </Button>
         {menuOpen && (
-          <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-lg p-2 z-10 flex flex-col gap-2">
+          <div className="absolute right-0 top-full mt-1 bg-popover border border-border rounded shadow-lg p-2 z-10 flex flex-col gap-2">
             <Button
               variant="outline"
               onClick={() => {

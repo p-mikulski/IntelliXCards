@@ -1,6 +1,6 @@
 Main Framework Analysis
 
-<thought_process> - Tech stack analysis: * Astro 5 is the main framework - this is crucial as it determines deployment options * TypeScript 5 indicates a need for build process support * React 19 components need to be rendered * Tailwind 4 requires CSS processing - Key insight: Astro is a static-first framework with SSR capabilities - Astro's operational model: * Supports static site generation (SSG) * Supports server-side rendering (SSR) * Has middleware support * Uses Vite under the hood </thought_process>
+<thought_process> - Tech stack analysis: _ Astro 5 is the main framework - this is crucial as it determines deployment options _ TypeScript 5 indicates a need for build process support _ React 19 components need to be rendered _ Tailwind 4 requires CSS processing - Key insight: Astro is a static-first framework with SSR capabilities - Astro's operational model: _ Supports static site generation (SSG) _ Supports server-side rendering (SSR) _ Has middleware support _ Uses Vite under the hood </thought_process>
 The main framework is Astro 5, a modern web framework that employs a "Static-First" approach with hybrid rendering capabilities. It can operate in two primary modes:
 
 Static Site Generation (SSG) - builds to static HTML/CSS/JS
@@ -8,7 +8,7 @@ Server-Side Rendering (SSR) - requires a Node.js runtime
 Astro's architecture allows for selective hydration of React components ("Islands Architecture"), which influences hosting requirements as it needs support for both static file serving and potential server-side operations.
 Recommended Hosting Services (From Astro's Creators/Official Support)
 
-<thought_process> - Researching Astro's officially recommended hosting platforms: * Checking deployment guides: https://docs.astro.build/en/guides/deploy/ * Analyzing build output requirements * Considering SSR support capabilities * Evaluating integration with Astro's CLI * Assessing automatic deployment features </thought_process>
+<thought_process> - Researching Astro's officially recommended hosting platforms: _ Checking deployment guides: https://docs.astro.build/en/guides/deploy/ _ Analyzing build output requirements _ Considering SSR support capabilities _ Evaluating integration with Astro's CLI \* Assessing automatic deployment features </thought_process>
 Netlify
 
 Native Astro support
@@ -26,7 +26,7 @@ Workers for dynamic functionality
 Global edge network
 Alternative Platforms
 
-<thought_process> - Considering platforms beyond official recommendations: * Evaluating container support for flexibility * Checking Node.js runtime support for SSR * Analyzing cost-effectiveness for scaling * Assessing deployment complexity * Checking integration capabilities </thought_process>
+<thought_process> - Considering platforms beyond official recommendations: _ Evaluating container support for flexibility _ Checking Node.js runtime support for SSR _ Analyzing cost-effectiveness for scaling _ Assessing deployment complexity \* Checking integration capabilities </thought_process>
 Azure Static Web Apps
 
 Supports static and SSR
@@ -39,7 +39,7 @@ Auto-scaling capabilities
 Pay-per-use model
 Critique of Solutions
 
-<thought_process> - Analyzing each platform across required dimensions: * Deployment complexity: CI/CD integration, build steps, configuration * Tech stack compatibility: Runtime support, build process, optimization * Environment management: Staging/prod setup, branch deployments * Commercial viability: Pricing structure, scalability costs </thought_process>
+<thought_process> - Analyzing each platform across required dimensions: _ Deployment complexity: CI/CD integration, build steps, configuration _ Tech stack compatibility: Runtime support, build process, optimization _ Environment management: Staging/prod setup, branch deployments _ Commercial viability: Pricing structure, scalability costs </thought_process>
 Netlify:
 a) Deployment: Simple Git-based deployment but complex local testing
 b) Compatibility: Excellent native support but limited SSR optimization options
@@ -87,7 +87,7 @@ Can be very cost-effective at scale
 No artificial tiers
 Platform Scores
 
-<thought_process> - Evaluating based on: * Current needs vs future scalability * Cost vs features * Ease of use vs flexibility * Developer experience * Commercial viability </thought_process>
+<thought_process> - Evaluating based on: _ Current needs vs future scalability _ Cost vs features _ Ease of use vs flexibility _ Developer experience \* Commercial viability </thought_process>
 Vercel: 9/10
 
 Perfect for current stack

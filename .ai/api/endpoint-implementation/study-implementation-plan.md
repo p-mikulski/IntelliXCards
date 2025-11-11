@@ -3,11 +3,13 @@
 This document outlines the implementation plan for the REST API endpoints related to managing study sessions.
 
 ## 1. Endpoint Overview
+
 The goal is to create a set of endpoints to manage the lifecycle of a user's study session for a specific project. This includes starting a session, listing all sessions, and viewing the details of a specific session. These endpoints are crucial for tracking user engagement and study habits.
 
 ## 2. Request Details
 
 ### A. Start Study Session
+
 - **HTTP Method:** `POST`
 - **URL Structure:** `/api/projects/{projectId}/study-sessions`
 - **Parameters:**
@@ -20,6 +22,7 @@ The goal is to create a set of endpoints to manage the lifecycle of a user's stu
   ```
 
 ### B. Get Study Session Detail
+
 - **HTTP Method:** `GET`
 - **URL Structure:** `/api/study-sessions/{sessionId}`
 - **Parameters:**
@@ -27,6 +30,7 @@ The goal is to create a set of endpoints to manage the lifecycle of a user's stu
 - **Request Body:** None
 
 ### C. List Study Sessions
+
 - **HTTP Method:** `GET`
 - **URL Structure:** `/api/study-sessions`
 - **Parameters:**
@@ -34,7 +38,9 @@ The goal is to create a set of endpoints to manage the lifecycle of a user's stu
 - **Request Body:** None
 
 ## 3. Used Types
+
 The following DTOs and Command models from `src/types.ts` will be used:
+
 - `CreateStudySessionCommand`: For the request body of the "Start Study Session" endpoint.
 - `StudySessionDto`: As the response for creating and retrieving a single session.
 - `StudySessionListDto`: As the paginated response for listing sessions.
@@ -58,18 +64,22 @@ The following DTOs and Command models from `src/types.ts` will be used:
     - Supabase enforces Row-Level Security (RLS) to ensure data isolation between users.
 
 ## 5. Security Considerations
+
 - **Authentication:** All endpoints will be protected. The user's session will be retrieved from `Astro.locals.session`. If no session exists, a `401 Unauthorized` error will be returned.
 - **Authorization:** Supabase's Row-Level Security (RLS) will be the primary mechanism for authorization. Policies must be in place to ensure users can only access `projects` and `study_sessions` that belong to them (`user_id = auth.uid()`).
 - **Input Validation:** All incoming data (URL params, query params, and request body) will be strictly validated using `zod` to prevent injection attacks and malformed data errors.
 
 ## 6. Error Handling
+
 A consistent error handling strategy will be implemented:
+
 - **`400 Bad Request`**: Returned for validation failures from `zod`. The response body will be a `ValidationErrorResponseDto` detailing the specific field errors.
 - **`401 Unauthorized`**: Returned if `Astro.locals.session` is null.
 - **`404 Not Found`**: Returned by the service layer if a specified `projectId` or `sessionId` is not found for the authenticated user.
 - **`500 Internal Server Error`**: Returned for any unexpected exceptions or database errors, with a generic error message.
 
 ## 7. Performance Considerations
+
 - **Database Indexing:** The `db-plan.md` specifies indexes on `study_sessions(user_id)`, `study_sessions(project_id)`, and `study_sessions(start_time)`. These are crucial for efficient filtering and sorting. The development team must ensure these indexes are created in the initial migration.
 - **Pagination:** The list endpoint will use limit-offset pagination by default (`page`, `limit`) to avoid loading large datasets and ensure fast response times.
 - **Payload Size:** The DTOs are designed to be concise. No large text fields are included, so payload size is not a major concern.

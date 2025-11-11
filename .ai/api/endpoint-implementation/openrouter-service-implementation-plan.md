@@ -40,20 +40,20 @@ The service will expose one primary public method.
 
 This method is the main entry point for making a chat completion request.
 
--   **`params`**: An object of type `ChatCompletionParams` containing all necessary information for the API call.
-    ```typescript
-    interface ChatCompletionParams {
-      model: string;
-      systemMessage?: string;
-      userMessage: string;
-      response_format?: {
-        type: "json_object"; // Note: OpenRouter uses 'json_object'
-      };
-      temperature?: number;
-      max_tokens?: number;
-    }
-    ```
--   **Returns**: A `Promise<T>` that resolves with the parsed content from the model's response. The generic type `T` allows for strong typing of structured JSON responses.
+- **`params`**: An object of type `ChatCompletionParams` containing all necessary information for the API call.
+  ```typescript
+  interface ChatCompletionParams {
+    model: string;
+    systemMessage?: string;
+    userMessage: string;
+    response_format?: {
+      type: "json_object"; // Note: OpenRouter uses 'json_object'
+    };
+    temperature?: number;
+    max_tokens?: number;
+  }
+  ```
+- **Returns**: A `Promise<T>` that resolves with the parsed content from the model's response. The generic type `T` allows for strong typing of structured JSON responses.
 
 ## 4. Private Methods and Fields
 
@@ -119,7 +119,11 @@ export interface ChatCompletionParams {
 
 // Define a custom error for better error handling
 export class OpenRouterAPIError extends Error {
-  constructor(message: string, public status?: number, public details?: any) {
+  constructor(
+    message: string,
+    public status?: number,
+    public details?: any
+  ) {
     super(message);
     this.name = "OpenRouterAPIError";
   }
@@ -298,7 +302,6 @@ export const POST: APIRoute = async ({ request }) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-
   } catch (error) {
     console.error(error);
     // Return a generic error to the client
