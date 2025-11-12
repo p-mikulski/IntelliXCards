@@ -20,3 +20,9 @@ const breadcrumbs = [{ label: "Dashboard", href: undefined }];
   <MainToolbar client:load user={user} breadcrumbs={breadcrumbs} />
   <ProjectView client:load />
 </Layout>
+
+<style is:global>
+  body {
+    overflow: hidden;
+  }
+</style>

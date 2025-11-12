@@ -82,10 +82,10 @@ export function Pagination({
   };
 
   return (
-    <div className="flex items-center justify-center gap-4">
-      <div className="flex items-center gap-2 relative">
+    <div className="flex items-center justify-around gap-4">
+      <div className="flex items-center justify-between gap-2 w-full">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={!canGoPrevious}
@@ -94,7 +94,7 @@ export function Pagination({
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 relative">
           {getPageNumbers().map((page, index) => {
             if (page === "...") {
               return (
@@ -107,7 +107,7 @@ export function Pagination({
             return (
               <Button
                 key={page}
-                variant={currentPage === page ? "default" : "outline"}
+                variant={currentPage === page ? "default" : "ghost"}
                 size="icon"
                 onClick={() => onPageChange(page as number)}
                 aria-label={`Page ${page}`}
@@ -117,10 +117,17 @@ export function Pagination({
               </Button>
             );
           })}
+          {getItemRange() && (
+            <>
+              <span className="absolute left-full ml-2 w-px h-8 bg-border"></span>
+              <span className="absolute left-full ml-4 text-xs text-sidebar-foreground whitespace-nowrap">
+                {getItemRange()}
+              </span>
+            </>
+          )}
         </div>
-
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={!canGoNext}
@@ -128,11 +135,6 @@ export function Pagination({
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-        {getItemRange() && (
-          <span className="absolute left-full ml-4 text-xs text-sidebar-foreground whitespace-nowrap">
-            {getItemRange()}
-          </span>
-        )}
       </div>
     </div>
   );

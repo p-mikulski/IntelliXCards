@@ -1,9 +1,9 @@
-import type { supabaseClient } from "../../db/supabase.client";
+import type { SupabaseClient } from "../../db/supabase.client";
 import type { CreateProjectCommand, ProjectDto, UpdateProjectCommand } from "../../types";
 import { createProjectSchema, updateProjectSchema } from "../validation/project.schema";
 
 export class ProjectService {
-  constructor(private readonly supabase: typeof supabaseClient) {}
+  constructor(private readonly supabase: SupabaseClient) {}
 
   /**
    * Creates a new project for the current user
@@ -32,18 +32,32 @@ export class ProjectService {
    * Lists all projects for the current user
    * @throws {Error} If database error occurs
    */
-  async listProjects(userId: string): Promise<ProjectDto[]> {
-    const { data, error } = await this.supabase
+  async listProjects(
+    userId: string,
+    page?: number,
+    limit?: number
+  ): Promise<{ projects: ProjectDto[]; total: number }> {
+    let query = this.supabase
       .from("projects")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
+
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      query = query.range(offset, offset + limit - 1);
+    }
+
+    const { data, error, count } = await query;
 
     if (error) {
       throw new Error(`Failed to list projects: ${error.message}`);
     }
 
-    return data;
+    return {
+      projects: data || [],
+      total: count || 0,
+    };
   }
 
   /**

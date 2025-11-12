@@ -164,16 +164,17 @@ describe("ProjectService", () => {
       mockQueryBuilder.order.mockResolvedValueOnce({
         data: mockProjects,
         error: null,
+        count: 2,
       });
 
       // Act
       const result = await service.listProjects(mockUserId);
 
       // Assert
-      expect(result).toEqual(mockProjects);
-      expect(result).toHaveLength(2);
+      expect(result).toEqual({ projects: mockProjects, total: 2 });
+      expect(result.projects).toHaveLength(2);
       expect(mockSupabase.from).toHaveBeenCalledWith("projects");
-      expect(mockQueryBuilder.select).toHaveBeenCalledWith("*");
+      expect(mockQueryBuilder.select).toHaveBeenCalledWith("*", { count: "exact" });
       expect(mockQueryBuilder.eq).toHaveBeenCalledWith("user_id", mockUserId);
       expect(mockQueryBuilder.order).toHaveBeenCalledWith("created_at", { ascending: false });
     });
@@ -183,14 +184,15 @@ describe("ProjectService", () => {
       mockQueryBuilder.order.mockResolvedValueOnce({
         data: [],
         error: null,
+        count: 0,
       });
 
       // Act
       const result = await service.listProjects(mockUserId);
 
       // Assert
-      expect(result).toEqual([]);
-      expect(result).toHaveLength(0);
+      expect(result).toEqual({ projects: [], total: 0 });
+      expect(result.projects).toHaveLength(0);
     });
 
     it("should throw an error when database query fails", async () => {

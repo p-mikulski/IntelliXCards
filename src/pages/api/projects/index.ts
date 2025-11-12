@@ -101,18 +101,18 @@ export const GET: APIRoute = async ({ locals, url }) => {
 
     // Parse query parameters for pagination
     const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "10");
+    const limit = parseInt(url.searchParams.get("limit") || "9");
 
-    // Get all projects for the user (for now, ignoring pagination)
+    // Get paginated projects for the user
     const projectService = new ProjectService(locals.supabase);
-    const projects = await projectService.listProjects(locals.user.id);
+    const result = await projectService.listProjects(locals.user.id, page, limit);
 
-    // For now, return all projects with basic pagination info
+    // Return paginated response
     const response = {
-      projects,
+      projects: result.projects,
       page,
       limit,
-      total: projects.length,
+      total: result.total,
     };
 
     return new Response(JSON.stringify(response), {
