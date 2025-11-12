@@ -123,6 +123,8 @@ export const useProjectDashboard = (isMobile = false) => {
       );
 
       toast.success(`Project "${newProject.title}" created successfully!`);
+      // Refetch projects to ensure the list is up to date
+      fetchProjects(1, pagination.pageSize);
     } catch (e) {
       setError(e as Error);
       toast.error(`Failed to create project "${data.title}"`, {
@@ -190,6 +192,8 @@ export const useProjectDashboard = (isMobile = false) => {
       setProjects((prev) => prev.filter((p) => p.id !== projectId));
 
       toast.success(`Project "${projectTitle}" deleted successfully!`);
+      // Refetch projects to ensure the list is up to date
+      fetchProjects(pagination.currentPage, pagination.pageSize);
     } catch (e) {
       setError(e as Error);
       toast.error(`Failed to delete project "${projectTitle}"`, {
