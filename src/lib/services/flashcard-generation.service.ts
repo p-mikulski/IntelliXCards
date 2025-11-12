@@ -55,9 +55,10 @@ export class FlashcardGenerationService {
 
   constructor(config: FlashcardGenerationServiceConfig = {}) {
     const envApiKey = typeof import.meta !== "undefined" ? import.meta.env.OPENROUTER_API_KEY : "";
+    const envModel = typeof import.meta !== "undefined" ? import.meta.env.OPENROUTER_MODEL : "";
 
     this.apiKey = (config.apiKey ?? envApiKey ?? "").trim();
-    this.model = config.model ?? "minimax/minimax-m2:free";
+    this.model = config.model ?? envModel ?? "deepseek/deepseek-chat-v3.1:free";
     this.temperature = config.temperature ?? 0.4;
     this.maxTokens = config.maxTokens ?? 1500;
   }
@@ -290,7 +291,7 @@ export class FlashcardGenerationService {
   }
 
   private extractJsonFromContent(content: string): string {
-    // Remove <think> tags if present (used by some models like minimax)
+    // Remove <think> tags if present (used by some models like DeepSeek)
     const thinkTagPattern = /<think>[\s\S]*?<\/think>/gi;
     const cleaned = content.replace(thinkTagPattern, "").trim();
 
