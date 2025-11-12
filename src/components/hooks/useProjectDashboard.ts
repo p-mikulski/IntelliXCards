@@ -3,13 +3,18 @@ import { toast } from "sonner";
 import type { ProjectViewModel } from "@/components/dashboard/types";
 import type { CreateProjectCommand, UpdateProjectCommand, ProjectListDto, ProjectDto } from "@/types";
 
-export const useProjectDashboard = () => {
+export const useProjectDashboard = (isMobile = false) => {
   const [projects, setProjects] = useState<ProjectViewModel[]>([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalCount: 0,
-    pageSize: 10,
+    pageSize: 9,
+  });
+  const [mobile, setMobile] = useState({
+    hasMore: false,
+    isLoadingMore: false,
+    nextPage: 1,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -23,34 +28,55 @@ export const useProjectDashboard = () => {
     delete: null,
   });
 
-  const fetchProjects = useCallback(async (page = 1, limit = 10) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`/api/projects?page=${page}&limit=${limit}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch projects");
+  const fetchProjects = useCallback(
+    async (page = 1, limit = 9, append = false) => {
+      setIsLoading(!append);
+      setError(null);
+      if (append) {
+        setMobile((prev) => ({ ...prev, isLoadingMore: true }));
       }
-      const data: ProjectListDto = await response.json();
+      try {
+        const response = await fetch(`/api/projects?page=${page}&limit=${limit}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch projects");
+        }
+        const data: ProjectListDto = await response.json();
 
-      const viewModels: ProjectViewModel[] = data.projects.map((p) => ({
-        ...p,
-        formattedCreatedAt: new Date(p.created_at).toLocaleDateString(),
-      }));
+        const viewModels: ProjectViewModel[] = data.projects.map((p) => ({
+          ...p,
+          formattedCreatedAt: new Date(p.created_at).toLocaleDateString(),
+        }));
 
-      setProjects(viewModels);
-      setPagination({
-        currentPage: data.page,
-        totalPages: Math.ceil(data.total / data.limit),
-        totalCount: data.total,
-        pageSize: data.limit,
-      });
-    } catch (e) {
-      setError(e as Error);
-    } finally {
-      setIsLoading(false);
+        const totalPages = Math.ceil(data.total / data.limit);
+        const hasMore = isMobile && data.page < totalPages;
+
+        setProjects((prev) => (append ? [...prev, ...viewModels] : viewModels));
+        setPagination({
+          currentPage: data.page,
+          totalPages,
+          totalCount: data.total,
+          pageSize: data.limit,
+        });
+        setMobile({
+          hasMore,
+          isLoadingMore: false,
+          nextPage: data.page + 1,
+        });
+      } catch (e) {
+        setError(e as Error);
+        setMobile((prev) => ({ ...prev, isLoadingMore: false }));
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isMobile]
+  );
+
+  const loadMoreProjects = useCallback(() => {
+    if (isMobile && mobile.hasMore && !mobile.isLoadingMore) {
+      fetchProjects(mobile.nextPage, pagination.pageSize, true);
     }
-  }, []);
+  }, [isMobile, mobile.hasMore, mobile.isLoadingMore, mobile.nextPage, pagination.pageSize, fetchProjects]);
 
   useEffect(() => {
     fetchProjects();
@@ -188,10 +214,12 @@ export const useProjectDashboard = () => {
   return {
     projects,
     pagination,
+    mobile,
     isLoading,
     error,
     dialogState,
     fetchProjects,
+    loadMoreProjects,
     handleCreateProject,
     handleUpdateProject,
     handleDeleteProject,

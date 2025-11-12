@@ -23,7 +23,7 @@ interface PageHeaderProps {
  */
 export default function PageHeader({ title, subtitle, actions, children, isLoading = false }: PageHeaderProps) {
   return (
-    <header className="sticky top-16 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-16 z-40 w-full border-b">
       <div className="container flex min-h-[4rem] items-center justify-between px-6 py-3 w-full max-w-full">
         {/* Left section: Title and subtitle */}
         <div className="flex-1 min-w-0 mr-4">

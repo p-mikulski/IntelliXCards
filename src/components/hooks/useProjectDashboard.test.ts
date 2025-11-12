@@ -42,7 +42,7 @@ describe("useProjectDashboard", () => {
       const mockResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -74,7 +74,7 @@ describe("useProjectDashboard", () => {
       const mockResponse: ProjectListDto = {
         projects: [],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 0,
       };
 
@@ -140,7 +140,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 0,
       };
 
@@ -198,7 +198,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 0,
       };
 
@@ -268,7 +268,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 0,
       };
 
@@ -309,7 +309,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -359,7 +359,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -401,7 +401,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -437,7 +437,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -489,7 +489,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -527,7 +527,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 0,
       };
 
@@ -564,7 +564,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
@@ -602,7 +602,7 @@ describe("useProjectDashboard", () => {
       const mockListResponse: ProjectListDto = {
         projects: [mockProjectDto],
         page: 1,
-        limit: 10,
+        limit: 9,
         total: 1,
       };
 
