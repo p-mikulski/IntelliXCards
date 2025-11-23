@@ -46,7 +46,7 @@ export class OpenRouterAPIError extends Error {
 
 export class FlashcardGenerationService {
   private readonly apiKey: string;
-  private readonly model: string;
+  private readonly models: string[];
   private readonly temperature: number;
   private readonly maxTokens: number;
   private readonly baseUrl = "https://openrouter.ai/api/v1";
@@ -58,7 +58,17 @@ export class FlashcardGenerationService {
     const envModel = typeof import.meta !== "undefined" ? import.meta.env.OPENROUTER_MODEL : "";
 
     this.apiKey = (config.apiKey ?? envApiKey ?? "").trim();
-    this.model = config.model ?? envModel ?? "deepseek/deepseek-chat-v3.1:free";
+
+    // Build model fallback chain
+    const primaryModel = config.model ?? envModel ?? "x-ai/grok-4.1-fast";
+    this.models = [
+      primaryModel,
+      "x-ai/grok-4.1-fast:free",
+      "deepseek/deepseek-r1:free",
+      "google/gemini-2.0-flash-exp:free",
+      "openai/gpt-oss-20b:free",
+    ].filter((model, index, arr) => arr.indexOf(model) === index); // Remove duplicates
+
     this.temperature = config.temperature ?? 0.4;
     this.maxTokens = config.maxTokens ?? 1500;
   }
@@ -117,7 +127,7 @@ export class FlashcardGenerationService {
     const safeCount = Math.max(1, Math.min(desiredCount, 100));
 
     return {
-      model: this.model,
+      model: this.models[0], // Use primary model
       systemMessage:
         "You are an expert instructor that creates high-quality study flashcards. " +
         "Return only valid JSON. Each flashcard must include a short question in 'front' and a concise, factual answer in 'back'.",
@@ -134,7 +144,7 @@ export class FlashcardGenerationService {
 
   private buildRegenerationRequest(flashcardId: string): ChatCompletionParams {
     return {
-      model: this.model,
+      model: this.models[0], // Use primary model
       systemMessage:
         "You are an expert educator who refreshes flashcards. Return only valid JSON with a single flashcard entry.",
       userMessage: [
@@ -152,25 +162,57 @@ export class FlashcardGenerationService {
       throw new OpenRouterAPIError("OpenRouter API key is not configured.", 401);
     }
 
-    const payload = this.buildRequestPayload(params);
-    const response = await this.sendRequest<{ choices?: { message?: { content?: string } }[] }>(payload);
-    const content = response.choices?.[0]?.message?.content?.trim();
+    // Try each model in sequence until one succeeds
+    for (let i = 0; i < this.models.length; i++) {
+      const modelToTry = this.models[i];
+      const modelParams = { ...params, model: modelToTry };
 
-    if (!content) {
-      throw new OpenRouterAPIError("Invalid response: No content received from API.", 500, response);
+      try {
+        const payload = this.buildRequestPayload(modelParams);
+        const response = await this.sendRequest<{ choices?: { message?: { content?: string } }[] }>(payload);
+        const content = response.choices?.[0]?.message?.content?.trim();
+
+        if (!content) {
+          if (i === this.models.length - 1) {
+            // Last model failed
+            throw new OpenRouterAPIError("Invalid response: No content received from API.", 500, response);
+          }
+          continue; // Try next model
+        }
+
+        // Extract JSON from content (some models wrap it in <think> tags or other markup)
+        const jsonContent = this.extractJsonFromContent(content);
+
+        try {
+          return JSON.parse(jsonContent) as T;
+        } catch (error) {
+          if (i === this.models.length - 1) {
+            // Last model failed to parse
+            throw new OpenRouterAPIError("Failed to parse JSON response from model.", 500, {
+              rawContent: content,
+              cause: error,
+            });
+          }
+          continue; // Try next model
+        }
+      } catch (error) {
+        if (i === this.models.length - 1) {
+          // Last model failed completely
+          if (error instanceof OpenRouterAPIError) {
+            throw error;
+          }
+          throw new OpenRouterAPIError(
+            `All models failed. Last error: ${error instanceof Error ? error.message : "Unknown error"}`,
+            500,
+            error
+          );
+        }
+        // Try next model silently
+      }
     }
 
-    // Extract JSON from content (some models wrap it in <think> tags or other markup)
-    const jsonContent = this.extractJsonFromContent(content);
-
-    try {
-      return JSON.parse(jsonContent) as T;
-    } catch (error) {
-      throw new OpenRouterAPIError("Failed to parse JSON response from model.", 500, {
-        rawContent: content,
-        cause: error,
-      });
-    }
+    // This should never be reached, but TypeScript needs it
+    throw new OpenRouterAPIError("All models failed to generate response.", 500);
   }
 
   private buildRequestPayload(params: ChatCompletionParams): Record<string, unknown> {
